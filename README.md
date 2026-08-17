@@ -59,17 +59,24 @@ January 22–23, 2027 are **planning placeholders**, labelled as such everywhere
 ## Preview locally
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8912
 ```
 
-Then open <http://localhost:8000/>. The site fetches `data/site-data.json`, so opening `index.html` straight from Finder is blocked by browser security — use the local server.
+Then open <http://localhost:8912/>. The site fetches `data/site-data.json`, so opening `index.html` straight from Finder is blocked by browser security — use the local server.
 
-For date-specific checks, add `?today=YYYY-MM-DD` before the hash, e.g. `http://localhost:8000/?today=2026-11-26#today`. This only changes the displayed "today"; it never rewrites the schedule, and the interface labels itself as previewing.
+For date-specific checks, add `?today=YYYY-MM-DD` before the hash, e.g. `http://localhost:8912/?today=2026-11-26#today`. This only changes the displayed "today"; it never rewrites the schedule, and the interface labels itself as previewing.
 
 Run the test suites:
 
 ```bash
-node tests/pin.test.mjs && node tests/storage.test.mjs && node tests/sync-merge.test.mjs && node tests/export.test.mjs
+node tests/pin.test.mjs
+node tests/username.test.mjs
+node tests/account-auth.test.mjs
+node tests/storage.test.mjs
+node tests/sync-merge.test.mjs
+node tests/export.test.mjs
+node tests/ui-auth.test.mjs
+node tests/supabase-artifacts.test.mjs
 ```
 
 ---
@@ -84,29 +91,41 @@ node tests/pin.test.mjs && node tests/storage.test.mjs && node tests/sync-merge.
 
 ---
 
-## Sign-in: one PIN, with email recovery
+## Sign-in: email or username + PIN, with email recovery
 
 This tracker is single-user. The gate is deliberately simple:
 
-- **You type a numeric PIN of at least four digits.** Nothing else, on any normal day.
-- **Your PIN is never stored or transmitted as typed.** It is stretched in your browser with PBKDF2-SHA256 (310,000 iterations, salted with your account email) into a long random-looking string. *That* is your Supabase account password. Supabase never stores the short PIN itself; PBKDF2 adds work to each guess, and Supabase's rate limits help protect the online sign-in endpoint.
-- **Your email is typed once per device** and cached in that browser only. It is deliberately **not** committed to the repository, so a public repo never names an account for anyone to target. It also acts as a second thing an attacker would have to know.
+- **You unlock with an email or optional sign-in username plus a numeric PIN of at least four digits.** The identifier actually used is remembered on that device. If it was a username, the browser never replaces it with or exposes the associated email on the lock screen.
+- **Your PIN is never stored or transmitted as typed.** It is stretched in the browser with PBKDF2-SHA256 (310,000 iterations) into a long `mm1.…` legacy or `mm2.…` migrated Supabase password. Only the derived password reaches authentication code, and it is never persisted or logged by the app.
+- **New credentials use an immutable random salt.** The editable username is never a salt. Renaming or removing the username and changing the Auth email therefore leave the PIN credential unchanged.
 - **The session persists.** Supabase refreshes it automatically, so in practice you type the PIN once per device and then just open the app. The PIN screen returns only on a new device, after clearing browser data, or when you tap **Lock this device**.
 - **Offline never locks you out.** A device that has unlocked before stays unlocked with no connection, because a PIN cannot be verified offline. It re-locks on reconnect if the session has genuinely expired.
 - **Locking is not deleting.** Locking ends cloud access on that device and leaves every local record intact.
 
-Wrong email and wrong PIN produce the same message, so neither can be probed independently.
+Unknown emails, unknown usernames, and wrong PINs produce the same message. The pre-auth salt endpoint returns a keyed deterministic fake salt for unknown identifiers; the login endpoint also performs a fake Auth attempt, imposes per-IP and per-identifier server-side limits, and keeps response shape and minimum timing uniform. Strict CORS limits browser origins, although CORS is not authentication and non-browser clients can forge an Origin header. Supabase Auth rate limiting remains the password-attempt backstop; see [Supabase Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits).
 
-If you forget the PIN, **Forgot your PIN?** sends a one-use recovery link to the owner email. The
-linked page asks for the new PIN twice, derives the correct account password in the browser, updates
-Supabase, signs the recovery session out, and returns to a fresh unlock screen. Neither resetting nor
-locking deletes local or cloud tracker data.
+### Display name versus sign-in username
+
+Open the sync chip to reach **Your account and sync** after unlocking:
+
+- **Display name** is an optional cosmetic greeting in `state.settings.displayName`. It is sanitized to 32 characters, syncs with tracker state, merges by the settings timestamp, and round-trips through JSON export/import. It never participates in authentication.
+- **Sign-in username** is an optional private account alias. It is lowercase, unique after normalization, 3–32 ASCII characters, uses letters/digits/`.`/`_`/`-`, begins and ends alphanumerically, rejects adjacent punctuation and reserved names, and contains no `@`. It is stored with the private account credential, not in tracker state or backups.
+
+The sign-in username editor is never rendered while locked. First setup requires the current PIN. Rename and removal do not rotate the password or salt; removal clears only the alias so email + PIN and recovery remain usable.
+
+### First-time credential migration
+
+Existing accounts remain compatible with the email-salted `mm1.…` flow until a sign-in username is configured. Setup first verifies the current `mm1.…` credential, creates one private pending record with a random immutable salt, derives `mm2.…` locally, and calls the vendored Supabase JS 2.111.0 `updateUser` API with `current_password`. The final activation verifies `mm2.…` before marking the record active.
+
+The database transition is idempotent. A pending row is deliberately usable for credential lookup, and retries always reuse its salt. If creating the row, updating Auth, activating it, or returning any response fails, re-enter the same PIN and retry: the client detects whether Auth still accepts `mm1.…` or already accepts `mm2.…` and resumes at the safe point. Do not manually delete a pending record without first checking which password Auth accepts.
+
+If you forget the PIN, **Forgot your PIN?** sends a one-use recovery link to the owner email. The request may start from either identifier but always returns a generic response. After the recovery session is established, the reset page privately obtains the account credential by authenticated user ID: migrated accounts derive the new password with the immutable salt, while legacy accounts keep the email-salted behavior. It then updates Supabase, activates a pending migration if necessary, signs out, and returns to a fresh unlock screen. Neither resetting nor locking deletes local or cloud tracker data.
 
 ### One-time setup
 
 1. **Create a Supabase project** at <https://supabase.com>.
 
-2. **Create the database table.** Open the project's SQL Editor and run [`supabase/schema.sql`](./supabase/schema.sql). This creates a single `tracker_state` table, enables Row Level Security, revokes all access from the anonymous role, and grants each authenticated user access to their own row only.
+2. **Create the tracker table.** Open the project's SQL Editor and run [`supabase/schema.sql`](./supabase/schema.sql). This creates `tracker_state`, enables Row Level Security, revokes anonymous access, and grants each authenticated user access to only their row.
 
 3. **Calculate your account key.** Serve the site locally and open [`setup.html`](./setup.html). Enter the email you will use and a PIN of at least four digits. It returns a long `mm1.…` string, computed entirely in your browser — nothing is transmitted. Copy it.
 
@@ -118,15 +137,17 @@ locking deletes local or cloud tracker data.
 
 7. **Allow the recovery pages.** In **Authentication → URL Configuration**, set the deployed site as the Site URL and add both the deployed `reset.html` address and the local preview address to **Redirect URLs**.
 
-8. **Unlock.** Open the site, enter your email and PIN once, and it syncs.
+8. **Deploy private-alias support.** Follow the safe deployment order below. Until those migrations and functions are deployed, legacy email + PIN remains the only supported login and the username editor will report that the account service is unavailable.
+
+9. **Unlock.** Open the site, enter your email and PIN once, and it syncs. Then optionally configure a sign-in username inside **Your account and sync**.
 
 ### Signing in on a second device
 
-Open the same URL, enter the same email and PIN. Existing local progress on that device is **merged** with the cloud copy, never overwritten. After that first unlock the email is remembered and only the PIN is asked for.
+Open the same URL and enter either the email or configured sign-in username plus the same PIN. Existing local progress on that device is **merged** with the cloud copy, never overwritten. After that first unlock the identifier actually used is remembered and only the PIN is asked for.
 
 ### If you forget the PIN
 
-Tap **Forgot your PIN?** on the lock screen. Enter the owner email if this is a new device, then open
+Tap **Forgot your PIN?** on the lock screen. Enter the owner email or configured username if this is a new device, then open
 the link in the recovery email. Enter the new PIN twice. The reset page changes the derived Supabase
 password and returns you to the tracker; unlock with the new PIN.
 
@@ -148,7 +169,21 @@ Neither method changes tracker data.
 | **Secret / service-role key** | **Never.** It bypasses RLS entirely |
 | **Database password, access token, PIN, account key** | **Never** |
 
-The publishable key is designed for browser code *provided Row Level Security is enabled* — which `schema.sql` does, and which step 2 above should be confirmed in the dashboard under **Database → Tables → tracker_state → RLS enabled**.
+The publishable key is designed for browser code *provided Row Level Security is enabled*. The alias/email mapping instead lives in an unexposed `private` schema; public and authenticated browser roles receive no schema/table access. The SQL wrappers are executable only by `service_role` and are used only inside Edge Functions. This follows Supabase's guidance on [private schemas](https://supabase.com/docs/guides/database/tables#schemas) and [securing the Data API](https://supabase.com/docs/guides/api/securing-your-api).
+
+### Safe alias deployment order
+
+These are live mutations and must be reviewed immediately before execution:
+
+1. Confirm legacy email + PIN login and recovery still work; take a database backup.
+2. Apply [`supabase/migrations/202608170001_private_account_credentials.sql`](./supabase/migrations/202608170001_private_account_credentials.sql). Verify `private` is absent from **API → Exposed schemas**, browser roles cannot execute any `server_*` wrapper, and the Auth email-sync trigger exists.
+3. In Edge Function secrets, add a new random `ALIAS_HMAC_SECRET` of at least 32 characters directly (never put it in a file, shell history, log, or documentation). Set `ALLOWED_ORIGINS` to the exact deployed and local origins and `ALLOWED_RECOVERY_REDIRECTS` to the exact deployed/local `reset.html` URLs.
+4. Deploy `credential-info`, `identifier-login`, `request-pin-reset`, and `account-credentials` with [`supabase/config.toml`](./supabase/config.toml). Gateway JWT verification is disabled for all four because the dashboard toggle accepts only legacy-secret JWTs. Every endpoint still requires the project publishable key, and `account-credentials` additionally validates the caller's bearer token against Supabase Auth with `auth.getUser()` before serving any account data. Supabase documents the authorization-header pattern under [Edge Function authorization headers](https://supabase.com/docs/guides/functions/auth-headers).
+5. With a nonexistent test identifier, verify credential-info has a stable response shape, repeated unknown requests receive the same salt, login/reset messages are generic, strict CORS rejects an unlisted origin, and rate limiting returns 429. Do not use the owner PIN or derived password in curl, logs, or test fixtures.
+6. Publish the static client. Verify legacy email + PIN before configuring a username.
+7. While signed in, configure the first username and re-enter the current PIN. Then verify username + PIN and email + PIN in fresh browser states, recovery, rename, and removal.
+
+See [`supabase/ROLLBACK.md`](./supabase/ROLLBACK.md) before rollback. Most importantly, once any account is active on `mm2.…`, do not remove its private credential row or the credential/login functions and do not deploy a legacy-only client. The salt is then required to derive the real Auth password.
 
 ### Diagnosing paused sync
 
@@ -192,7 +227,9 @@ css/styles.css        mobile-first styles, one stylesheet
 js/app.js             bootstrap, routing glue, sync chrome, unlock gate
 js/data.js            loads and indexes site-data.json
 js/storage.js         versioned local state, migration, merge, backups
-js/sync.js            Supabase auth + debounced cloud sync
+js/account-auth.js    email/username unlock + retryable credential migration
+js/username.js        login-username normalization and validation
+js/sync.js            Supabase auth, Edge Function calls, debounced cloud sync
 js/sync-config.js     project URL + publishable key (safe to publish)
 js/pin.js             shared PIN → account-key derivation
 js/reset.js           recovery-session handling and PIN update
@@ -201,8 +238,10 @@ js/export.js          XLSX / CSV / JSON generation
 js/views/             today, plan, exams, log, guide, shared
 data/site-data.json   generated deployment artifact
 scripts/              site-data generator
-supabase/schema.sql   table + RLS policies
-tests/                storage, merge, and export test suites
+supabase/schema.sql   baseline tracker table + RLS policies
+supabase/migrations/  versioned private credential schema and server-only SQL
+supabase/functions/   pre-auth login/recovery and authenticated account endpoints
+tests/                auth, migration, storage, merge, UI, and export suites
 vendor/               ExcelJS 4.4.0, Supabase JS 2.111.0 (MIT, vendored)
 ```
 
@@ -215,7 +254,9 @@ No third-party code is loaded from a CDN at runtime.
 - One authenticated cloud document rather than a relational backend. Fine for one user; it is not built for concurrent editing of the same record on two devices in the same second.
 - Unfinished form **drafts** merge by whole-state recency rather than per-field, so a draft edited on two devices while both were offline keeps one side's version.
 - No XLSX re-import. JSON is the dependable full-state import format.
+- The cosmetic display name lives in `settings`, which merges as one block by recency, so changing it on two devices while both are offline keeps the newer edit rather than blending them. The private sign-in username does not live in tracker state.
 - Workload estimates are labelled inferences from assignment type, mode, and targets — not measurements.
 - Readiness output applies the plan's own rule and is presented as guidance, not a verdict.
 - The focus timer is deliberately minimal: one optional 25-minute block with locally stored history.
 - A four-digit PIN favors convenience over security. Client-side stretching protects the stored credential and Supabase rate-limits online attempts, but a longer PIN is safer and should be used if the site ever becomes multi-user or protects more sensitive data.
+- The derived `mm2.…` value is the real Auth password. HTTPS, no-store responses, strict CORS, generic errors, endpoint throttling, and Auth limits reduce exposure, but a captured derived password can be replayed just like any other password. This design is not phishing-resistant; WebAuthn/passkeys would be required for that property.

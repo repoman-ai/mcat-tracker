@@ -1,5 +1,6 @@
 import { AUTH_STORAGE_KEY, rememberEmail, rememberedEmail } from "./auth-storage.js";
-import { derivePassword, normalizeEmail } from "./pin.js";
+import { deriveRecoveryPassword } from "./account-auth.js";
+import { normalizeEmail } from "./pin.js";
 import { SYNC_CONFIG } from "./sync-config.js";
 
 const loadingView = document.querySelector("[data-reset-loading]");
@@ -22,7 +23,8 @@ const linkError = hashParameters.get("error_description") || queryParameters.get
 function configured() {
   try {
     const url = new URL(SYNC_CONFIG.supabaseUrl);
-    return url.protocol === "https:" && Boolean(SYNC_CONFIG.supabasePublishableKey?.trim());
+    const secureTransport = url.protocol === "https:" || (["localhost", "127.0.0.1"].includes(url.hostname) && url.protocol === "http:");
+    return secureTransport && Boolean(SYNC_CONFIG.supabasePublishableKey?.trim());
   } catch {
     return false;
   }
@@ -53,6 +55,17 @@ function showExpired(message) {
   resendForm.elements.email.value = rememberedEmail();
   show(expiredView);
   (resendForm.elements.email.value ? resendForm.querySelector("button") : resendForm.elements.email).focus();
+}
+
+async function accountCredential(client, action, fields = {}) {
+  const { data, error } = await client.functions.invoke("account-credentials", { body: { action, ...fields } });
+  if (error) {
+    let message = error.message;
+    try { message = (await error.context?.json())?.error || message; } catch { /* Preserve transport message. */ }
+    throw new Error(message);
+  }
+  if (data?.error) throw new Error(data.error);
+  return data;
 }
 
 if (!configured() || !window.supabase?.createClient) {
@@ -95,9 +108,12 @@ if (!configured() || !window.supabase?.createClient) {
       const session = recoverySession || (await client.auth.getSession()).data.session;
       const email = normalizeEmail(session?.user?.email);
       if (!email || !arrivedFromRecovery) throw new Error("The secure reset session is missing or expired.");
-      const password = await derivePassword(email, pin);
+      const credential = await accountCredential(client, "status");
+      const migrated = ["pending", "active"].includes(credential.migrationState) && credential.credentialSalt;
+      const password = await deriveRecoveryPassword(credential, email, pin);
       const { error } = await client.auth.updateUser({ password });
       if (error) throw error;
+      if (migrated && credential.migrationState === "pending") await accountCredential(client, "activate", { password });
       rememberEmail(email);
       await client.auth.signOut({ scope: "global" });
       show(successView);

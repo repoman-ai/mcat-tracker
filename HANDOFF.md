@@ -9,20 +9,34 @@ index, live application, and Supabase project before continuing.
 tracker. Browser state saves immediately to `localStorage`; an authenticated session merges it with
 one owner-only row in Supabase.
 
-Authentication uses an owner email plus a numeric PIN of at least four digits. `js/pin.js` derives a
-Supabase password with PBKDF2-SHA256 (310,000 iterations and an email-based salt). The literal PIN and
-derived `mm1.…` password must never be logged, committed, or requested.
+Authentication accepts an owner email or optional private sign-in username plus a numeric PIN of at
+least four digits. Legacy accounts use the email-salted `mm1.…` derivation. Configuring the first
+sign-in username migrates Auth to `mm2.…`, derived from an immutable random private account salt.
+The editable username is never the salt. Literal PINs and derived passwords must never be logged,
+persisted, committed, or requested.
 
 ## PIN recovery is complete
 
 - The lock screen includes **Forgot your PIN?**.
-- `reset.html` and `js/reset.js` consume the Supabase recovery session, ask for the new PIN twice,
-  derive the replacement password locally, update the owner account, sign out, and return to a fresh
-  unlock screen.
+- `reset.html` and `js/reset.js` consume the Supabase recovery session, fetch credential status by
+  authenticated user ID, derive an `mm2.…` replacement for migrated/pending accounts or `mm1.…` for
+  legacy accounts, update Auth, sign out, and return to a fresh unlock screen.
 - Expired or already-used links show a resend form.
 - A real built-in-Supabase recovery email was received and the PIN change succeeded.
 - Local state and the cloud row are not deleted by locking or resetting.
 - PIN derivation accepts digits only and requires at least four digits.
+
+## Display name and sign-in username
+
+An optional display name lives at `state.settings.displayName` (32 characters, sanitized by
+`sanitizeDisplayName` in `js/storage.js`). It is edited only from the unlocked app, in the **Your
+account and sync** dialog, appears in the **Today** heading, syncs/merges with tracker settings, and
+round-trips through JSON backups. It is cosmetic and plays no part in authentication.
+
+The separate sign-in username is a normalized unique alias in `private.account_credentials`. It is
+only managed from the unlocked dialog. First setup re-verifies the current PIN and uses a retryable
+pending→active migration; rename/removal preserve the immutable salt and PIN. The lock screen says
+**Email or username**, uses `autocomplete="username"`, and remembers the identifier actually used.
 
 ## Supabase state verified on August 17, 2026
 
@@ -39,13 +53,17 @@ derived `mm1.…` password must never be logged, committed, or requested.
   - `https://repoman-ai.github.io/mcat-tracker/reset.html`
   - `http://localhost:8912/reset.html`
 
+The private alias migration and four Edge Functions are implemented locally but have **not** been
+applied or deployed to the live project. No live Auth password or alias row has been changed. Before
+any live mutation, follow README **Safe alias deployment order** and `supabase/ROLLBACK.md`.
+
 Supabase's built-in sender is adequate for occasional recovery when the owner email is a project-team
 address, but it is best-effort and currently limited to two messages per hour. Custom SMTP is optional
 for this one-user system and is useful only if dependable production delivery is important.
 
 ## Git state
 
-The repository is committed on `main` and tracks `origin/main` at the public repository:
+The repository tracks `main` and `origin/main` at the public repository:
 `https://github.com/repoman-ai/mcat-tracker`.
 
 GitHub Pages is enabled from the root of `main` with HTTPS enforced:
@@ -53,21 +71,23 @@ GitHub Pages is enabled from the root of `main` with HTTPS enforced:
 
 The first Pages deployment completed successfully. The live desktop lock screen, 390×844 phone lock
 screen, and live expired-link recovery page were verified with no browser warnings or errors and no
-horizontal overflow. Authenticated live sign-in and sync still require the owner to type the account
-email and PIN directly; never request or retrieve those credentials.
+horizontal overflow. Authenticated live sign-in and sync still require the owner to type credentials
+directly; never request, retrieve, inspect, or log them. Username login cannot work live until the
+SQL/functions and updated static client are deployed in order.
 
 ## Verification commands
 
 ```bash
-node --check js/app.js
-node --check js/auth-storage.js
-node --check js/pin.js
-node --check js/reset.js
-node --check js/sync.js
+for file in js/*.js js/views/*.js; do node --check "$file" || exit 1; done
 node tests/pin.test.mjs
+node tests/username.test.mjs
+node tests/account-auth.test.mjs
 node tests/storage.test.mjs
 node tests/sync-merge.test.mjs
 node tests/export.test.mjs
+node tests/ui-auth.test.mjs
+node tests/supabase-artifacts.test.mjs
+git diff --check
 ```
 
 The local preview uses `http://localhost:8912/index.html`. If the server process is stale, restart it
@@ -76,9 +96,13 @@ the same.
 
 ## Safety boundaries
 
-- Never request or use a service-role key, secret key, database password, account key, or PIN.
+- Never request or expose a service-role key, secret key, database password, account key, PIN,
+  derived password, HMAC secret, or session token.
 - The project URL and anon key in `js/sync-config.js` are intentionally browser-visible; RLS is the
   authorization boundary.
 - Do not hand-edit `data/site-data.json`; regenerate it with `scripts/generate_site_data.py` after
   authoritative source changes.
 - Only `mcat-tracker/` is intended for deployment. Do not include parent-workspace source documents.
+- The `mm2.…` derived value is still a replayable password. TLS, strict CORS, no-store responses,
+  generic failures, server throttles, and Auth limits reduce exposure but do not make it
+  phishing-resistant.

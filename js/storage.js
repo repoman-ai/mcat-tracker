@@ -3,6 +3,7 @@ import { APP_VERSION, uniqueId } from "./utils.js";
 export const STORAGE_KEY = "mcatMomentum.state.v2";
 export const SCHEMA_VERSION = 3;
 export let lastLoadIssue = null;
+const UNEDITED_SETTINGS_TIMESTAMP = "1970-01-01T00:00:00.000Z";
 
 export function defaultState() {
   return {
@@ -14,15 +15,35 @@ export function defaultState() {
     mistakes: [],
     mastery: {},
     settings: {
+      displayName: "",
       registeredExamDate: "",
       storageNoticeDismissed: false,
       reducedMotionOverride: "system",
-      updatedAt: new Date().toISOString(),
+      // A fresh device has not edited settings. Keeping this at the epoch lets
+      // an existing cloud name or exam date win during its first merge.
+      updatedAt: UNEDITED_SETTINGS_TIMESTAMP,
     },
     drafts: { mistake: {} },
     focusSessions: [],
     tombstones: { mistakes: {} },
   };
+}
+
+export const MAX_DISPLAY_NAME_LENGTH = 32;
+
+/**
+ * The display name is cosmetic. It is not an identity: sign-in still uses the
+ * owner email and PIN. Control characters become ordinary spacing so pasted
+ * lines cannot disturb the layout, and the length is capped to keep the
+ * greeting compact.
+ */
+export function sanitizeDisplayName(value) {
+  return String(value ?? "")
+    .replace(/[\u0000-\u001f\u007f-\u009f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, MAX_DISPLAY_NAME_LENGTH)
+    .trim();
 }
 
 function objectOr(value, fallback = {}) {
@@ -78,7 +99,12 @@ export function normalizeState(input) {
     exams: objectOr(source.exams),
     mistakes: sanitizeMistakes(source.mistakes),
     mastery: objectOr(source.mastery),
-    settings: { ...base.settings, ...settings, updatedAt: String(settings.updatedAt || source.updatedAt || base.settings.updatedAt) },
+    settings: {
+      ...base.settings,
+      ...settings,
+      displayName: sanitizeDisplayName(settings.displayName),
+      updatedAt: String(settings.updatedAt || source.updatedAt || base.settings.updatedAt),
+    },
     drafts: { ...base.drafts, ...objectOr(source.drafts), mistake: objectOr(objectOr(source.drafts).mistake) },
     focusSessions: Array.isArray(source.focusSessions) ? source.focusSessions.filter((item) => item && typeof item === "object") : [],
     tombstones: {
@@ -156,6 +182,7 @@ export function validateBackup(payload) {
       masteryRecords: Object.keys(state.mastery).length,
       focusSessions: state.focusSessions.length,
       registeredExamDate: state.settings.registeredExamDate || "Not set",
+      displayName: state.settings.displayName || "Not set",
     },
   };
 }

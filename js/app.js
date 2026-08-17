@@ -1,8 +1,9 @@
 import { loadSiteData } from "./data.js";
 import { exportCorruptRecovery } from "./export.js";
 import { navigate, startRouter } from "./router.js";
-import { lastLoadIssue, loadState, saveState } from "./storage.js";
-import { getSyncStatus, initializeSync, rememberedEmail, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js";
+import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName, saveState } from "./storage.js";
+import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js";
+import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js";
 import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js";
 import { renderToday, bindToday } from "./views/today.js";
 import { renderPlan, bindPlan } from "./views/plan.js";
@@ -89,19 +90,111 @@ function renderSyncChrome() {
   });
 }
 
+/** Cosmetic tracker state; deliberately separate from the private account alias. */
+function displayNameFieldHTML() {
+  const name = state?.settings.displayName || "";
+  return `<form class="sync-name-form" data-display-name-form>
+    <h4>Display name</h4>
+    <label>Cosmetic greeting
+      <input name="displayName" type="text" value="${escapeAttr(name)}" maxlength="${MAX_DISPLAY_NAME_LENGTH}" autocomplete="nickname" placeholder="What should this tracker call you?">
+    </label>
+    <div class="button-row"><button class="button button--primary button--small" type="submit">Save display name</button>${name ? `<button class="button button--quiet button--small" type="button" data-display-name-clear>Remove</button>` : ""}</div>
+    <p class="form-hint">This only changes the Today greeting and synced tracker state. It is not a sign-in username.</p>
+  </form>`;
+}
+
+function bindDisplayNameField(scope) {
+  const form = scope.querySelector("[data-display-name-form]");
+  if (!form) return;
+  const save = (value) => {
+    const displayName = sanitizeDisplayName(value);
+    updateState({ ...state, settings: { ...state.settings, displayName, updatedAt: new Date().toISOString() } });
+    if (dialog.open) dialog.close();
+    showToast(displayName ? `Display name saved as ${displayName}` : "Display name removed");
+  };
+  form.addEventListener("submit", (event) => { event.preventDefault(); save(form.elements.displayName.value); });
+  form.querySelector("[data-display-name-clear]")?.addEventListener("click", () => save(""));
+}
+
+function loginUsernameEditorHTML(account) {
+  const active = account.migrationState === "active";
+  const pending = account.migrationState === "pending";
+  const username = account.loginUsername || "";
+  return `<form class="sync-name-form" data-login-username-form>
+    <h4>Sign-in username</h4>
+    <label>Private account alias
+      <input name="loginUsername" type="text" value="${escapeAttr(username)}" maxlength="${MAX_LOGIN_USERNAME_LENGTH}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="e.g. study.runner">
+    </label>
+    ${active ? "" : `<label>Current PIN
+      <input name="pin" type="password" autocomplete="current-password" inputmode="numeric" pattern="[0-9]*" minlength="4" required placeholder="Required for first setup">
+    </label>`}
+    <p class="form-error" data-login-username-error role="alert"></p>
+    <div class="button-row"><button class="button button--primary button--small" type="submit">${active ? (username ? "Rename username" : "Add username") : (pending ? "Retry setup" : "Set up username")}</button>${active && username ? `<button class="button button--quiet button--small" type="button" data-login-username-remove>Remove username</button>` : ""}</div>
+    <p class="form-hint">Use 3–32 lowercase letters, digits, dots, underscores, or hyphens. This alias unlocks new devices; changing or removing it never changes your PIN. Your account email continues to work.</p>
+    ${pending ? `<p class="form-hint"><strong>Setup is incomplete but recoverable.</strong> Re-enter the same PIN to finish; the credential salt will not change.</p>` : ""}
+  </form>`;
+}
+
+async function loadLoginUsernameEditor(scope) {
+  const mount = scope.querySelector("[data-login-username-editor]");
+  if (!mount || !syncStatus.signedIn) return;
+  try {
+    const account = await getLoginUsernameStatus();
+    if (!mount.isConnected) return;
+    mount.innerHTML = loginUsernameEditorHTML(account);
+    const form = mount.querySelector("[data-login-username-form]");
+    const error = form.querySelector("[data-login-username-error]");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      error.textContent = "";
+      const checked = validateLoginUsername(form.elements.loginUsername.value);
+      if (!checked.valid) { error.textContent = checked.message; return; }
+      const button = form.querySelector("button[type='submit']");
+      button.disabled = true;
+      button.textContent = "Saving…";
+      try {
+        if (account.migrationState === "active") await renameLoginUsername(checked.username);
+        else await configureLoginUsername(checked.username, form.elements.pin.value);
+        showToast(account.migrationState === "active" ? "Sign-in username updated" : "Sign-in username ready on new devices");
+        await loadLoginUsernameEditor(scope);
+      } catch (problem) {
+        error.textContent = problem.message;
+        button.disabled = false;
+        button.textContent = account.migrationState === "active" ? "Save username" : "Retry setup";
+      } finally {
+        if (form.elements.pin) form.elements.pin.value = "";
+      }
+    });
+    form.querySelector("[data-login-username-remove]")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      error.textContent = "";
+      try {
+        await removeLoginUsername();
+        showToast("Sign-in username removed; email + PIN still works");
+        await loadLoginUsernameEditor(scope);
+      } catch (problem) { error.textContent = problem.message; button.disabled = false; }
+    });
+  } catch (problem) {
+    mount.innerHTML = `<p class="form-error" role="alert">${escapeHTML(problem.message)}</p>`;
+  }
+}
+
 function syncDialogBody() {
   if (!syncStatus.configured) {
-    return `<div class="sync-panel"><span class="sync-hero sync-hero--setup" aria-hidden="true">↔</span><h3>Working locally on this device</h3><p>Every change is already saved in this browser, and JSON backups work normally. To see the same progress on your phone and computer, finish the one-time Supabase setup in the README and add the project URL and publishable key to <code>js/sync-config.js</code>.</p><div class="notice-card"><strong>Security boundary</strong><p>Only a publishable key belongs in browser code. A secret or service-role key must never appear in this project.</p></div><a class="button" href="./setup.html">Open the account key calculator</a></div>`;
+    return `<div class="sync-panel"><span class="sync-hero sync-hero--setup" aria-hidden="true">↔</span><h3>Working locally on this device</h3><p>Every change is already saved in this browser, and JSON backups work normally. To see the same progress on your phone and computer, finish the one-time Supabase setup in the README and add the project URL and publishable key to <code>js/sync-config.js</code>.</p><div class="notice-card"><strong>Security boundary</strong><p>Only a publishable key belongs in browser code. A secret or service-role key must never appear in this project.</p></div>${displayNameFieldHTML()}<a class="button" href="./setup.html">Open the account key calculator</a></div>`;
   }
   if (!syncStatus.signedIn) {
     return `<div class="sync-panel"><span class="sync-hero sync-hero--setup" aria-hidden="true">⌘</span><h3>This device is locked</h3><p>${escapeHTML(syncStatus.message)} Local progress on this device is untouched and will merge with your cloud copy once you unlock.</p><div class="button-row"><button class="button button--primary" type="button" data-sync-unlock>Enter PIN</button></div></div>`;
   }
   const lastSync = syncStatus.lastSyncedAt ? new Date(syncStatus.lastSyncedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "Waiting for first sync";
-  return `<div class="sync-panel"><span class="sync-hero sync-hero--ready" aria-hidden="true">✓</span><h3>${escapeHTML(syncStatus.message)}</h3><dl class="sync-facts"><div><dt>Account</dt><dd>${escapeHTML(syncStatus.email)}</dd></div><div><dt>Last sync</dt><dd>${escapeHTML(lastSync)}</dd></div></dl><p>Changes save locally first, then sync automatically. If you study offline, they stay safe here and upload when this device reconnects.</p><p class="form-error" data-sync-error role="alert"></p><div class="button-row"><button class="button button--primary" type="button" data-sync-now>Sync now</button><button class="button" type="button" data-sync-lock>Lock this device</button></div><p class="form-hint">Locking asks for your PIN again next time. It never deletes local progress.</p></div>`;
+  return `<div class="sync-panel"><span class="sync-hero sync-hero--ready" aria-hidden="true">✓</span><h3>${escapeHTML(syncStatus.message)}</h3><dl class="sync-facts"><div><dt>Account email</dt><dd>${escapeHTML(syncStatus.email)}</dd></div><div><dt>Last sync</dt><dd>${escapeHTML(lastSync)}</dd></div></dl>${displayNameFieldHTML()}<div data-login-username-editor><p class="form-hint">Loading private sign-in username…</p></div><p>Changes save locally first, then sync automatically. If you study offline, they stay safe here and upload when this device reconnects.</p><p class="form-error" data-sync-error role="alert"></p><div class="button-row"><button class="button button--primary" type="button" data-sync-now>Sync now</button><button class="button" type="button" data-sync-lock>Lock this device</button></div><p class="form-hint">Locking asks for your PIN again next time. It never deletes local progress.</p></div>`;
 }
 
 function openSyncDialog() {
-  openDialog({ title: "Private cross-device sync", body: syncDialogBody(), onMount: (scope) => {
+  openDialog({ title: "Your account and sync", body: syncDialogBody(), onMount: (scope) => {
+    bindDisplayNameField(scope);
+    loadLoginUsernameEditor(scope);
     scope.querySelector("[data-sync-unlock]")?.addEventListener("click", () => { dialog.close(); renderLockScreen({ focus: true }); });
     scope.querySelector("[data-sync-now]")?.addEventListener("click", async (event) => {
       const button = event.currentTarget; button.disabled = true; button.textContent = "Syncing…";
@@ -125,19 +218,19 @@ function renderLockScreen({ focus = false } = {}) {
 
   lockError.textContent = "";
 
-  const known = rememberedEmail();
+  const known = rememberedIdentifier();
   const useKnown = Boolean(known) && !lockEmailOverride;
   lockAccount.hidden = !useKnown;
   lockEmailField.hidden = useKnown;
-  lockForm.elements.email.required = !useKnown;
+  lockForm.elements.identifier.required = !useKnown;
   if (useKnown) {
-    lockAccount.querySelector("[data-lock-email]").textContent = known;
-    lockForm.elements.email.value = known;
+    lockAccount.querySelector("[data-lock-identifier]").textContent = known;
+    lockForm.elements.identifier.value = known;
   }
   lockScreen.querySelector("[data-lock-lead]").textContent = known && !lockEmailOverride
     ? "Welcome back. Enter your PIN to unlock this device."
-    : "Enter the account email and PIN for this tracker.";
-  if (focus) (useKnown ? lockForm.elements.pin : lockForm.elements.email).focus();
+    : "Enter the account email or sign-in username and PIN for this tracker.";
+  if (focus) (useKnown ? lockForm.elements.pin : lockForm.elements.identifier).focus();
 }
 
 lockForm.addEventListener("submit", async (event) => {
@@ -148,7 +241,7 @@ lockForm.addEventListener("submit", async (event) => {
   lockError.textContent = "";
   lockMessage.textContent = "";
   try {
-    await unlockWithPin(lockForm.elements.email.value, lockForm.elements.pin.value);
+    await unlockWithPin(lockForm.elements.identifier.value, lockForm.elements.pin.value);
     lockForm.elements.pin.value = "";
     lockEmailOverride = false;
     showToast("Unlocked — your tracker is syncing");
@@ -163,21 +256,21 @@ lockForm.addEventListener("submit", async (event) => {
 
 lockScreen.querySelector("[data-lock-reset]").addEventListener("click", async (event) => {
   const button = event.currentTarget;
-  const email = lockForm.elements.email.value || rememberedEmail();
+  const identifier = lockForm.elements.identifier.value || rememberedIdentifier();
   lockError.textContent = "";
   lockMessage.textContent = "";
-  if (!email) {
+  if (!identifier) {
     lockEmailOverride = true;
     renderLockScreen({ focus: true });
-    lockError.textContent = "Enter your account email first, then tap “Forgot your PIN?” again.";
+    lockError.textContent = "Enter your account email or sign-in username first, then tap “Forgot your PIN?” again.";
     return;
   }
 
   button.disabled = true;
   button.textContent = "Sending reset email…";
   try {
-    await requestPinReset(email);
-    lockMessage.textContent = "Check your email for a PIN reset link. It may take a minute to arrive.";
+    await requestPinReset(identifier);
+    lockMessage.textContent = "If that identifier matches the owner account, a PIN reset link is on its way.";
   } catch (problem) {
     lockError.textContent = problem.message;
   } finally {

@@ -1,0 +1,21 @@
+project_id = "mcat-tracker"
+
+[auth]
+site_url = "http://localhost:8912"
+additional_redirect_urls = [
+  "http://localhost:8912/reset.html",
+  "http://127.0.0.1:8912/reset.html",
+  "https://repoman-ai.github.io/mcat-tracker/reset.html",
+]
+
+[functions.credential-info]
+verify_jwt = false
+
+[functions.identifier-login]
+verify_jwt = false
+
+[functions.request-pin-reset]
+verify_jwt = false
+
+[functions.account-credentials]
+verify_jwt = false

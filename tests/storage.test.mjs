@@ -83,6 +83,45 @@ const mergedDeletion = storage.mergeStates(
 assert.equal(mergedDeletion.mistakes.length, 0);
 assert.equal(mergedDeletion.tombstones.mistakes.gone, "2026-08-21T00:00:00.000Z");
 
+assert.equal(storage.defaultState().settings.displayName, "");
+assert.equal(storage.sanitizeDisplayName("  Alec  E  "), "Alec E");
+assert.equal(storage.sanitizeDisplayName("Alec\0\nE\t"), "Alec E");
+assert.equal(storage.sanitizeDisplayName("x".repeat(80)).length, storage.MAX_DISPLAY_NAME_LENGTH);
+assert.equal(storage.sanitizeDisplayName(undefined), "");
+assert.equal(storage.normalizeState({ settings: { displayName: "  Alec " } }).settings.displayName, "Alec");
+const displayBackup = storage.createBackup(storage.normalizeState({ settings: { displayName: "  Alec  E  ", updatedAt: "2026-08-21T00:00:00.000Z" } }));
+assert.equal(displayBackup.state.settings.displayName, "Alec E", "display name is normalized in JSON export");
+const validatedDisplayBackup = storage.validateBackup(displayBackup);
+assert.equal(validatedDisplayBackup.state.settings.displayName, "Alec E", "display name survives JSON import");
+assert.equal(validatedDisplayBackup.summary.displayName, "Alec E");
+
+// Opening a fresh device is not a settings edit; its blank defaults must not
+// overwrite a real cloud display name just because the device was opened later.
+const cloudNameOnFreshDevice = {
+  ...storage.defaultState(),
+  settings: { ...storage.defaultState().settings, displayName: "Cloud name", updatedAt: "2025-01-01T00:00:00.000Z" },
+};
+assert.equal(storage.mergeStates(storage.defaultState(), cloudNameOnFreshDevice).settings.displayName, "Cloud name");
+assert.equal(storage.mergeStates(cloudNameOnFreshDevice, storage.defaultState()).settings.displayName, "Cloud name");
+
+// A display name set on one device must win over an older one from another device.
+const mergedName = storage.mergeStates(
+  { ...storage.defaultState(), settings: { displayName: "Old", updatedAt: "2026-08-20T00:00:00.000Z" } },
+  { ...storage.defaultState(), settings: { displayName: "New", updatedAt: "2026-08-21T00:00:00.000Z" } },
+);
+assert.equal(mergedName.settings.displayName, "New");
+assert.equal(storage.mergeStates(
+  { ...storage.defaultState(), settings: { displayName: "New", updatedAt: "2026-08-21T00:00:00.000Z" } },
+  { ...storage.defaultState(), settings: { displayName: "Old", updatedAt: "2026-08-20T00:00:00.000Z" } },
+).settings.displayName, "New");
+
+// Removing a display name is also a settings edit, so a newer empty value wins.
+const mergedNameRemoval = storage.mergeStates(
+  { ...storage.defaultState(), settings: { displayName: "Alec", updatedAt: "2026-08-20T00:00:00.000Z" } },
+  { ...storage.defaultState(), settings: { displayName: "", updatedAt: "2026-08-21T00:00:00.000Z" } },
+);
+assert.equal(mergedNameRemoval.settings.displayName, "");
+
 assert.equal(csvCell("plain"), "plain");
 assert.equal(csvCell("comma, quote \" and\nUnicode β"), '"comma, quote "" and\nUnicode β"');
 

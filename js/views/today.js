@@ -82,9 +82,11 @@ export function renderToday(context) {
   // orienting fact instead of repeating it, keeping the action card near the top
   // of a phone screen. Off-schedule states still explain themselves in prose.
   const isScheduled = todayContext.state === "scheduled";
+  const heading = isScheduled ? "Today" : "Your next block";
+  const name = state.settings.displayName;
   return `
     <header class="view-header today-header">
-      <div><span class="eyebrow">${escapeHTML(timingLine)}</span><h1>${isScheduled ? "Today" : "Your next block"}</h1>${isScheduled ? "" : `<p>${escapeHTML(formatDateLong(row.date))}</p>`}</div>
+      <div><span class="eyebrow">${escapeHTML(timingLine)}</span><h1>${escapeHTML(name ? `${heading}, ${name}` : heading)}</h1>${isScheduled ? "" : `<p>${escapeHTML(formatDateLong(row.date))}</p>`}</div>
       ${previewNote}
     </header>
     <div class="today-grid">

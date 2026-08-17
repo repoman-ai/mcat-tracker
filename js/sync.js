@@ -1,13 +1,14 @@
-import { derivePassword, normalizeEmail } from "./pin.js";
-import { AUTH_STORAGE_KEY, rememberEmail, rememberedEmail } from "./auth-storage.js";
+import { GENERIC_AUTH_ERROR, migrateLoginCredential, unlockWithIdentifier } from "./account-auth.js";
+import { AUTH_STORAGE_KEY, rememberIdentifier } from "./auth-storage.js";
 import { mergeStates, normalizeState, SCHEMA_VERSION } from "./storage.js";
 import { SYNC_CONFIG } from "./sync-config.js";
+import { validateLoginUsername } from "./username.js";
 
 const SYNC_DELAY = 900;
 const POLL_INTERVAL = 60_000;
 
-/** The owner email is typed once per device and cached here. It is never committed. */
-export { rememberedEmail } from "./auth-storage.js";
+/** The identifier used on this device is cached here. A username is never resolved to email in storage. */
+export { rememberedIdentifier } from "./auth-storage.js";
 
 /**
  * True when this browser holds Supabase auth material. Used so a device that
@@ -52,7 +53,8 @@ function computeUnlocked(signedIn) {
 function isConfigured() {
   try {
     const url = new URL(SYNC_CONFIG.supabaseUrl);
-    return url.protocol === "https:" && Boolean(SYNC_CONFIG.supabasePublishableKey?.trim());
+    const secureTransport = url.protocol === "https:" || (["localhost", "127.0.0.1"].includes(url.hostname) && url.protocol === "http:");
+    return secureTransport && Boolean(SYNC_CONFIG.supabasePublishableKey?.trim());
   } catch {
     return false;
   }
@@ -69,7 +71,7 @@ function setSession(nextSession) {
   emit({
     signedIn,
     unlocked: computeUnlocked(signedIn),
-    email: session?.user?.email || rememberedEmail(),
+    email: session?.user?.email || "",
     mode: signedIn ? status.mode : "locked",
     message: signedIn ? status.message : "Enter your PIN to unlock this device.",
   });
@@ -153,39 +155,75 @@ function unlockErrorMessage(error) {
   }
   // Supabase answers a wrong email and a wrong PIN identically, so neither can
   // be enumerated. Say so plainly instead of leaking which half was wrong.
-  if (/invalid login credentials/i.test(raw)) return "That email and PIN combination did not match. Check both and try again.";
+  if (/invalid login credentials|email or username and PIN combination/i.test(raw)) return GENERIC_AUTH_ERROR;
   if (/email not confirmed/i.test(raw)) return "This account still needs email confirmation turned off in Supabase. See the README setup steps.";
   if (/rate limit|too many/i.test(raw)) return "Too many attempts just now. Wait a minute and try again.";
   return raw || "The PIN could not be checked.";
 }
 
 /**
- * Unlocks this device with the owner email and PIN. The PIN is stretched locally
+ * Calls a pre-auth Edge Function without installing a browser session or
+ * attaching an Authorization bearer. Only the publishable key is sent.
+ */
+async function publicFunction(name, body) {
+  const response = await fetch(`${SYNC_CONFIG.supabaseUrl}/functions/v1/${name}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: SYNC_CONFIG.supabasePublishableKey },
+    body: JSON.stringify(body),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(payload.error || (response.status === 429 ? "Too many attempts just now. Wait a minute and try again." : "The sign-in service is temporarily unavailable."));
+    error.status = response.status;
+    throw error;
+  }
+  return payload;
+}
+
+async function accountFunction(action, fields = {}) {
+  if (!client) throw new Error("Cloud sync is not configured yet.");
+  const { data, error } = await client.functions.invoke("account-credentials", { body: { action, ...fields } });
+  if (error) {
+    let message = error.message;
+    try { message = (await error.context?.json())?.error || message; } catch { /* Preserve transport message. */ }
+    throw new Error(message || "The account service is temporarily unavailable.");
+  }
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+
+const accountApi = {
+  status: () => accountFunction("status"),
+  begin: (loginUsername) => accountFunction("begin", { loginUsername }),
+  setUsername: (loginUsername) => accountFunction("set_username", { loginUsername }),
+  activate: (password) => accountFunction("activate", { password }),
+};
+
+/**
+ * Unlocks this device with an email or sign-in username and PIN. The PIN is stretched locally
  * into the account password; the raw PIN never leaves the browser and is never
  * stored. There is no sign-up path here — only an account that already exists in
  * Supabase can be unlocked.
  */
-export async function unlockWithPin(email, pin) {
+export async function unlockWithPin(identifier, pin) {
   if (!client) throw new Error("Cloud sync is not configured yet.");
-  const account = normalizeEmail(email);
   emit({ mode: "connecting", message: "Checking your PIN…" });
 
-  let password;
   try {
-    password = await derivePassword(account, pin);
+    const nextSession = await unlockWithIdentifier({
+      identifier,
+      pin,
+      auth: client.auth,
+      getCredentialInfo: (normalized) => publicFunction("credential-info", { identifier: normalized }),
+      loginWithAlias: (normalized, password) => publicFunction("identifier-login", { identifier: normalized, password }),
+    });
+    rememberIdentifier(identifier);
+    setSession(nextSession);
   } catch (error) {
-    emit({ mode: "locked", message: error.message });
-    throw error;
-  }
-
-  const { data, error } = await client.auth.signInWithPassword({ email: account, password });
-  if (error) {
     emit({ mode: "locked", message: unlockErrorMessage(error) });
     throw new Error(unlockErrorMessage(error));
   }
 
-  rememberEmail(account);
-  setSession(data.session);
   await syncNow({ reason: "unlock" });
   return getSyncStatus();
 }
@@ -197,17 +235,45 @@ export async function unlockWithPin(email, pin) {
  * account key from it. Supabase never learns the PIN itself, and forgetting the
  * PIN no longer means losing the account.
  */
-export async function requestPinReset(email) {
+export async function requestPinReset(identifier) {
   if (!client) throw new Error("Cloud sync is not configured yet.");
-  const account = normalizeEmail(email);
-  if (!account) throw new Error("Enter the account email so the reset link can be sent.");
+  const normalized = String(identifier ?? "").trim().toLowerCase();
+  if (!normalized) throw new Error("Enter the account email or sign-in username so a reset link can be requested.");
 
   // Same-origin so this works on localhost and on the deployed subpath alike.
   const redirectTo = new URL("reset.html", window.location.href).href;
-  const { error } = await client.auth.resetPasswordForEmail(account, { redirectTo });
-  if (error) throw new Error(unlockErrorMessage(error));
-  rememberEmail(account);
+  await publicFunction("request-pin-reset", { identifier: normalized, redirectTo });
+  rememberIdentifier(normalized);
   return true;
+}
+
+export async function getLoginUsernameStatus() {
+  if (!session?.user) throw new Error("Unlock this device to manage its sign-in username.");
+  return accountApi.status();
+}
+
+export async function configureLoginUsername(loginUsername, pin) {
+  if (!session?.user?.email) throw new Error("Unlock this device to manage its sign-in username.");
+  const result = await migrateLoginCredential({
+    email: session.user.email,
+    pin,
+    requestedUsername: loginUsername,
+    auth: client.auth,
+    accountApi,
+  });
+  return result;
+}
+
+export async function renameLoginUsername(loginUsername) {
+  if (!session?.user) throw new Error("Unlock this device to manage its sign-in username.");
+  const checked = validateLoginUsername(loginUsername);
+  if (!checked.valid) throw new Error(checked.message);
+  return accountApi.setUsername(checked.username);
+}
+
+export async function removeLoginUsername() {
+  if (!session?.user) throw new Error("Unlock this device to manage its sign-in username.");
+  return accountApi.setUsername(null);
 }
 
 /**

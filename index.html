@@ -66,12 +66,12 @@
       <p class="lock-lead" data-lock-lead>Enter your PIN to unlock this device.</p>
 
       <div class="lock-account" data-lock-account hidden>
-        <span data-lock-email></span>
-        <button class="button button--quiet button--small" type="button" data-lock-change-email>Use a different account</button>
+        <span data-lock-identifier></span>
+        <button class="button button--quiet button--small" type="button" data-lock-change-email>Use a different identifier</button>
       </div>
 
-      <label data-lock-email-field>Account email
-        <input type="email" name="email" autocomplete="username" inputmode="email" required>
+      <label data-lock-email-field>Email or username
+        <input type="text" name="identifier" autocomplete="username" autocapitalize="none" spellcheck="false" required>
       </label>
 
       <label>PIN
