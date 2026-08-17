@@ -11,5 +11,5 @@
 // account for anyone to target.
 export const SYNC_CONFIG = Object.freeze({
   supabaseUrl: "https://hqsfeunkuvzuhbivlyla.supabase.co",
-  supabasePublishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxc2ZldW5rdXZ6dWhiaXZseWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5OTAwNjcsImV4cCI6MjEwMjU2NjA2N30.UECgTJEjfEhwVjncaNIunyaA38hK1iEBy1j5YEBbUAo",
+  supabasePublishableKey: "sb_publishable_u_U4tyLjGzAJ0yzHg8rnwQ_rpgzUNGX",
 });
