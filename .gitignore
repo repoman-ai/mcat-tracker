@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Office lock files
+~$*.docx
+~$*.xlsx
+
+# Editor artefacts
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Dependencies (the site itself has no build step)
+node_modules/
+
+# Locally generated debris
+.tmp_mcat/
+*.inspect.ndjson
+tests/output/
+
+# Never commit a real credential. sync-config.js holds only the Supabase
+# project URL and publishable key, which are safe to publish; anything with a
+# secret belongs in a file matching these patterns instead.
+*.local
+.env
+.env.*
+*service-role*
+*secret*

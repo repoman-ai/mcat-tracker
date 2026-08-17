@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f5f1e8">
+  <title>Reset PIN · MCAT Momentum</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./css/styles.css">
+  <script src="./vendor/supabase.min.js"></script>
+  <script type="module" src="./js/reset.js"></script>
+</head>
+<body>
+  <main class="setup-page">
+    <a class="setup-back" href="./index.html">← Back to the tracker</a>
+    <span class="brand-mark brand-mark--lock" aria-hidden="true"><i></i><i></i><i></i></span>
+    <h1>Reset your PIN</h1>
+
+    <section class="setup-card" data-reset-loading>
+      <h2>Opening your secure reset link…</h2>
+      <p class="setup-lead">This should only take a moment.</p>
+    </section>
+
+    <section class="setup-card" data-reset-form hidden>
+      <h2>Choose a new PIN</h2>
+      <p class="setup-lead">Use at least four digits. This changes the PIN for every device but does not remove any study data.</p>
+      <form class="reset-form" data-new-pin-form>
+        <label>New PIN
+          <input type="password" name="pin" autocomplete="new-password" inputmode="numeric" pattern="[0-9]*" minlength="4" required placeholder="At least 4 digits">
+        </label>
+        <label>Confirm new PIN
+          <input type="password" name="confirmation" autocomplete="new-password" inputmode="numeric" pattern="[0-9]*" minlength="4" required placeholder="Type it again">
+        </label>
+        <p class="form-error" data-reset-error role="alert"></p>
+        <button class="button button--primary button--large" type="submit">Save new PIN</button>
+      </form>
+    </section>
+
+    <section class="setup-card" data-reset-expired hidden>
+      <h2>This reset link cannot be used</h2>
+      <p class="setup-lead" data-link-error>The link may have expired or already been used. Request a fresh one below.</p>
+      <form class="reset-form" data-resend-form>
+        <label>Account email
+          <input type="email" name="email" autocomplete="username" inputmode="email" required placeholder="you@example.com">
+        </label>
+        <p class="form-error" data-resend-error role="alert"></p>
+        <p class="form-success" data-resend-message role="status" aria-live="polite"></p>
+        <button class="button button--primary" type="submit">Send a new reset email</button>
+      </form>
+    </section>
+
+    <section class="setup-card setup-card--privacy" data-reset-success hidden>
+      <h2>Your PIN has been changed</h2>
+      <p>Returning you to the tracker so you can unlock it with the new PIN. Your study data is still there.</p>
+      <a class="button button--primary" href="./index.html">Return to the tracker now</a>
+    </section>
+  </main>
+</body>
+</html>

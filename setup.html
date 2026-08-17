@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Account key calculator · MCAT Momentum</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <main class="setup-page">
+    <a class="setup-back" href="./index.html">← Back to the tracker</a>
+    <h1>Account key calculator</h1>
+    <p class="setup-lead">
+      Run this once when you create your Supabase account. It turns the PIN you want to
+      use into the long account password Supabase should store, so the value in the auth table is
+      never a short number that could be guessed.
+    </p>
+
+    <section class="setup-card setup-card--privacy">
+      <h2>Nothing here is sent anywhere</h2>
+      <p>
+        The calculation happens entirely in this browser tab. Your PIN is never transmitted, never
+        logged, and never saved. Close the tab and it is gone.
+      </p>
+    </section>
+
+    <form class="setup-card" id="calc-form">
+      <label>Owner email
+        <input type="email" name="email" autocomplete="off" required placeholder="the address you will create in Supabase">
+      </label>
+      <label>PIN you want to use
+        <input type="password" name="pin" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" required minlength="4"
+               placeholder="at least 4 digits">
+      </label>
+      <p class="setup-hint">
+        Use at least four digits. You will type this PIN to unlock a new device. If you forget it,
+        the tracker can send a secure reset link to your owner email.
+      </p>
+      <p class="form-error" id="calc-error" role="alert"></p>
+      <button class="button button--primary button--large" type="submit">Calculate account key</button>
+    </form>
+
+    <section class="setup-card setup-result" id="calc-result" hidden>
+      <h2>Account password for Supabase</h2>
+      <p>Copy this whole value into the <strong>Password</strong> field when you create the user in
+        Supabase → Authentication → Users → <em>Add user</em>. Then never type it again — you will
+        only ever type your PIN.</p>
+      <output id="calc-output"></output>
+      <div class="button-row">
+        <button class="button button--primary" type="button" id="calc-copy">Copy to clipboard</button>
+        <button class="button" type="button" id="calc-clear">Clear the screen</button>
+      </div>
+      <p class="setup-hint" id="calc-copy-note" aria-live="polite"></p>
+    </section>
+
+    <section class="setup-card">
+      <h2>The rest of the one-time setup</h2>
+      <ol class="setup-steps">
+        <li>Create a Supabase project.</li>
+        <li>Run <code>supabase/schema.sql</code> in its SQL Editor.</li>
+        <li>Turn <strong>off</strong> public sign-ups, and turn off "Confirm email", under
+          Authentication → Sign In / Providers → Email.</li>
+        <li>Add one user with your email and the calculated password above.</li>
+        <li>Paste the project URL and publishable key into <code>js/sync-config.js</code>.</li>
+        <li>Open the tracker, enter your email and PIN, and you are unlocked.</li>
+      </ol>
+      <p class="setup-hint">The full explanation lives in the project README.</p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { derivePassword } from "./js/pin.js";
+
+    const form = document.querySelector("#calc-form");
+    const errorLine = document.querySelector("#calc-error");
+    const result = document.querySelector("#calc-result");
+    const output = document.querySelector("#calc-output");
+    const copyNote = document.querySelector("#calc-copy-note");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorLine.textContent = "";
+      copyNote.textContent = "";
+      try {
+        output.textContent = await derivePassword(form.elements.email.value, form.elements.pin.value);
+        result.hidden = false;
+        result.scrollIntoView({ block: "nearest" });
+      } catch (problem) {
+        result.hidden = true;
+        errorLine.textContent = problem.message;
+      }
+    });
+
+    document.querySelector("#calc-copy").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(output.textContent);
+        copyNote.textContent = "Copied. Paste it into Supabase, then clear this screen.";
+      } catch {
+        copyNote.textContent = "Copying was blocked — select the value above and copy it manually.";
+      }
+    });
+
+    document.querySelector("#calc-clear").addEventListener("click", () => {
+      output.textContent = "";
+      result.hidden = true;
+      copyNote.textContent = "";
+      form.reset();
+      form.elements.email.focus();
+    });
+  </script>
+</body>
+</html>
