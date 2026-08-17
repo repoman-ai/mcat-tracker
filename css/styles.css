@@ -585,6 +585,7 @@ body.is-locked .app-shell { display: none; }
   .app-column { grid-column: 2; padding-bottom: 0; }
   .mobile-nav, .mobile-brand { display: none; }
   .topbar { min-height: 70px; }
+  .sync-chip { display: none; }
   .topbar-date { margin-left: 0; text-align: left; }
   .topbar-log { display: inline-flex; min-height: var(--touch); align-items: center; gap: .4rem; padding: .6rem .85rem; border: 0; border-radius: .7rem; background: var(--ink-strong); color: #fff; font-weight: 800; }
   .toast { bottom: 1rem; }
