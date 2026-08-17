@@ -215,6 +215,15 @@ The site is static and uses only relative paths, with `.nojekyll` included, so i
 
 Only the `mcat-tracker/` directory is intended for deployment. The parent workspace holds the source `.docx` and `.xlsx` documents and is not part of the published site.
 
+### Current live deployment
+
+The private-schema migration and all four Edge Functions are deployed to the configured Supabase
+project, and the static client is published at `https://repoman-ai.github.io/mcat-tracker/`. The
+versioned SQL migration was applied through the Supabase SQL Editor in the reviewed order because the
+Supabase CLI was unavailable locally; reconcile the project's migration history before a future
+`supabase db push`. The `ALIAS_HMAC_SECRET` exists only in Supabase Function Secrets. No secret key,
+PIN, derived password, session token, or recovery email contents were committed or documented.
+
 ---
 
 ## Architecture

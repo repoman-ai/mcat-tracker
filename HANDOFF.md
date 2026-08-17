@@ -41,7 +41,7 @@ pending→active migration; rename/removal preserve the immutable salt and PIN. 
 ## Supabase state verified on August 17, 2026
 
 - Project ref: `hqsfeunkuvzuhbivlyla`
-- Project URL and browser-safe anon key are present in `js/sync-config.js`.
+- Project URL and the current browser-safe publishable key are present in `js/sync-config.js`.
 - Exactly one corrected owner user exists.
 - Public sign-ups are disabled and Confirm email is disabled.
 - `tracker_state` exists, has RLS enabled, has three policies, and grants no table privileges to
@@ -52,10 +52,21 @@ pending→active migration; rename/removal preserve the immutable salt and PIN. 
 - Allowed recovery redirects:
   - `https://repoman-ai.github.io/mcat-tracker/reset.html`
   - `http://localhost:8912/reset.html`
+  - `http://127.0.0.1:8912/reset.html`
 
-The private alias migration and four Edge Functions are implemented locally but have **not** been
-applied or deployed to the live project. No live Auth password or alias row has been changed. Before
-any live mutation, follow README **Safe alias deployment order** and `supabase/ROLLBACK.md`.
+The private alias migration is live in the unexposed `private` schema. Browser roles have no schema or
+wrapper-function privileges; only `service_role` can call the server wrappers. The server-only
+`ALIAS_HMAC_SECRET` is stored in Supabase Function Secrets and is not in this repository.
+`credential-info`, `identifier-login`, `request-pin-reset`, and `account-credentials` are deployed.
+Gateway JWT verification is disabled because the dashboard switch is legacy-secret-only; the
+authenticated function validates bearer tokens with Supabase Auth `getUser()` itself.
+
+The owner completed the one-time username migration in Chrome. Username + PIN and email + PIN both
+unlocked the deployed site successfully, and the lock screen remembered the username without exposing
+the email. Unknown-identifier recovery and login responses were checked live with generic errors; no
+real recovery email was sent during the final verification pass. The versioned SQL file was applied
+through the Supabase SQL Editor because the CLI was unavailable locally; reconcile migration history
+before a future `supabase db push`.
 
 Supabase's built-in sender is adequate for occasional recovery when the owner email is a project-team
 address, but it is best-effort and currently limited to two messages per hour. Custom SMTP is optional
@@ -69,11 +80,10 @@ The repository tracks `main` and `origin/main` at the public repository:
 GitHub Pages is enabled from the root of `main` with HTTPS enforced:
 `https://repoman-ai.github.io/mcat-tracker/`.
 
-The first Pages deployment completed successfully. The live desktop lock screen, 390×844 phone lock
-screen, and live expired-link recovery page were verified with no browser warnings or errors and no
-horizontal overflow. Authenticated live sign-in and sync still require the owner to type credentials
-directly; never request, retrieve, inspect, or log them. Username login cannot work live until the
-SQL/functions and updated static client are deployed in order.
+The final Pages deployment completed successfully. The live desktop lock screen, phone lock screen,
+username editor, username + PIN login, email + PIN compatibility login, and expired-link recovery page
+were verified with no browser warnings or errors and no horizontal overflow. Authenticated flows still
+require the owner to type credentials directly; never request, retrieve, inspect, or log them.
 
 ## Verification commands
 
