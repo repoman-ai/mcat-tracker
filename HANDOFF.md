@@ -45,12 +45,16 @@ for this one-user system and is useful only if dependable production delivery is
 
 ## Git state
 
-The repository is on `main` with no commits. The original project files are staged, while later
-authentication/reset changes are a mixture of unstaged modifications and untracked files. Preserve
-both the index and working tree unless the owner explicitly asks to stage or commit them.
+The repository is committed on `main` and tracks `origin/main` at the public repository:
+`https://github.com/repoman-ai/mcat-tracker`.
 
-Do not rely on any earlier claim that deployment was approved. Before creating or pushing a public
-GitHub repository or enabling GitHub Pages, ask the owner again at action time.
+GitHub Pages is enabled from the root of `main` with HTTPS enforced:
+`https://repoman-ai.github.io/mcat-tracker/`.
+
+The first Pages deployment completed successfully. The live desktop lock screen, 390×844 phone lock
+screen, and live expired-link recovery page were verified with no browser warnings or errors and no
+horizontal overflow. Authenticated live sign-in and sync still require the owner to type the account
+email and PIN directly; never request or retrieve those credentials.
 
 ## Verification commands
 
