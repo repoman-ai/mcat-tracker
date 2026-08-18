@@ -56,7 +56,7 @@ export function renderToday(context) {
   if (!row) {
     return `
       <header class="view-header"><div><span class="eyebrow">${escapeHTML(formatDateLong(today))}</span><h1>Plan complete</h1><p>You reached the end of the dated plan. Use your registered exam date and readiness evidence to choose the next block.</p></div>${previewNote}</header>
-      <div class="today-grid">${countdown(data, state, today)}<section class="card card--hero"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><div class="button-row"><a class="button button--primary" href="#log">Open repair queue</a><a class="button" href="#exams">Review exams</a></div></section></div>`;
+      <div class="today-grid">${countdown(data, state, today)}<section class="card card--hero"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><div class="button-row"><a class="button button--primary" href="#log/repair">Open repair queue</a><a class="button" href="#exams">Review exams</a></div></section></div>`;
   }
 
   const daily = state.daily[row.id] || {};
@@ -138,7 +138,7 @@ export function renderToday(context) {
             <div><dt>Phase</dt><dd>${escapeHTML(row.phase)}</dd></div>
             <div><dt>Planned hours</dt><dd>${row.weeklyHours}</dd></div>
             <div><dt>Week progress</dt><dd>${percent(completedDays, studyRows.length)}%</dd></div>
-            <div><dt>Next retests</dt><dd><a href="#log">View queue</a></dd></div>
+            <div><dt>Next retests</dt><dd><a href="#log/repair">View queue</a></dd></div>
           </dl>
         </section>
       </aside>
