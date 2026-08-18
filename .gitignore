@@ -2,7 +2,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-Icon?
+Icon\r
 
 # Office lock files
 ~$*.docx
@@ -17,6 +17,7 @@ Icon?
 
 # Dependencies (the site itself has no build step)
 node_modules/
+__pycache__/
 
 # Locally generated debris
 .tmp_mcat/

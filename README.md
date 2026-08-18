@@ -246,7 +246,11 @@ js/router.js          hash routing
 js/export.js          XLSX / CSV / JSON generation
 js/views/             today, plan, exams, log, guide, shared
 data/site-data.json   generated deployment artifact
-scripts/              site-data generator
+favicon.svg           app icon (tabs, bookmarks) — generated, do not hand-edit
+favicon.ico           legacy multi-size icon for older browsers
+icons/                PWA + Apple touch icons for home-screen bookmarks
+site.webmanifest      name, colours, and icons for installed/home-screen use
+scripts/              site-data generator, icon generator
 supabase/schema.sql   baseline tracker table + RLS policies
 supabase/migrations/  versioned private credential schema and server-only SQL
 supabase/functions/   pre-auth login/recovery and authenticated account endpoints
@@ -255,6 +259,21 @@ vendor/               ExcelJS 4.4.0, Supabase JS 2.111.0 (MIT, vendored)
 ```
 
 No third-party code is loaded from a CDN at runtime.
+
+### Icons
+
+Every icon is generated from a single glyph definition in
+`scripts/generate_icons.py`, so the tab favicon, the `.ico`, the Android
+maskable icons, and the iOS touch icon can never drift apart:
+
+```bash
+python3 scripts/generate_icons.py bars    # bars | check | monogram | hex
+```
+
+Requires `cairosvg` and `pillow`. Re-run it after changing the glyph or the
+palette, then commit the regenerated `favicon.svg`, `favicon.ico`, and
+`icons/`. Adding the site to an iPhone home screen picks up
+`icons/apple-touch-icon.png` and opens standalone, without browser chrome.
 
 ---
 
