@@ -40,6 +40,10 @@ for (const d of ["2026-11-26", "2026-12-25"]) {
   assert.equal(row.carsPassages, 0);
   assert.equal(row.practiceTarget, "");
 }
+for (const row of data.schedule.filter(r => r.isRest)) {
+  assert.equal(row.practiceTarget, "", `Rest day ${row.date} must not carry a practice quota`);
+  assert.equal(row.carsPassages, 0);
+}
 const chapterRows = data.schedule.filter(r => r.chapterIds.length);
 const ids = chapterRows.flatMap(r => r.chapterIds);
 assert.equal(ids.length, 83);
