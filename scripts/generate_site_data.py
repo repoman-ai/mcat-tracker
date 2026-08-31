@@ -14,7 +14,7 @@ import re
 import sys
 import zipfile
 from collections import Counter, defaultdict
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
@@ -371,9 +371,10 @@ def parse_xlsx_sheets() -> dict[str, list[list[Any]]]:
     return result
 
 
-def workbook_content() -> dict[str, Any]:
+def workbook_content(plan: dict[str, Any]) -> dict[str, Any]:
     sheets = parse_xlsx_sheets()
     expected = {
+        f"{plan['prep_weeks']}-Week Tracker",
         "Daily Schedule",
         "Mistake Log",
         "Weekly Pattern Review",
@@ -472,9 +473,34 @@ def parse_int(value: str, field: str, row_number: int) -> int:
         raise error
 
 
+# Each chapter token is a separate block. Operational blocks include maintenance;
+# question costs include answering AND review, never an additional review block.
+MODE_MINUTES = {
+    "full read": (90, 135),
+    "objectives + checks": (50, 80),
+    "questions first": (30, 55),
+    "rapid review": (30, 45),
+    "evidence-driven review": (75, 120),
+    "practice / retrieval": (35, 70),
+    "light retrieval": (35, 70),
+    "section bank / review": (15, 30),
+    "logistics": (20, 45),
+    "rest": (0, 30),
+    "rest / logistics": (20, 45),
+    "exam under test conditions": (450, 480),
+    "exam if officially scheduled": (450, 480),
+}
+
+
 def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
-    assignment = row["assignment"].lower()
-    mode = row["mode"].lower()
+    modes = [piece.strip().lower() for piece in row["mode"].split(";")]
+    unknown = set(modes) - MODE_MINUTES.keys()
+    if unknown:
+        fail(f"Unknown workload modes on {row['date']}: {sorted(unknown)}")
+    if (row["isRest"] or row["isExam"] or row["isFullLengthReview"] or "exam if officially scheduled" in modes) and len(modes) != 1:
+        fail(f"Protected/conditional day {row['date']} cannot stack extra mode blocks")
+    if "exam if officially scheduled" in modes:
+        return {"lowMinutes": 450, "highMinutes": 480, "label": "If registered: ~7.5-8 hr", "basis": "Conditional placeholder, not a booked exam; otherwise rest. Excluded from preparation totals.", "conditional": True}
     if row["isRest"]:
         return {"lowMinutes": 0, "highMinutes": 30, "label": "Rest day", "basis": "Optional light maintenance only"}
     if row["isExam"]:
@@ -482,53 +508,24 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
     if row["isFullLengthReview"]:
         sunday = row["day"] == "Sun"
         return {"lowMinutes": 240 if sunday else 120, "highMinutes": 300 if sunday else 150, "label": "~4-5 hr" if sunday else "~2-2.5 hr", "basis": "Protected exam review; no new chapters"}
-    if row["week"] == 1:
-        light = row["day"] == "Fri"
-        return {"lowMinutes": 60 if light else 180, "highMinutes": 90 if light else 210, "label": "~1-1.5 hr" if light else "~3-3.5 hr", "basis": "Launch time cap includes questions, review and brief Anki; flag gaps for after the diagnostic"}
-
-    low = 0
-    high = 0
-    chapter_count = len(row["chapterIds"])
-    for mode_name in [piece.strip().lower() for piece in row["mode"].split(";")]:
-        if mode_name == "full read":
-            low += 90
-            high += 135
-        elif mode_name == "objectives + checks":
-            low += 50
-            high += 80
-        elif mode_name == "questions first":
-            low += 30
-            high += 55
-        elif "evidence-driven review" in mode_name:
-            low += 75
-            high += 120
-        elif "practice" in mode_name or "retrieval" in mode_name:
-            low += 35
-            high += 70
-    if chapter_count and low == 0:
-        low += 40 * chapter_count
-        high += 70 * chapter_count
+    low = sum(MODE_MINUTES[mode][0] for mode in modes)
+    high = sum(MODE_MINUTES[mode][1] for mode in modes)
+    if row["chapterIds"]:
+        low += 15
+        high += 30
 
     practice = row["practiceTarget"]
-    uworld = re.search(r"(\d+)\s+UWorld", practice, flags=re.I)
-    section_bank = re.search(r"(\d+)\s+[^;]*Section Bank", practice, flags=re.I)
-    if uworld:
-        count = int(uworld.group(1))
+    for count in re.findall(r"(\d+)\s+UWorld", practice, flags=re.I):
+        count = int(count)
         low += count * 4
         high += count * 7
-    if section_bank:
-        count = int(section_bank.group(1))
+    for count in re.findall(r"(\d+)\s+[^;]*Section Bank", practice, flags=re.I):
+        count = int(count)
         low += count * 5
         high += count * 8
     if row["carsPassages"]:
         low += row["carsPassages"] * 15
         high += row["carsPassages"] * 22
-    if "logistics" in assignment:
-        low = max(low, 20)
-        high = max(high, 45)
-
-    if high == 0:
-        low, high = 30, 60
 
     def hours_label(minutes: int) -> str:
         return f"{minutes / 60:.1f}".replace(".0", "")
@@ -544,7 +541,7 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
         "lowMinutes": low,
         "highMinutes": high,
         "label": workload_label,
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps.",
     }
 
 
@@ -575,7 +572,6 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
     schedule: list[dict[str, Any]] = []
     unknown_chapters: set[str] = set()
     assigned_chapters: list[str] = []
-    display_normalizations = 0
     start = date.fromisoformat(plan["plan_start"])
 
     for index, raw in enumerate(raw_rows, start=2):
@@ -596,14 +592,12 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         week: int | str = int(raw["week"]) if raw["week"].isdigit() else raw["week"]
         assignment_lower = raw["assignment"].lower()
         mode_lower = raw["mode"].lower()
-        practice_display = re.sub(r"\b1 CARS passages\b", "1 CARS passage", raw["practice_target"])
-        if practice_display != raw["practice_target"]:
-            display_normalizations += 1
-        is_rest = mode_lower.startswith("rest") or assignment_lower in {"rest", "thanksgiving rest", "holiday rest"} or assignment_lower.startswith("rest;")
+        is_rest = mode_lower == "rest"
         is_exam = "exam under test conditions" in mode_lower
         is_review = "full-length review" in assignment_lower or "finish full-length review" in assignment_lower
         is_section_bank = "section bank" in raw["practice_target"].lower()
         is_test_window = week == "TEST"
+        is_logistics = mode_lower in {"logistics", "rest / logistics"}
         if is_test_window:
             day_type = "test-window"
         elif is_exam:
@@ -612,6 +606,8 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             day_type = "full-length-review"
         elif is_rest:
             day_type = "rest"
+        elif is_logistics:
+            day_type = "logistics"
         elif is_section_bank:
             day_type = "section-bank"
         else:
@@ -630,7 +626,7 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             "assignment": raw["assignment"],
             "mode": raw["mode"],
             "practiceTarget": raw["practice_target"],
-            "practiceTargetDisplay": practice_display,
+            "practiceTargetDisplay": raw["practice_target"],
             "carsPassages": parse_int(raw["cars_passages"], "cars_passages", index),
             "weeklyHours": parse_int(raw["weekly_hours"], "weekly_hours", index),
             "weeklyMilestone": raw["weekly_milestone"],
@@ -643,6 +639,11 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             "isSectionBank": is_section_bank,
             "isTestWindow": is_test_window,
         }
+        extra_questions = re.search(r"\d+\s+(?:UWorld|[^;]*Section Bank)", row["practiceTarget"], re.I)
+        if ((is_rest or is_review) and row["carsPassages"]) or ((is_rest or is_review or is_exam) and extra_questions):
+            fail(f"Protected rest/review day {row['date']} has an extra practice quota")
+        if (is_rest or is_review or is_exam) and chapter_ids:
+            fail(f"Protected day {row['date']} has new chapters")
         row["estimatedWorkload"] = infer_workload(row)
         row["relatedGuideSections"] = guide_links_for(row)
         schedule.append(row)
@@ -690,16 +691,16 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
                 fail(f"Schedule values for Week {week_number} do not align with plan.json")
         cars_total = sum(row["carsPassages"] for row in rows)
         uworld_total = sum(
-            int(match.group(1))
+            int(count)
             for row in rows
-            for match in [re.search(r"(\d+)\s+UWorld", row["practiceTarget"], flags=re.I)]
-            if match
+            for count in re.findall(r"(\d+)\s+UWorld", row["practiceTarget"], flags=re.I)
         )
         if cars_total != int(week["cars_passages"]):
             fail(f"Week {week_number} CARS target mismatch: schedule={cars_total}, plan={week['cars_passages']}")
         if uworld_total != int(week["uworld_questions"]):
             fail(f"Week {week_number} UWorld target mismatch: schedule={uworld_total}, plan={week['uworld_questions']}")
-        weekly_checks.append({"week": week_number, "dailyRows": 7, "carsPassages": cars_total, "uworldQuestions": uworld_total})
+        workload = validate_week_workload(rows, week)
+        weekly_checks.append({"week": week_number, "dailyRows": 7, "carsPassages": cars_total, "uworldQuestions": uworld_total, **workload})
 
     return schedule, {
         "dailyRows": len(schedule),
@@ -711,12 +712,18 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         "chapterAssignments": len(assigned_chapters),
         "uniqueChapterAssignments": len(set(assigned_chapters)),
         "unknownChapterIds": [],
-        "displayNormalizations": {
-            "singularCarsPassageLabels": display_normalizations,
-            "sourceRowsChanged": 0,
-        },
         "weeklyChecks": weekly_checks,
     }
+
+
+def validate_week_workload(rows: list[dict[str, Any]], week: dict[str, Any]) -> dict[str, Any]:
+    low = sum(row["estimatedWorkload"]["lowMinutes"] for row in rows)
+    high = sum(row["estimatedWorkload"]["highMinutes"] for row in rows)
+    budget = week["planned_hours"] * 60
+    if low > budget:
+        fail(f"Week {week['week']} minimum estimate {low} min exceeds {budget} min budget; revise assignments, not estimates")
+    risk = "midpoint-over-budget" if (low + high) / 2 > budget else "upper-over-budget" if high > budget else "within-budget"
+    return {"estimatedLowMinutes": low, "estimatedHighMinutes": high, "budgetMinutes": budget, "capacityRisk": risk}
 
 
 def derive_phase_map(plan: dict[str, Any]) -> list[dict[str, Any]]:
@@ -743,7 +750,7 @@ def derive_phase_map(plan: dict[str, Any]) -> list[dict[str, Any]]:
     return phases
 
 
-def derive_exams(schedule: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def derive_exams(schedule: list[dict[str, Any]], plan: dict[str, Any]) -> list[dict[str, Any]]:
     exams = []
     for index, row in enumerate(schedule):
         if not row["isExam"]:
@@ -768,14 +775,14 @@ def derive_exams(schedule: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 ],
             }
         )
-    if len(exams) != 8:
-        fail(f"Expected eight full-length/diagnostic exams, found {len(exams)}")
+    if [exam["plannedDate"] for exam in exams] != plan["full_length_dates"]:
+        fail("Full-length dates/count do not match plan.json full_length_dates")
     if any(date.fromisoformat(exam["plannedDate"]).weekday() != 5 or len(exam["reviewAssignmentIds"]) != 2 for exam in exams):
         fail("Every full-length needs a Saturday exam and two protected review days")
     return exams
 
 
-def derive_section_banks(schedule: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def derive_section_banks(schedule: list[dict[str, Any]], plan: dict[str, Any]) -> list[dict[str, Any]]:
     groups: dict[str, dict[str, Any]] = {}
     for row in schedule:
         for count, section in re.findall(r"(\d+)\s+([^;]+?) Section Bank questions", row["practiceTarget"], flags=re.I):
@@ -787,10 +794,10 @@ def derive_section_banks(schedule: list[dict[str, Any]]) -> list[dict[str, Any]]
     for index, group in enumerate(groups.values(), start=1):
         group["id"] = f"section-bank-{index:02d}"
         output.append(group)
-    if sum(group["totalQuestions"] for group in output) != 600:
-        fail(f"Section Bank total must be 600 questions, found {sum(group['totalQuestions'] for group in output)}")
-    if {group["section"]: group["totalQuestions"] for group in output} != {"B/B": 200, "C/P": 200, "P/S": 200}:
-        fail("Section Banks must contain 200 questions per science section")
+    if sum(group["totalQuestions"] for group in output) != plan["question_targets"]["section_bank"]:
+        fail("Section Bank total does not match plan.json")
+    if {group["section"]: group["totalQuestions"] for group in output} != plan["question_targets"]["section_bank_by_section"]:
+        fail("Section Bank section totals do not match plan.json")
     return output
 
 
@@ -828,9 +835,11 @@ def build_mode_definitions(plan: dict[str, Any], guide: dict[str, Any]) -> list[
         ("Exam under test conditions", "Treat the exam as the week's main practice volume. Reproduce testing conditions and do not stack a normal QBank quota on top."),
         ("Evidence-driven review", "Review every incorrect, flagged, and guessed-correct item. Name the cause, record one concrete fix, and schedule a retest 7-14 days later."),
         ("Practice / retrieval", "Use questions, spaced retrieval, and the mistake log to choose the next repair target. Count deeply reviewed work, not screens completed."),
+        ("Section Bank / review", "Complete the named questions and review incorrect, flagged and guessed-correct answers. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."),
         ("Light retrieval", "Use only short, confidence-building retrieval. Stop broad content work and protect sleep during the taper."),
         ("Rest", "Rest is planned work. Optional Anki maintenance may stay brief, but there is no catch-up quota."),
         ("Rest / logistics", "Protect recovery and complete only the named logistics task. Do not turn the block into an unplanned study marathon."),
+        ("Logistics", "Complete only the named checklist, route, ID or food task in 20-45 minutes. This is a short task, not a zero-work rest day."),
         ("Exam if officially scheduled", "This is a placeholder window only. Treat it as test day only after the registered AAMC date is entered."),
     ]
     for name, instructions in operational:
@@ -855,7 +864,7 @@ This map shows where every authoritative source component appears. `data/site-da
 | Authoritative source | Source component | Website location | Treatment |
 |---|---|---|---|
 | `schedule.csv` | All {validation['dailyRows']} dated rows | Today; Plan; Daily Schedule export | Today prioritizes the current/next action; Plan exposes every row and complete details. |
-| `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text is preserved. A display-only grammar normalization changes “1 CARS passages” to “1 CARS passage” in {validation['displayNormalizations']['singularCarsPassageLabels']} rows. |
+| `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text and per-chapter mode multiplicity are preserved; repeated modes are displayed once. |
 | `plan.json` | Metadata, {validation['numericWeeks']} weeks, targets, phases | Today; Plan; Guide | Weekly progress uses the exact planned hours, UWorld, CARS, focus, and milestone values. |
 | `plan.json` | Preferred/fallback windows, placeholders, registration, readiness rules | Today countdown; Exams; Guide | January 22-23 remain clearly labeled placeholders until a registered date is saved. |
 | `plan.json` + guide | Study modes and complete instructions | Today/Plan detail drawer; Guide | The plan summary is merged with the guide’s when-to-use and required-output rules. |
@@ -865,7 +874,7 @@ This map shows where every authoritative source component appears. `data/site-da
 | Study guide | Phase Map + question-volume budget | Guide; Plan phase map | Complete tables and phase navigation. |
 | Study guide | Honest Time Templates | Guide; Today workload context | Complete guide section; Today adds a clearly labeled inference. |
 | Study guide | Week-by-Week Plan + Week 1 | Guide; Plan | Full guide tables plus the complete interactive daily schedule. |
-| Study guide | Full-Length and Section Bank Schedule | Exams; Plan; Guide | All eight exams and all 600 Section Bank questions are linked to dated assignments. |
+| Study guide | Full-Length and Section Bank Schedule | Exams; Plan; Guide | All {validation['fullLengthEvents']} exams and {validation['sectionBankQuestions']} Section Bank questions are linked to dated assignments. |
 | Study guide | January vs. March Decision + March protocol | Exams readiness card; Guide | The plan’s own decision rule is shown as guidance, not definitive advice. |
 | Study guide | Registration and Resource Controls + source links | Exams date setting; Guide | Full content and clickable source links. |
 | Workbook | Mistake Log fields and validation lists | Log quick capture; complete log; CSV/XLSX | The fast form keeps common fields visible and retains workbook-compatible concepts. |
@@ -881,8 +890,9 @@ This map shows where every authoritative source component appears. `data/site-da
 - Week boundaries: {validation['weekBoundary']}
 - Kaplan assignments resolved: {validation['chapterAssignments']} / 83; unknown IDs: 0
 - Plan weeks reconciled: {validation['numericWeeks']} / {validation['numericWeeks']}
-- Full-length events: 8
-- Section Bank questions: 600
+- Full-length events: {validation['fullLengthEvents']}
+- Section Bank questions: {validation['sectionBankQuestions']}
+- Workload: every mode explicitly costed; every week's low estimate within its budget; upper/midpoint risks shown in Plan
 - Mastery topics: 40
 - Meaningful guide sections mapped: 9 / 9, plus plan overview and source links
 """
@@ -898,12 +908,18 @@ def main() -> int:
     chapters = parse_chapters()
     chapter_index = {chapter["id"]: chapter for chapter in chapters}
     guide = parse_guide()
-    workbook = workbook_content()
+    workbook = workbook_content(plan)
     schedule, validation = parse_schedule(chapter_index, plan)
-    exams = derive_exams(schedule)
-    section_banks = derive_section_banks(schedule)
+    exams = derive_exams(schedule, plan)
+    section_banks = derive_section_banks(schedule, plan)
     phase_map = derive_phase_map(plan)
     mode_definitions = build_mode_definitions(plan, guide)
+    known_modes = {mode["name"].lower() for mode in mode_definitions}
+    for row in schedule:
+        if any(mode.strip().lower() not in known_modes for mode in row["mode"].split(";")):
+            fail(f"Missing UI mode definition on {row['date']}")
+    if sum(week["uworld_questions"] for week in plan["weeks"]) != plan["question_targets"]["uworld_baseline"]:
+        fail("UWorld baseline does not match weekly totals")
 
     validation.update(
         {
@@ -921,7 +937,6 @@ def main() -> int:
     source_paths = [SCHEDULE_PATH, PLAN_PATH, CHAPTERS_PATH, GUIDE_PATH, WORKBOOK_PATH, README_PATH]
     payload = {
         "schemaVersion": 1,
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
         "sourceProvenance": [
             {"file": path.name, "sha256": sha256(path), "bytes": path.stat().st_size}
             for path in source_paths

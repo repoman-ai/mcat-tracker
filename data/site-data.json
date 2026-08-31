@@ -1,16 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-31T18:16:44.933199+00:00",
   "sourceProvenance": [
     {
       "file": "schedule.csv",
-      "sha256": "7e7f61cbbe1828e76a00a7a5ebf6f4fef8a579f5aa7b145f45aac05410445e35",
-      "bytes": 41266
+      "sha256": "c2688d78894e69c1faa5a34d51fc9e24eb1a4cb4cc2672f4d279dbf26dc063c6",
+      "bytes": 48239
     },
     {
       "file": "plan.json",
-      "sha256": "d8daadf0088203ec4e2a81fd111d436d0c8c930ef192a62294b22e5997cadefc",
-      "bytes": 9490
+      "sha256": "dcdfddb465fe1dfc2d2bc6e0928ed4be1addc40c9584f0d4492312ab7d9dc304",
+      "bytes": 11128
     },
     {
       "file": "kaplan-mcat-books.md",
@@ -19,18 +18,18 @@
     },
     {
       "file": "study-guide.json",
-      "sha256": "167077cb779cc8fe2b12becba916a04c849013853dba607c37b755ea83c6c04d",
-      "bytes": 22112
+      "sha256": "40843ed819ed71e17d1738089ba88df78745945f277bbe3d7c373e4fb3656e30",
+      "bytes": 24014
     },
     {
       "file": "MCAT_520_Plus_Mistake_Log.xlsx",
-      "sha256": "1d752eb0f9b8183c61f104fd2ce7f76858e3f0cb3eb0e56554f21b2bbcb91881",
-      "bytes": 46551
+      "sha256": "e84314c60bb643bd12b715649637b7fa1740f4ff81ac7a3592eb8f3bb43a4466",
+      "bytes": 47011
     },
     {
       "file": "README.md",
-      "sha256": "d48efb7332826a9fc1daf5b87c9c27a214c3fe2fd3ac75cfd51cbe8722457f69",
-      "bytes": 4476
+      "sha256": "1a400723ce18f24407e473715f8552cae16bc0b14319f52e53d35dd7f0d73596",
+      "bytes": 5887
     }
   ],
   "plan": {
@@ -48,10 +47,15 @@
     "calendar_status": "Checked August 31, 2026: AAMC still displays the 2026 U.S. calendar and says the full 2027 calendar is coming soon. January 22-23 remain unconfirmed planning placeholders.",
     "registration_action": "Begin checking the AAMC registration page on 2026-10-01 and register on the day the 2027 dates open.",
     "question_targets": {
-      "uworld_baseline": 564,
-      "uworld_evidence_driven_range": "600-750 only if review fits; 564 scheduled baseline",
+      "uworld_baseline": 484,
+      "uworld_evidence_driven_range": "484 scheduled baseline; optional expansion only after review fits the weekly budget",
       "section_bank": 600,
-      "cars_ramp": "Four warm-up passages plus nine diagnostic passages in Week 1; two/day by Week 5; official FL passages count toward weekly totals"
+      "cars_ramp": "Four warm-up passages plus nine diagnostic passages in Week 1; two/day by Week 5; official FL passages count toward weekly totals",
+      "section_bank_by_section": {
+        "B/B": 200,
+        "C/P": 200,
+        "P/S": 200
+      }
     },
     "study_modes": {
       "Full read": "Use for likely-dead foundations; complete objectives, concept checks, short closed-book summary, then questions.",
@@ -141,40 +145,40 @@
         "phase": "Integrate + SB",
         "focus": "Fluids/circuits + P/S",
         "planned_hours": 24,
-        "uworld_questions": 20,
-        "cars_passages": 14,
+        "uworld_questions": 0,
+        "cars_passages": 12,
         "exam_or_section_bank": "B/B SB",
-        "milestone": "100 B/B Section Bank questions with review"
+        "milestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current"
       },
       {
         "week": 9,
         "phase": "Integrate + SB",
         "focus": "Finish physics + Orgo foundations",
         "planned_hours": 24,
-        "uworld_questions": 20,
-        "cars_passages": 14,
+        "uworld_questions": 0,
+        "cars_passages": 12,
         "exam_or_section_bank": "B/B SB",
-        "milestone": "100 B/B Section Bank; equations cold by Mon Nov 2"
+        "milestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2"
       },
       {
         "week": 10,
         "phase": "Integrate + SB",
         "focus": "Orgo reactions + finish P/S",
         "planned_hours": 24,
-        "uworld_questions": 20,
-        "cars_passages": 14,
+        "uworld_questions": 0,
+        "cars_passages": 12,
         "exam_or_section_bank": "C/P SB",
-        "milestone": "100 C/P Section Bank; finish P/S first pass"
+        "milestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass"
       },
       {
         "week": 11,
         "phase": "Integrate + SB",
         "focus": "Carbonyls + final Orgo audit",
         "planned_hours": 24,
-        "uworld_questions": 20,
-        "cars_passages": 14,
+        "uworld_questions": 0,
+        "cars_passages": 12,
         "exam_or_section_bank": "C/P SB",
-        "milestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16"
+        "milestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16"
       },
       {
         "week": 12,
@@ -184,17 +188,17 @@
         "uworld_questions": 0,
         "cars_passages": 15,
         "exam_or_section_bank": "AAMC PE1",
-        "milestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon"
+        "milestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval"
       },
       {
         "week": 13,
         "phase": "AAMC official",
-        "focus": "Thanksgiving float + P/S Section Bank",
+        "focus": "Thanksgiving float + mixed Section Banks",
         "planned_hours": 16,
         "uworld_questions": 0,
         "cars_passages": 10,
-        "exam_or_section_bank": "P/S SB",
-        "milestone": "100 P/S Section Bank; Thanksgiving and Sunday off"
+        "exam_or_section_bank": "Mixed SB",
+        "milestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off"
       },
       {
         "week": 14,
@@ -204,7 +208,7 @@
         "uworld_questions": 0,
         "cars_passages": 15,
         "exam_or_section_bank": "AAMC PE2",
-        "milestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon"
+        "milestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval"
       },
       {
         "week": 15,
@@ -214,7 +218,7 @@
         "uworld_questions": 0,
         "cars_passages": 15,
         "exam_or_section_bank": "AAMC PE3",
-        "milestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon"
+        "milestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval"
       },
       {
         "week": 16,
@@ -224,17 +228,17 @@
         "uworld_questions": 0,
         "cars_passages": 15,
         "exam_or_section_bank": "AAMC PE4",
-        "milestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review"
+        "milestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval"
       },
       {
         "week": 17,
         "phase": "AAMC official",
-        "focus": "Holiday float + finish P/S Section Bank",
+        "focus": "Holiday float + mixed Section Banks",
         "planned_hours": 18,
         "uworld_questions": 0,
-        "cars_passages": 12,
-        "exam_or_section_bank": "P/S SB",
-        "milestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off"
+        "cars_passages": 10,
+        "exam_or_section_bank": "Mixed SB",
+        "milestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off"
       },
       {
         "week": 18,
@@ -244,7 +248,7 @@
         "uworld_questions": 0,
         "cars_passages": 15,
         "exam_or_section_bank": "AAMC PE5",
-        "milestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light"
+        "milestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval"
       },
       {
         "week": 19,
@@ -254,7 +258,7 @@
         "uworld_questions": 0,
         "cars_passages": 15,
         "exam_or_section_bank": "AAMC PE6",
-        "milestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder"
+        "milestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval"
       },
       {
         "week": 20,
@@ -288,6 +292,24 @@
       "note": "Fresh start: no August catch-up debt. Rapid review is conditional on recall; do not delay the diagnostic to finish reading.",
       "capacity_rule": "Launch: about 26 hours. Content weeks: 22-24 hours. If two weeks exceed capacity, cut optional reading/question volume and reconsider January using scored evidence.",
       "rest_rule": "Sunday off in non-exam weeks. In scored FL weeks Friday is rest/light logistics; Sunday-Monday are protected review. Launch Friday is light and Monday finishes review."
+    },
+    "revision": "2026-08-31-workload-review",
+    "full_length_dates": [
+      "2026-09-05",
+      "2026-10-10",
+      "2026-11-21",
+      "2026-12-05",
+      "2026-12-12",
+      "2026-12-19",
+      "2027-01-02",
+      "2027-01-09"
+    ],
+    "workload_policy": {
+      "budget_role": "planned_hours is the weekly capacity budget, not a promise that every upper-bound estimate fits.",
+      "validation": "Fail if the low estimate exceeds the budget. Show midpoint and upper-bound risks; never clamp estimates to fit.",
+      "execution": "Protect exams, their review and sleep. If the budget is reached, stop new questions, finish their review next session, and replace lower-priority work rather than adding catch-up debt. Log actual time and replan if two weeks overrun.",
+      "maintenance": "Chapter days add 15-30 minutes Anki/log maintenance. Operational mode blocks already include maintenance; exam/review days have no extra quota.",
+      "estimates": "Mode ranges and question review allowances are planning assumptions, not measured completion times. The midpoint is a sensitivity check, not a statistical forecast."
     }
   },
   "phaseMap": [
@@ -335,11 +357,11 @@
       "endWeek": 19,
       "focuses": [
         "Official Exam 1",
-        "Thanksgiving float + P/S Section Bank",
+        "Thanksgiving float + mixed Section Banks",
         "Official Exam 2",
         "Official Exam 3",
         "Official Exam 4 + readiness decision",
-        "Holiday float + finish P/S Section Bank",
+        "Holiday float + mixed Section Banks",
         "Official Exam 5",
         "Final full-length"
       ],
@@ -415,6 +437,14 @@
       "completeInstructions": "Use questions, spaced retrieval, and the mistake log to choose the next repair target. Count deeply reviewed work, not screens completed."
     },
     {
+      "id": "section-bank-review",
+      "name": "Section Bank / review",
+      "summary": "Complete the named questions and review incorrect, flagged and guessed-correct answers. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added.",
+      "whenToUse": "Use when this exact mode appears on the dated schedule.",
+      "requiredOutput": "Complete the named block without adding unrelated volume.",
+      "completeInstructions": "Complete the named questions and review incorrect, flagged and guessed-correct answers. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."
+    },
+    {
       "id": "light-retrieval",
       "name": "Light retrieval",
       "summary": "Use only short, confidence-building retrieval. Stop broad content work and protect sleep during the taper.",
@@ -437,6 +467,14 @@
       "whenToUse": "Use when this exact mode appears on the dated schedule.",
       "requiredOutput": "Complete the named block without adding unrelated volume.",
       "completeInstructions": "Protect recovery and complete only the named logistics task. Do not turn the block into an unplanned study marathon."
+    },
+    {
+      "id": "logistics",
+      "name": "Logistics",
+      "summary": "Complete only the named checklist, route, ID or food task in 20-45 minutes. This is a short task, not a zero-work rest day.",
+      "whenToUse": "Use when this exact mode appears on the dated schedule.",
+      "requiredOutput": "Complete the named block without adding unrelated volume.",
+      "completeInstructions": "Complete only the named checklist, route, ID or food task in 20-45 minutes. This is a short task, not a zero-work rest day."
     },
     {
       "id": "exam-if-officially-scheduled",
@@ -2614,7 +2652,7 @@
       "weeklyHours": 26,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 5; review Sun-Mon; no catch-up debt",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Cap the whole block at 3-3.5 hours including questions/review and 15-20 minutes Anki. Flag unfamiliar topics; repair them after the diagnostic.",
+      "sourceNotes": "Rapid review 30-45 min per chapter + 8 UWorld with review + 1 CARS passage + 15-30 min maintenance. Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -2622,10 +2660,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 180,
-        "highMinutes": 210,
-        "label": "~3-3.5 hr",
-        "basis": "Launch time cap includes questions, review and brief Anki; flag gaps for after the diagnostic"
+        "lowMinutes": 122,
+        "highMinutes": 198,
+        "label": "~2–3.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -2733,7 +2771,7 @@
       "weeklyHours": 26,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 5; review Sun-Mon; no catch-up debt",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Cap the whole block at 3-3.5 hours including questions/review and 15-20 minutes Anki. Flag unfamiliar topics; repair them after the diagnostic.",
+      "sourceNotes": "Rapid review 30-45 min per chapter + 8 UWorld with review + 1 CARS passage + 15-30 min maintenance. Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -2741,10 +2779,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 180,
-        "highMinutes": 210,
-        "label": "~3-3.5 hr",
-        "basis": "Launch time cap includes questions, review and brief Anki; flag gaps for after the diagnostic"
+        "lowMinutes": 152,
+        "highMinutes": 243,
+        "label": "~2.5–4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -2852,7 +2890,7 @@
       "weeklyHours": 26,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 5; review Sun-Mon; no catch-up debt",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Cap the whole block at 3-3.5 hours including questions/review and 15-20 minutes Anki. Flag unfamiliar topics; repair them after the diagnostic.",
+      "sourceNotes": "Rapid review 30-45 min per chapter + 8 UWorld with review + 1 CARS passage + 15-30 min maintenance. Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -2860,10 +2898,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 180,
-        "highMinutes": 210,
-        "label": "~3-3.5 hr",
-        "basis": "Launch time cap includes questions, review and brief Anki; flag gaps for after the diagnostic"
+        "lowMinutes": 152,
+        "highMinutes": 243,
+        "label": "~2.5–4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -2896,10 +2934,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 60,
-        "highMinutes": 90,
-        "label": "~1-1.5 hr",
-        "basis": "Launch time cap includes questions, review and brief Anki; flag gaps for after the diagnostic"
+        "lowMinutes": 50,
+        "highMinutes": 92,
+        "label": "~50 min–1.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3099,10 +3137,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 190,
-        "highMinutes": 309,
-        "label": "~3.2–5.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 205,
+        "highMinutes": 339,
+        "label": "~3.4–5.7 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3203,10 +3241,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 190,
-        "highMinutes": 309,
-        "label": "~3.2–5.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 205,
+        "highMinutes": 339,
+        "label": "~3.4–5.7 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3268,10 +3306,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 125,
-        "highMinutes": 207,
-        "label": "~2.1–3.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 140,
+        "highMinutes": 237,
+        "label": "~2.3–4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3325,10 +3363,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 165,
-        "highMinutes": 262,
-        "label": "~2.8–4.4 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 180,
+        "highMinutes": 292,
+        "label": "~3–4.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3421,10 +3459,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 175,
-        "highMinutes": 287,
-        "label": "~2.9–4.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 190,
+        "highMinutes": 317,
+        "label": "~3.2–5.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3522,10 +3560,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 105,
-        "highMinutes": 182,
-        "label": "~1.8–3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 120,
+        "highMinutes": 212,
+        "label": "~2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3579,10 +3617,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 144,
-        "highMinutes": 236,
-        "label": "~2.4–3.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 159,
+        "highMinutes": 266,
+        "label": "~2.6–4.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3671,10 +3709,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 194,
-        "highMinutes": 316,
-        "label": "~3.2–5.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 209,
+        "highMinutes": 346,
+        "label": "~3.5–5.8 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3732,10 +3770,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 184,
-        "highMinutes": 291,
-        "label": "~3.1–4.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 199,
+        "highMinutes": 321,
+        "label": "~3.3–5.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3789,10 +3827,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 129,
-        "highMinutes": 214,
-        "label": "~2.1–3.6 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 144,
+        "highMinutes": 244,
+        "label": "~2.4–4.1 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3881,10 +3919,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 179,
-        "highMinutes": 294,
-        "label": "~3–4.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 194,
+        "highMinutes": 324,
+        "label": "~3.2–5.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3978,10 +4016,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 105,
-        "highMinutes": 182,
-        "label": "~1.8–3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 120,
+        "highMinutes": 212,
+        "label": "~2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4043,10 +4081,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 140,
-        "highMinutes": 229,
-        "label": "~2.3–3.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 155,
+        "highMinutes": 259,
+        "label": "~2.6–4.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4104,10 +4142,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 140,
-        "highMinutes": 229,
-        "label": "~2.3–3.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 155,
+        "highMinutes": 259,
+        "label": "~2.6–4.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4177,10 +4215,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 180,
-        "highMinutes": 284,
-        "label": "~3–4.7 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4261,10 +4299,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 190,
-        "highMinutes": 309,
-        "label": "~3.2–5.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 205,
+        "highMinutes": 339,
+        "label": "~3.4–5.7 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4353,10 +4391,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 175,
-        "highMinutes": 287,
-        "label": "~2.9–4.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 190,
+        "highMinutes": 317,
+        "label": "~3.2–5.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4454,10 +4492,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 105,
-        "highMinutes": 182,
-        "label": "~1.8–3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 120,
+        "highMinutes": 212,
+        "label": "~2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4523,10 +4561,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 144,
-        "highMinutes": 236,
-        "label": "~2.4–3.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 159,
+        "highMinutes": 266,
+        "label": "~2.6–4.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4588,10 +4626,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 184,
-        "highMinutes": 291,
-        "label": "~3.1–4.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 199,
+        "highMinutes": 321,
+        "label": "~3.3–5.3 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4672,10 +4710,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 194,
-        "highMinutes": 316,
-        "label": "~3.2–5.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 209,
+        "highMinutes": 346,
+        "label": "~3.5–5.8 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4737,10 +4775,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 144,
-        "highMinutes": 236,
-        "label": "~2.4–3.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 159,
+        "highMinutes": 266,
+        "label": "~2.6–4.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4829,10 +4867,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 234,
-        "highMinutes": 371,
-        "label": "~3.9–6.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 249,
+        "highMinutes": 401,
+        "label": "~4.2–6.7 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4926,10 +4964,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 120,
-        "highMinutes": 204,
-        "label": "~2–3.4 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 234,
+        "label": "~2.2–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4989,8 +5027,8 @@
       ],
       "assignment": "Biochemistry Ch. 9 - Carbohydrate Metabolism I: Glycolysis, Glycogen, Gluconeogenesis, and the Pentose Phosphate Pathway",
       "mode": "Full read",
-      "practiceTarget": "5 UWorld topic questions; 1 CARS passage",
-      "practiceTargetDisplay": "5 UWorld topic questions; 1 CARS passage",
+      "practiceTarget": "7 UWorld topic questions; 1 CARS passage",
+      "practiceTargetDisplay": "7 UWorld topic questions; 1 CARS passage",
       "carsPassages": 1,
       "weeklyHours": 22,
       "weeklyMilestone": "Scored third-party FL Sat Oct 10; protect Sun-Mon review",
@@ -5003,10 +5041,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 125,
-        "highMinutes": 192,
-        "label": "~2.1–3.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 148,
+        "highMinutes": 236,
+        "label": "~2.5–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5054,8 +5092,8 @@
       ],
       "assignment": "Biochemistry Ch. 10 - Carbohydrate Metabolism II: Aerobic Respiration",
       "mode": "Full read",
-      "practiceTarget": "5 UWorld topic questions; 1 CARS passage",
-      "practiceTargetDisplay": "5 UWorld topic questions; 1 CARS passage",
+      "practiceTarget": "7 UWorld topic questions; 1 CARS passage",
+      "practiceTargetDisplay": "7 UWorld topic questions; 1 CARS passage",
       "carsPassages": 1,
       "weeklyHours": 22,
       "weeklyMilestone": "Scored third-party FL Sat Oct 10; protect Sun-Mon review",
@@ -5068,10 +5106,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 125,
-        "highMinutes": 192,
-        "label": "~2.1–3.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 148,
+        "highMinutes": 236,
+        "label": "~2.5–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5154,8 +5192,8 @@
       ],
       "assignment": "Biochemistry Ch. 11 - Lipid and Amino Acid Metabolism; Critical Analysis and Reasoning Skills Ch. 7 - Understanding Passages",
       "mode": "Full read; Questions first",
-      "practiceTarget": "5 UWorld topic questions; 1 CARS passage",
-      "practiceTargetDisplay": "5 UWorld topic questions; 1 CARS passage",
+      "practiceTarget": "6 UWorld topic questions; 1 CARS passage",
+      "practiceTargetDisplay": "6 UWorld topic questions; 1 CARS passage",
       "carsPassages": 1,
       "weeklyHours": 22,
       "weeklyMilestone": "Scored third-party FL Sat Oct 10; protect Sun-Mon review",
@@ -5168,10 +5206,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 155,
-        "highMinutes": 247,
-        "label": "~2.6–4.1 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 174,
+        "highMinutes": 284,
+        "label": "~2.9–4.7 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5300,8 +5338,8 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "5 UWorld topic questions",
-      "practiceTargetDisplay": "5 UWorld topic questions",
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 22,
       "weeklyMilestone": "Scored third-party FL Sat Oct 10; protect Sun-Mon review",
@@ -5392,10 +5430,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 168,
-        "highMinutes": 263,
-        "label": "~2.8–4.4 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 183,
+        "highMinutes": 293,
+        "label": "~3–4.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5469,10 +5507,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 168,
-        "highMinutes": 263,
-        "label": "~2.8–4.4 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 183,
+        "highMinutes": 293,
+        "label": "~3–4.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5557,10 +5595,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 258,
-        "highMinutes": 398,
-        "label": "~4.3–6.6 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 273,
+        "highMinutes": 428,
+        "label": "~4.5–7.1 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5622,10 +5660,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 168,
-        "highMinutes": 263,
-        "label": "~2.8–4.4 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 183,
+        "highMinutes": 293,
+        "label": "~3–4.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5710,10 +5748,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 214,
-        "highMinutes": 336,
-        "label": "~3.6–5.6 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 229,
+        "highMinutes": 366,
+        "label": "~3.8–6.1 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5807,10 +5845,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 104,
-        "highMinutes": 176,
-        "label": "~1.7–2.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 119,
+        "highMinutes": 206,
+        "label": "~2–3.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5858,11 +5896,11 @@
       ],
       "assignment": "Physics and Math Ch. 4 - Fluids",
       "mode": "Full read",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -5872,10 +5910,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 151,
-        "highMinutes": 229,
-        "label": "~2.5–3.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 209,
+        "label": "~2.2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5954,11 +5992,11 @@
       ],
       "assignment": "Physics and Math Ch. 5 - Electrostatics and Magnetism; Behavioral Sciences Ch. 6 - Identity and Personality",
       "mode": "Full read; Objectives + checks",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -5968,10 +6006,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 201,
-        "highMinutes": 309,
-        "label": "~3.4–5.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 185,
+        "highMinutes": 289,
+        "label": "~3.1–4.8 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6019,11 +6057,11 @@
       ],
       "assignment": "Physics and Math Ch. 6 - Circuits",
       "mode": "Full read",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6033,10 +6071,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 132,
-        "highMinutes": 200,
-        "label": "~2.2–3.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 209,
+        "label": "~2.2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6050,7 +6088,7 @@
       "week": 8,
       "phase": "Integrate + SB",
       "weeklyFocus": "Fluids/circuits + P/S",
-      "resource": "Kaplan 2019-2020",
+      "resource": "Kaplan 2019-2020; AAMC Section Bank",
       "chapterIds": [
         "GC12"
       ],
@@ -6080,28 +6118,29 @@
       ],
       "assignment": "General Chemistry Ch. 12 - Electrochemistry",
       "mode": "Full read",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages; 20 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 B/B Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 132,
-        "highMinutes": 200,
-        "label": "~2.2–3.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 235,
+        "highMinutes": 369,
+        "label": "~3.9–6.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -6114,15 +6153,15 @@
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
+      "assignment": "B/B Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 B/B Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Timed science checkpoint: 30 questions in about 48 minutes (adjust for approved accommodations), then review. Log accuracy, unfinished items and top three gaps; no scaled-score conversion.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6130,10 +6169,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 327,
-        "highMinutes": 535,
-        "label": "~5.5–8.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6157,7 +6196,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -6184,7 +6223,7 @@
       "week": 8,
       "phase": "Integrate + SB",
       "weeklyFocus": "Fluids/circuits + P/S",
-      "resource": "Kaplan 2019-2020; AAMC Section Bank",
+      "resource": "Kaplan 2019-2020",
       "chapterIds": [
         "CARS09",
         "PS07"
@@ -6241,29 +6280,28 @@
       ],
       "assignment": "Critical Analysis and Reasoning Skills Ch. 9 - Question Types I: Foundations of Comprehension Questions; Behavioral Sciences Ch. 7 - Psychological Disorders",
       "mode": "Questions first; Objectives + checks",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank questions with review",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
-      "dayType": "section-bank",
+      "dayType": "study",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": true,
+      "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 372,
-        "highMinutes": 600,
-        "label": "~6.2–10 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 125,
+        "highMinutes": 209,
+        "label": "~2.1–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map",
-        "full-length-and-section-bank-schedule"
+        "phase-map"
       ]
     },
     {
@@ -6299,11 +6337,11 @@
       ],
       "assignment": "Physics and Math Ch. 7 - Waves and Sound",
       "mode": "Full read",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6313,10 +6351,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 151,
-        "highMinutes": 229,
-        "label": "~2.5–3.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 209,
+        "label": "~2.2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6387,11 +6425,11 @@
       ],
       "assignment": "Physics and Math Ch. 8 - Light and Optics; Behavioral Sciences Ch. 8 - Social Processes, Attitudes, and Behavior",
       "mode": "Full read; Objectives + checks",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6401,10 +6439,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 201,
-        "highMinutes": 309,
-        "label": "~3.4–5.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 185,
+        "highMinutes": 289,
+        "label": "~3.1–4.8 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6452,11 +6490,11 @@
       ],
       "assignment": "Physics and Math Ch. 9 - Atomic and Nuclear Phenomena",
       "mode": "Full read",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6466,10 +6504,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 132,
-        "highMinutes": 200,
-        "label": "~2.2–3.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 209,
+        "label": "~2.2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6483,7 +6521,7 @@
       "week": 9,
       "phase": "Integrate + SB",
       "weeklyFocus": "Finish physics + Orgo foundations",
-      "resource": "Kaplan 2019-2020",
+      "resource": "Kaplan 2019-2020; AAMC Section Bank",
       "chapterIds": [
         "OC01",
         "PS09"
@@ -6540,28 +6578,29 @@
       ],
       "assignment": "Organic Chemistry Ch. 1 - Nomenclature; Behavioral Sciences Ch. 9 - Social Interaction",
       "mode": "Objectives + checks; Objectives + checks",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages; 20 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 B/B Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 142,
-        "highMinutes": 225,
-        "label": "~2.4–3.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 245,
+        "highMinutes": 394,
+        "label": "~4.1–6.6 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -6574,15 +6613,15 @@
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
+      "assignment": "B/B Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 B/B Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Timed science checkpoint: 30 questions in about 48 minutes (adjust for approved accommodations), then review. Log accuracy, unfinished items and top three gaps; no scaled-score conversion.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6590,10 +6629,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 327,
-        "highMinutes": 535,
-        "label": "~5.5–8.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6617,7 +6656,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -6644,7 +6683,7 @@
       "week": 9,
       "phase": "Integrate + SB",
       "weeklyFocus": "Finish physics + Orgo foundations",
-      "resource": "Kaplan 2019-2020; AAMC Section Bank",
+      "resource": "Kaplan 2019-2020",
       "chapterIds": [
         "OC02",
         "CARS10"
@@ -6697,29 +6736,28 @@
       ],
       "assignment": "Organic Chemistry Ch. 2 - Isomers; Critical Analysis and Reasoning Skills Ch. 10 - Question Types II: Reasoning Within the Text Questions",
       "mode": "Full read; Questions first",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 B/B Section Bank questions",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 B/B Section Bank; equations cold by Mon Nov 2",
+      "weeklyMilestone": "50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
-      "dayType": "section-bank",
+      "dayType": "study",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": true,
+      "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 412,
-        "highMinutes": 655,
-        "label": "~6.9–10.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 165,
+        "highMinutes": 264,
+        "label": "~2.8–4.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map",
-        "full-length-and-section-bank-schedule"
+        "phase-map"
       ]
     },
     {
@@ -6782,11 +6820,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 3 - Bonding; Critical Analysis and Reasoning Skills Ch. 11 - Question Types III: Reasoning Beyond the Text Questions",
       "mode": "Full read; Questions first",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6796,10 +6834,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 181,
-        "highMinutes": 284,
-        "label": "~3–4.7 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 165,
+        "highMinutes": 264,
+        "label": "~2.8–4.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6874,11 +6912,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 4 - Analyzing Organic Reactions; Behavioral Sciences Ch. 10 - Social Thinking",
       "mode": "Full read; Objectives + checks",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6888,10 +6926,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 201,
-        "highMinutes": 309,
-        "label": "~3.4–5.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 185,
+        "highMinutes": 289,
+        "label": "~3.1–4.8 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6958,11 +6996,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 5 - Alcohols; Behavioral Sciences Ch. 11 - Social Structure and Demographics",
       "mode": "Full read; Objectives + checks",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -6972,10 +7010,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 182,
-        "highMinutes": 280,
-        "label": "~3–4.7 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 185,
+        "highMinutes": 289,
+        "label": "~3.1–4.8 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6989,7 +7027,7 @@
       "week": 10,
       "phase": "Integrate + SB",
       "weeklyFocus": "Orgo reactions + finish P/S",
-      "resource": "Kaplan 2019-2020",
+      "resource": "Kaplan 2019-2020; AAMC Section Bank",
       "chapterIds": [
         "OC06"
       ],
@@ -7019,28 +7057,29 @@
       ],
       "assignment": "Organic Chemistry Ch. 6 - Aldehydes and Ketones I: Electrophilicity and Oxidation–Reduction",
       "mode": "Full read",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages; 20 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 132,
-        "highMinutes": 200,
-        "label": "~2.2–3.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 235,
+        "highMinutes": 369,
+        "label": "~3.9–6.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -7053,15 +7092,15 @@
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
+      "assignment": "C/P Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Timed science checkpoint: 30 questions in about 48 minutes (adjust for approved accommodations), then review. Log accuracy, unfinished items and top three gaps; no scaled-score conversion.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -7069,10 +7108,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 327,
-        "highMinutes": 535,
-        "label": "~5.5–8.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7096,7 +7135,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -7123,7 +7162,7 @@
       "week": 10,
       "phase": "Integrate + SB",
       "weeklyFocus": "Orgo reactions + finish P/S",
-      "resource": "Kaplan 2019-2020; AAMC Section Bank",
+      "resource": "Kaplan 2019-2020",
       "chapterIds": [
         "PS12"
       ],
@@ -7149,29 +7188,28 @@
       ],
       "assignment": "Behavioral Sciences Ch. 12 - Social Stratification",
       "mode": "Objectives + checks",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; finish P/S first pass",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
-      "dayType": "section-bank",
+      "dayType": "study",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": true,
+      "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 342,
-        "highMinutes": 545,
-        "label": "~5.7–9.1 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 95,
+        "highMinutes": 154,
+        "label": "~1.6–2.6 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map",
-        "full-length-and-section-bank-schedule"
+        "phase-map"
       ]
     },
     {
@@ -7211,11 +7249,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 7 - Aldehydes and Ketones II: Enolates",
       "mode": "Full read",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -7225,10 +7263,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 151,
-        "highMinutes": 229,
-        "label": "~2.5–3.8 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 209,
+        "label": "~2.2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7299,11 +7337,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 8 - Carboxylic Acids; Critical Analysis and Reasoning Skills Ch. 12 - Effective Review of CARS",
       "mode": "Full read; Questions first",
-      "practiceTarget": "4 UWorld topic questions; 3 CARS passages",
-      "practiceTargetDisplay": "4 UWorld topic questions; 3 CARS passages",
-      "carsPassages": 3,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -7313,10 +7351,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 181,
-        "highMinutes": 284,
-        "label": "~3–4.7 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 165,
+        "highMinutes": 264,
+        "label": "~2.8–4.4 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7360,11 +7398,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 9 - Carboxylic Acid Derivatives",
       "mode": "Full read",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -7374,10 +7412,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 132,
-        "highMinutes": 200,
-        "label": "~2.2–3.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 135,
+        "highMinutes": 209,
+        "label": "~2.2–3.5 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7391,7 +7429,7 @@
       "week": 11,
       "phase": "Integrate + SB",
       "weeklyFocus": "Carbonyls + final Orgo audit",
-      "resource": "Kaplan 2019-2020",
+      "resource": "Kaplan 2019-2020; AAMC Section Bank",
       "chapterIds": [
         "OC10"
       ],
@@ -7421,28 +7459,29 @@
       ],
       "assignment": "Organic Chemistry Ch. 10 - Nitrogen- and Phosphorus-Containing Compounds",
       "mode": "Full read",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages",
+      "practiceTarget": "2 CARS passages; 20 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 132,
-        "highMinutes": 200,
-        "label": "~2.2–3.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 235,
+        "highMinutes": 369,
+        "label": "~3.9–6.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -7455,15 +7494,15 @@
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
+      "assignment": "C/P Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Timed science checkpoint: 30 questions in about 48 minutes (adjust for approved accommodations), then review. Log accuracy, unfinished items and top three gaps; no scaled-score conversion.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -7471,10 +7510,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 327,
-        "highMinutes": 535,
-        "label": "~5.5–8.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7498,7 +7537,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -7525,7 +7564,7 @@
       "week": 11,
       "phase": "Integrate + SB",
       "weeklyFocus": "Carbonyls + final Orgo audit",
-      "resource": "Kaplan 2019-2020; AAMC Section Bank",
+      "resource": "Kaplan 2019-2020",
       "chapterIds": [
         "OC11",
         "OC12"
@@ -7578,48 +7617,11 @@
       ],
       "assignment": "Organic Chemistry Ch. 11 - Spectroscopy; Organic Chemistry Ch. 12 - Separations and Purifications",
       "mode": "Objectives + checks; Objectives + checks",
-      "practiceTarget": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
-      "practiceTargetDisplay": "3 UWorld topic questions; 2 CARS passages; 50 C/P Section Bank questions",
-      "carsPassages": 2,
-      "weeklyHours": 24,
-      "weeklyMilestone": "100 C/P Section Bank; all 83 chapters covered by Mon Nov 16",
-      "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "section-bank",
-      "isRest": false,
-      "isExam": false,
-      "isFullLengthReview": false,
-      "isSectionBank": true,
-      "isTestWindow": false,
-      "estimatedWorkload": {
-        "lowMinutes": 392,
-        "highMinutes": 625,
-        "label": "~6.5–10.4 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
-      },
-      "relatedGuideSections": [
-        "operating-rules",
-        "phase-map",
-        "full-length-and-section-bank-schedule"
-      ]
-    },
-    {
-      "id": "2026-11-17",
-      "date": "2026-11-17",
-      "day": "Tue",
-      "week": 12,
-      "phase": "AAMC official",
-      "weeklyFocus": "Official Exam 1",
-      "resource": "",
-      "chapterIds": [],
-      "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
       "practiceTarget": "2 CARS passages",
       "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
-      "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyHours": 24,
+      "weeklyMilestone": "50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -7629,14 +7631,51 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map"
+      ]
+    },
+    {
+      "id": "2026-11-17",
+      "date": "2026-11-17",
+      "day": "Tue",
+      "week": 12,
+      "phase": "AAMC official",
+      "weeklyFocus": "Official Exam 1",
+      "resource": "AAMC Section Bank",
+      "chapterIds": [],
+      "chapters": [],
+      "assignment": "B/B Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 B/B Section Bank questions",
+      "carsPassages": 2,
+      "weeklyHours": 20,
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
+      "sourceStatus": "Not Started",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
+      "isRest": false,
+      "isExam": false,
+      "isFullLengthReview": false,
+      "isSectionBank": true,
+      "isTestWindow": false,
+      "estimatedWorkload": {
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+      },
+      "relatedGuideSections": [
+        "operating-rules",
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -7655,7 +7694,7 @@
       "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -7668,7 +7707,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7687,11 +7726,11 @@
       "chapters": [],
       "assignment": "Targeted practice + spaced retrieval",
       "mode": "Practice / retrieval",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -7701,10 +7740,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 50,
-        "highMinutes": 92,
-        "label": "~50 min–1.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 65,
+        "highMinutes": 114,
+        "label": "~1.1–1.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7727,7 +7766,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -7763,7 +7802,7 @@
       "practiceTargetDisplay": "Full-length exam; no normal QBank quota",
       "carsPassages": 9,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Start 8:00 a.m.; use standard timing/breaks (or approved accommodations), no pausing or answer lookups. Treat the unscored sample as a baseline, not a scaled score.",
       "dayType": "exam",
@@ -7800,7 +7839,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -7833,11 +7872,11 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
+      "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -7864,19 +7903,19 @@
       "day": "Tue",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages; 40 P/S Section Bank questions",
-      "practiceTargetDisplay": "2 CARS passages; 40 P/S Section Bank questions",
+      "assignment": "B/B Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 B/B Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -7884,10 +7923,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 265,
-        "highMinutes": 434,
-        "label": "~4.4–7.2 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7901,19 +7940,19 @@
       "day": "Wed",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages; 30 P/S Section Bank questions",
-      "practiceTargetDisplay": "2 CARS passages; 30 P/S Section Bank questions",
+      "assignment": "C/P Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -7921,10 +7960,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 215,
-        "highMinutes": 354,
-        "label": "~3.6–5.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7938,7 +7977,7 @@
       "day": "Thu",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
       "resource": "",
       "chapterIds": [],
       "chapters": [],
@@ -7948,7 +7987,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -7974,34 +8013,35 @@
       "day": "Fri",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
-      "resource": "",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -8010,19 +8050,19 @@
       "day": "Sat",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages; 30 P/S Section Bank questions",
-      "practiceTargetDisplay": "2 CARS passages; 30 P/S Section Bank questions",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -8030,10 +8070,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 215,
-        "highMinutes": 354,
-        "label": "~3.6–5.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8047,7 +8087,7 @@
       "day": "Sun",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
       "resource": "",
       "chapterIds": [],
       "chapters": [],
@@ -8057,7 +8097,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -8083,34 +8123,35 @@
       "day": "Mon",
       "week": 13,
       "phase": "AAMC official",
-      "weeklyFocus": "Thanksgiving float + P/S Section Bank",
-      "resource": "",
+      "weeklyFocus": "Thanksgiving float + mixed Section Banks",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 16,
-      "weeklyMilestone": "100 P/S Section Bank; Thanksgiving and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -8120,33 +8161,34 @@
       "week": 14,
       "phase": "AAMC official",
       "weeklyFocus": "Official Exam 2",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "B/B Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 B/B Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -8165,7 +8207,7 @@
       "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -8178,7 +8220,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8197,11 +8239,11 @@
       "chapters": [],
       "assignment": "Targeted practice + spaced retrieval",
       "mode": "Practice / retrieval",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -8211,10 +8253,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 50,
-        "highMinutes": 92,
-        "label": "~50 min–1.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 65,
+        "highMinutes": 114,
+        "label": "~1.1–1.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8237,7 +8279,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -8273,7 +8315,7 @@
       "practiceTargetDisplay": "Full-length exam; no normal QBank quota",
       "carsPassages": 9,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Start 8:00 a.m.; use standard timing/breaks (or approved accommodations), no pausing or answer lookups. Treat the unscored sample as a baseline, not a scaled score.",
       "dayType": "exam",
@@ -8310,7 +8352,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -8343,11 +8385,11 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
+      "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -8375,33 +8417,34 @@
       "week": 15,
       "phase": "AAMC official",
       "weeklyFocus": "Official Exam 3",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "C/P Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
-        "phase-map"
+        "phase-map",
+        "full-length-and-section-bank-schedule"
       ]
     },
     {
@@ -8420,7 +8463,7 @@
       "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -8433,7 +8476,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8452,11 +8495,11 @@
       "chapters": [],
       "assignment": "Targeted practice + spaced retrieval",
       "mode": "Practice / retrieval",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -8466,10 +8509,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 50,
-        "highMinutes": 92,
-        "label": "~50 min–1.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 65,
+        "highMinutes": 114,
+        "label": "~1.1–1.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8492,7 +8535,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -8528,7 +8571,7 @@
       "practiceTargetDisplay": "Full-length exam; no normal QBank quota",
       "carsPassages": 9,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Start 8:00 a.m.; use standard timing/breaks (or approved accommodations), no pausing or answer lookups. Treat the unscored sample as a baseline, not a scaled score.",
       "dayType": "exam",
@@ -8565,7 +8608,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -8598,11 +8641,11 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
+      "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon",
+      "weeklyMilestone": "AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -8630,33 +8673,34 @@
       "week": 16,
       "phase": "AAMC official",
       "weeklyFocus": "Official Exam 4 + readiness decision",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "C/P Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 30 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 30 C/P Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 195,
+        "highMinutes": 314,
+        "label": "~3.2–5.2 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -8676,7 +8720,7 @@
       "practiceTargetDisplay": "2 CARS passages",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -8689,7 +8733,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8709,11 +8753,11 @@
       "chapters": [],
       "assignment": "Targeted practice + spaced retrieval",
       "mode": "Practice / retrieval",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -8723,10 +8767,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 50,
-        "highMinutes": 92,
-        "label": "~50 min–1.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 65,
+        "highMinutes": 114,
+        "label": "~1.1–1.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8750,7 +8794,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -8787,7 +8831,7 @@
       "practiceTargetDisplay": "Full-length exam; no normal QBank quota",
       "carsPassages": 9,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Start 8:00 a.m.; use standard timing/breaks (or approved accommodations), no pausing or answer lookups. Treat the unscored sample as a baseline, not a scaled score.",
       "dayType": "exam",
@@ -8825,7 +8869,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -8859,11 +8903,11 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
+      "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review",
+      "weeklyMilestone": "AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -8891,19 +8935,19 @@
       "day": "Tue",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "January/March readiness decision; verify actual 30-day deadline against registered date",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "3 CARS passages; 40 P/S Section Bank questions",
-      "practiceTargetDisplay": "3 CARS passages; 40 P/S Section Bank questions",
-      "carsPassages": 3,
+      "assignment": "B/B Section Bank + answer review + brief maintenance; January/March readiness decision; verify registered deadline",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 B/B Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 B/B Section Bank questions",
+      "carsPassages": 2,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -8911,10 +8955,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 280,
-        "highMinutes": 456,
-        "label": "~4.7–7.6 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8929,19 +8973,19 @@
       "day": "Wed",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "January/March readiness decision; verify actual 30-day deadline against registered date",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "3 CARS passages; 30 P/S Section Bank questions",
-      "practiceTargetDisplay": "3 CARS passages; 30 P/S Section Bank questions",
-      "carsPassages": 3,
+      "assignment": "C/P Section Bank + answer review + brief maintenance; January/March readiness decision; verify registered deadline",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 C/P Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 C/P Section Bank questions",
+      "carsPassages": 2,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -8949,10 +8993,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 230,
-        "highMinutes": 376,
-        "label": "~3.8–6.3 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8967,34 +9011,35 @@
       "day": "Thu",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
-      "resource": "",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -9004,7 +9049,7 @@
       "day": "Fri",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
       "resource": "",
       "chapterIds": [],
       "chapters": [],
@@ -9014,7 +9059,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -9041,19 +9086,19 @@
       "day": "Sat",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
       "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages; 30 P/S Section Bank questions",
-      "practiceTargetDisplay": "2 CARS passages; 30 P/S Section Bank questions",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9061,10 +9106,10 @@
       "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 215,
-        "highMinutes": 354,
-        "label": "~3.6–5.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9079,7 +9124,7 @@
       "day": "Sun",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
       "resource": "",
       "chapterIds": [],
       "chapters": [],
@@ -9089,7 +9134,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -9116,34 +9161,35 @@
       "day": "Mon",
       "week": 17,
       "phase": "AAMC official",
-      "weeklyFocus": "Holiday float + finish P/S Section Bank",
-      "resource": "",
+      "weeklyFocus": "Holiday float + mixed Section Banks",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 18,
-      "weeklyMilestone": "Finish final 100 P/S Section Bank; Christmas and Sunday off",
+      "weeklyMilestone": "100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -9154,33 +9200,34 @@
       "week": 18,
       "phase": "AAMC official",
       "weeklyFocus": "Official Exam 5",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -9191,33 +9238,34 @@
       "week": 18,
       "phase": "AAMC official",
       "weeklyFocus": "Official Exam 5",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -9233,11 +9281,11 @@
       "chapters": [],
       "assignment": "Targeted practice + spaced retrieval",
       "mode": "Practice / retrieval",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -9247,10 +9295,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 50,
-        "highMinutes": 92,
-        "label": "~50 min–1.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 65,
+        "highMinutes": 114,
+        "label": "~1.1–1.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9274,7 +9322,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -9311,7 +9359,7 @@
       "practiceTargetDisplay": "Full-length exam; no normal QBank quota",
       "carsPassages": 9,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Start 8:00 a.m.; use standard timing/breaks (or approved accommodations), no pausing or answer lookups. Treat the unscored sample as a baseline, not a scaled score.",
       "dayType": "exam",
@@ -9349,7 +9397,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -9383,11 +9431,11 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
+      "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light",
+      "weeklyMilestone": "AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -9416,33 +9464,34 @@
       "week": 19,
       "phase": "AAMC official",
       "weeklyFocus": "Final full-length",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -9453,33 +9502,34 @@
       "week": 19,
       "phase": "AAMC official",
       "weeklyFocus": "Final full-length",
-      "resource": "",
+      "resource": "AAMC Section Bank",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Targeted practice + spaced retrieval",
-      "mode": "Practice / retrieval",
-      "practiceTarget": "2 CARS passages",
-      "practiceTargetDisplay": "2 CARS passages",
+      "assignment": "P/S Section Bank + answer review + brief maintenance",
+      "mode": "Section Bank / review",
+      "practiceTarget": "2 CARS passages; 20 P/S Section Bank questions",
+      "practiceTargetDisplay": "2 CARS passages; 20 P/S Section Bank questions",
       "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
-      "dayType": "study",
+      "sourceNotes": "Review every incorrect, flagged and guessed-correct answer before adding questions; this replaces extra retrieval/QBank volume.",
+      "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
-      "isSectionBank": false,
+      "isSectionBank": true,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 65,
-        "highMinutes": 114,
-        "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 145,
+        "highMinutes": 234,
+        "label": "~2.4–3.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
         "phase-map",
+        "full-length-and-section-bank-schedule",
         "january-vs-march-decision"
       ]
     },
@@ -9495,11 +9545,11 @@
       "chapters": [],
       "assignment": "Targeted practice + spaced retrieval",
       "mode": "Practice / retrieval",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "2 CARS passages",
+      "practiceTargetDisplay": "2 CARS passages",
+      "carsPassages": 2,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "study",
@@ -9509,10 +9559,10 @@
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 50,
-        "highMinutes": 92,
-        "label": "~50 min–1.5 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 65,
+        "highMinutes": 114,
+        "label": "~1.1–1.9 hr",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9536,7 +9586,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "rest",
@@ -9573,7 +9623,7 @@
       "practiceTargetDisplay": "Full-length exam; no normal QBank quota",
       "carsPassages": 9,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Start 8:00 a.m.; use standard timing/breaks (or approved accommodations), no pausing or answer lookups. Treat the unscored sample as a baseline, not a scaled score.",
       "dayType": "exam",
@@ -9611,7 +9661,7 @@
       "practiceTargetDisplay": "",
       "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -9645,11 +9695,11 @@
       "chapters": [],
       "assignment": "Finish full-length review + confidence map + weekly pattern review",
       "mode": "Evidence-driven review",
-      "practiceTarget": "1 CARS passage",
-      "practiceTargetDisplay": "1 CARS passage",
-      "carsPassages": 1,
+      "practiceTarget": "",
+      "practiceTargetDisplay": "",
+      "carsPassages": 0,
       "weeklyHours": 20,
-      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder",
+      "weeklyMilestone": "AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval",
       "sourceStatus": "Not Started",
       "sourceNotes": "Protected review: 4-5 hours Sunday, 2 hours Monday; identify three repair priorities and schedule retests in 7-14 days. No new chapters.",
       "dayType": "full-length-review",
@@ -9700,7 +9750,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9737,7 +9787,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9774,7 +9824,7 @@
         "lowMinutes": 65,
         "highMinutes": 114,
         "label": "~1.1–1.9 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9793,7 +9843,7 @@
       "chapterIds": [],
       "chapters": [],
       "assignment": "Logistics rehearsal: ID, route, food",
-      "mode": "Rest / logistics",
+      "mode": "Logistics",
       "practiceTarget": "",
       "practiceTargetDisplay": "",
       "carsPassages": 0,
@@ -9801,17 +9851,17 @@
       "weeklyMilestone": "No new broad content; sleep, retrieval and test-day logistics",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
-      "dayType": "rest",
-      "isRest": true,
+      "dayType": "logistics",
+      "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 0,
-        "highMinutes": 30,
-        "label": "Rest day",
-        "basis": "Optional light maintenance only"
+        "lowMinutes": 20,
+        "highMinutes": 45,
+        "label": "~20–45 min",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9829,8 +9879,8 @@
       "resource": "",
       "chapterIds": [],
       "chapters": [],
-      "assignment": "Light flashcards; protect sleep",
-      "mode": "Rest / logistics",
+      "assignment": "Rest; optional light flashcards; protect sleep",
+      "mode": "Rest",
       "practiceTarget": "",
       "practiceTargetDisplay": "",
       "carsPassages": 0,
@@ -9904,7 +9954,7 @@
       "chapterIds": [],
       "chapters": [],
       "assignment": "Stop broad studying; finalize checklist",
-      "mode": "Rest / logistics",
+      "mode": "Logistics",
       "practiceTarget": "",
       "practiceTargetDisplay": "",
       "carsPassages": 0,
@@ -9912,17 +9962,17 @@
       "weeklyMilestone": "No new broad content; sleep, retrieval and test-day logistics",
       "sourceStatus": "Not Started",
       "sourceNotes": "",
-      "dayType": "rest",
-      "isRest": true,
+      "dayType": "logistics",
+      "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
       "estimatedWorkload": {
-        "lowMinutes": 0,
-        "highMinutes": 30,
-        "label": "Rest day",
-        "basis": "Optional light maintenance only"
+        "lowMinutes": 20,
+        "highMinutes": 45,
+        "label": "~20–45 min",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9941,7 +9991,7 @@
       "chapterIds": [],
       "chapters": [],
       "assignment": "Buffer / logistics; light retrieval only",
-      "mode": "Rest / logistics",
+      "mode": "Logistics",
       "practiceTarget": "",
       "practiceTargetDisplay": "",
       "carsPassages": 0,
@@ -9950,16 +10000,16 @@
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "test-window",
-      "isRest": true,
+      "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": true,
       "estimatedWorkload": {
-        "lowMinutes": 0,
-        "highMinutes": 30,
-        "label": "Rest day",
-        "basis": "Optional light maintenance only"
+        "lowMinutes": 20,
+        "highMinutes": 45,
+        "label": "~20–45 min",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9979,7 +10029,7 @@
       "chapterIds": [],
       "chapters": [],
       "assignment": "Buffer / logistics; light retrieval only",
-      "mode": "Rest / logistics",
+      "mode": "Logistics",
       "practiceTarget": "",
       "practiceTargetDisplay": "",
       "carsPassages": 0,
@@ -9988,16 +10038,16 @@
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "test-window",
-      "isRest": true,
+      "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": true,
       "estimatedWorkload": {
-        "lowMinutes": 0,
-        "highMinutes": 30,
-        "label": "Rest day",
-        "basis": "Optional light maintenance only"
+        "lowMinutes": 20,
+        "highMinutes": 45,
+        "label": "~20–45 min",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10017,7 +10067,7 @@
       "chapterIds": [],
       "chapters": [],
       "assignment": "Buffer / logistics; light retrieval only",
-      "mode": "Rest / logistics",
+      "mode": "Logistics",
       "practiceTarget": "",
       "practiceTargetDisplay": "",
       "carsPassages": 0,
@@ -10026,16 +10076,16 @@
       "sourceStatus": "Not Started",
       "sourceNotes": "",
       "dayType": "test-window",
-      "isRest": true,
+      "isRest": false,
       "isExam": false,
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": true,
       "estimatedWorkload": {
-        "lowMinutes": 0,
-        "highMinutes": 30,
-        "label": "Rest day",
-        "basis": "Optional light maintenance only"
+        "lowMinutes": 20,
+        "highMinutes": 45,
+        "label": "~20–45 min",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10070,10 +10120,11 @@
       "isSectionBank": false,
       "isTestWindow": true,
       "estimatedWorkload": {
-        "lowMinutes": 30,
-        "highMinutes": 60,
-        "label": "~30 min–1 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 450,
+        "highMinutes": 480,
+        "label": "If registered: ~7.5-8 hr",
+        "basis": "Conditional placeholder, not a booked exam; otherwise rest. Excluded from preparation totals.",
+        "conditional": true
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10108,10 +10159,11 @@
       "isSectionBank": false,
       "isTestWindow": true,
       "estimatedWorkload": {
-        "lowMinutes": 30,
-        "highMinutes": 60,
-        "label": "~30 min–1 hr",
-        "basis": "Inferred from study mode and planned practice; adjust to your review depth"
+        "lowMinutes": 450,
+        "highMinutes": 480,
+        "label": "If registered: ~7.5-8 hr",
+        "basis": "Conditional placeholder, not a booked exam; otherwise rest. Excluded from preparation totals.",
+        "conditional": true
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10242,28 +10294,52 @@
       "totalQuestions": 200,
       "assignments": [
         {
+          "date": "2026-10-23",
+          "week": 8,
+          "questions": 20,
+          "assignmentId": "2026-10-23"
+        },
+        {
           "date": "2026-10-24",
           "week": 8,
-          "questions": 50,
+          "questions": 30,
           "assignmentId": "2026-10-24"
         },
         {
-          "date": "2026-10-26",
-          "week": 8,
-          "questions": 50,
-          "assignmentId": "2026-10-26"
+          "date": "2026-10-30",
+          "week": 9,
+          "questions": 20,
+          "assignmentId": "2026-10-30"
         },
         {
           "date": "2026-10-31",
           "week": 9,
-          "questions": 50,
+          "questions": 30,
           "assignmentId": "2026-10-31"
         },
         {
-          "date": "2026-11-02",
-          "week": 9,
-          "questions": 50,
-          "assignmentId": "2026-11-02"
+          "date": "2026-11-17",
+          "week": 12,
+          "questions": 30,
+          "assignmentId": "2026-11-17"
+        },
+        {
+          "date": "2026-11-24",
+          "week": 13,
+          "questions": 20,
+          "assignmentId": "2026-11-24"
+        },
+        {
+          "date": "2026-12-01",
+          "week": 14,
+          "questions": 30,
+          "assignmentId": "2026-12-01"
+        },
+        {
+          "date": "2026-12-22",
+          "week": 17,
+          "questions": 20,
+          "assignmentId": "2026-12-22"
         }
       ],
       "id": "section-bank-01"
@@ -10274,28 +10350,52 @@
       "totalQuestions": 200,
       "assignments": [
         {
+          "date": "2026-11-06",
+          "week": 10,
+          "questions": 20,
+          "assignmentId": "2026-11-06"
+        },
+        {
           "date": "2026-11-07",
           "week": 10,
-          "questions": 50,
+          "questions": 30,
           "assignmentId": "2026-11-07"
         },
         {
-          "date": "2026-11-09",
-          "week": 10,
-          "questions": 50,
-          "assignmentId": "2026-11-09"
+          "date": "2026-11-13",
+          "week": 11,
+          "questions": 20,
+          "assignmentId": "2026-11-13"
         },
         {
           "date": "2026-11-14",
           "week": 11,
-          "questions": 50,
+          "questions": 30,
           "assignmentId": "2026-11-14"
         },
         {
-          "date": "2026-11-16",
-          "week": 11,
-          "questions": 50,
-          "assignmentId": "2026-11-16"
+          "date": "2026-11-25",
+          "week": 13,
+          "questions": 20,
+          "assignmentId": "2026-11-25"
+        },
+        {
+          "date": "2026-12-08",
+          "week": 15,
+          "questions": 30,
+          "assignmentId": "2026-12-08"
+        },
+        {
+          "date": "2026-12-15",
+          "week": 16,
+          "questions": 30,
+          "assignmentId": "2026-12-15"
+        },
+        {
+          "date": "2026-12-23",
+          "week": 17,
+          "questions": 20,
+          "assignmentId": "2026-12-23"
         }
       ],
       "id": "section-bank-02"
@@ -10306,40 +10406,64 @@
       "totalQuestions": 200,
       "assignments": [
         {
-          "date": "2026-11-24",
+          "date": "2026-11-27",
           "week": 13,
-          "questions": 40,
-          "assignmentId": "2026-11-24"
-        },
-        {
-          "date": "2026-11-25",
-          "week": 13,
-          "questions": 30,
-          "assignmentId": "2026-11-25"
+          "questions": 20,
+          "assignmentId": "2026-11-27"
         },
         {
           "date": "2026-11-28",
           "week": 13,
-          "questions": 30,
+          "questions": 20,
           "assignmentId": "2026-11-28"
         },
         {
-          "date": "2026-12-22",
-          "week": 17,
-          "questions": 40,
-          "assignmentId": "2026-12-22"
+          "date": "2026-11-30",
+          "week": 13,
+          "questions": 20,
+          "assignmentId": "2026-11-30"
         },
         {
-          "date": "2026-12-23",
+          "date": "2026-12-24",
           "week": 17,
-          "questions": 30,
-          "assignmentId": "2026-12-23"
+          "questions": 20,
+          "assignmentId": "2026-12-24"
         },
         {
           "date": "2026-12-26",
           "week": 17,
-          "questions": 30,
+          "questions": 20,
           "assignmentId": "2026-12-26"
+        },
+        {
+          "date": "2026-12-28",
+          "week": 17,
+          "questions": 20,
+          "assignmentId": "2026-12-28"
+        },
+        {
+          "date": "2026-12-29",
+          "week": 18,
+          "questions": 20,
+          "assignmentId": "2026-12-29"
+        },
+        {
+          "date": "2026-12-30",
+          "week": 18,
+          "questions": 20,
+          "assignmentId": "2026-12-30"
+        },
+        {
+          "date": "2027-01-05",
+          "week": 19,
+          "questions": 20,
+          "assignmentId": "2027-01-05"
+        },
+        {
+          "date": "2027-01-06",
+          "week": 19,
+          "questions": 20,
+          "assignmentId": "2027-01-06"
         }
       ],
       "id": "section-bank-03"
@@ -10381,8 +10505,8 @@
               "September 1-3: rapid math/data, General Chemistry 1-4 and CARS 1-2 review. Friday is light; diagnostic Saturday, September 5 at 8 a.m.; review September 6-7.",
               "Normal weeks run Tuesday-Monday. The launch is about 26 hours; most content weeks are 22-24 hours. Protect Sunday rest outside exam weeks.",
               "All 83 Kaplan chapters remain scheduled. First pass ends November 16. Third-party full-length moves to October 10; official full-length dates stay November 21, December 5/12/19, and January 2/9.",
-              "Practice now budgets 564 UWorld questions plus 600 Section Bank questions. Add UWorld toward 600-750 only when review and sleep fit.",
-              "Thanksgiving and Christmas remain rest days. P/S Section Bank work uses both holiday float weeks; all 600 questions finish December 26 before the last two official exams."
+              "484 UWorld questions plus 600 Section Bank questions. Weeks 8-11 use Section Banks instead of extra UWorld; expand only when review fits.",
+              "Section Banks use 20-30-question blocks from October 23 through January 6. Holiday floats mix all three sciences; full-length review and rest days have no extra quotas."
             ]
           }
         ]
@@ -10403,7 +10527,7 @@
               "Pair every learning block with topic-mode questions. Count questions that were reviewed deeply, not screens completed.",
               "Log wrong, flagged, and guessed-correct items. Record the cause, one concrete fix, and a retest due 7-14 days later.",
               "Do not stack a normal UWorld quota on top of a full-length. The exam and its review are the week's main practice volume.",
-              "Anki is capped at 30-45 minutes on six days per week. Default deck: AnKing MCAT; create only selective cards from actual gaps.",
+              "Anki/log maintenance: 15-30 minutes on chapter days; included in operational blocks. Exam and review days have no separate maintenance quota. Prioritize due cards; do not grow a catch-up debt.",
               "Use the approximately 100-page Khan-Academy-derived Psych/Soc document with the AAMC content outline; do not rely on the older Kaplan P/S terminology alone."
             ]
           },
@@ -10468,13 +10592,13 @@
                 "8-11",
                 "Oct 20-Nov 16",
                 "Integrate + SB",
-                "Finish content; B/B and C/P Section Banks"
+                "Finish content; small timed B/B and C/P blocks"
               ],
               [
                 "12-19",
                 "Nov 17-Jan 11",
                 "AAMC official",
-                "Six official exams; holiday P/S Section Banks"
+                "Six official exams; mixed Section Banks through January 6"
               ],
               [
                 "20",
@@ -10492,7 +10616,7 @@
           },
           {
             "type": "paragraph",
-            "text": "Budget: 564 UWorld + 600 Section Bank questions; one unscored diagnostic, one third-party and six official full-lengths. CARS exam passages count toward weekly totals."
+            "text": "Budget: 484 UWorld + 600 Section Bank questions; one diagnostic, one third-party and six official full-lengths. Exam CARS counts toward weekly totals."
           }
         ]
       },
@@ -10504,40 +10628,53 @@
             "type": "table",
             "headers": [
               "Week type",
-              "Time budget",
-              "Priorities"
+              "Budget",
+              "Execution rule"
             ],
             "rows": [
               [
                 "Launch",
-                "About 26 hours",
-                "Tue-Thu 3-3.5 hours/day; Fri 1-1.5; Sat 7.5-8; Sun 4-5; Mon 2"
+                "26 hr",
+                "Rapid review costs 30-45 min/chapter; add questions, CARS and maintenance. Stop Tue-Thu at 3.5 hr; take the diagnostic even if unfinished."
               ],
               [
                 "Content / SB",
-                "22-24 hours",
-                "6-8 concept; 8-10 questions/review; 3-4 CARS; 2-3 Anki. Use diagnostic-driven reading."
+                "22-24 hr",
+                "Review depth follows diagnostic evidence. Weeks 8-11 replace UWorld with 50 SB/week; no 50-question days."
               ],
               [
                 "Full-length",
-                "20-22 hours",
-                "7.5-8 exam; 6-7 review; 5-7 retrieval/CARS. No normal QBank stack."
+                "20-22 hr",
+                "Protect exam and two review days. Early-week SB replaces general retrieval; review days have no new quotas."
               ],
               [
                 "Holiday floats",
-                "16 / 18 hours",
-                "100 P/S Section Bank each; CARS, retests; holidays and Sunday off"
+                "16 / 18 hr",
+                "Five 20-question mixed SB blocks; holiday and Sunday off."
               ],
               [
                 "Taper",
-                "8 hours maximum",
-                "No broad new content; sleep and logistics"
+                "8 hr maximum",
+                "Short retrieval and 20-45-minute logistics; genuine rest days have only optional maintenance."
               ]
             ]
           },
           {
+            "type": "heading",
+            "text": "Budget and estimate rules",
+            "level": 2
+          },
+          {
             "type": "paragraph",
-            "text": "Time is a cap, not a demand to skim unknown material. If a low-confidence chapter needs more time, replace optional questions/reading with repair. If repeated weeks need more than 24 hours, reduce volume and revisit January using scored evidence; do not quietly create a growing backlog."
+            "text": "Weekly hours are your capacity budget, not a guarantee that the upper estimate fits. The generator rejects a week if even its low estimate exceeds capacity; midpoint and upper-bound risks stay visible. These ranges are planning assumptions, not measured completion times or statistical forecasts."
+          },
+          {
+            "type": "paragraph",
+            "text": "Protect exams, their review and sleep. If the budget is reached, stop new questions, finish their review next session, and replace lower-priority work rather than adding catch-up debt. Log actual time and replan if two weeks overrun."
+          },
+          {
+            "type": "paragraph",
+            "text": "The website reports weekly estimate ranges and capacity warnings. Budget overrun is a signal to reduce scope or replan, not to read faster or skip answer review."
           }
         ]
       },
@@ -10600,73 +10737,73 @@
                 "8",
                 "2026-10-20 to 2026-10-26",
                 "Fluids/circuits + P/S | 24 hr",
-                "UWorld 20; CARS 14. 100 B/B Section Bank questions with review"
+                "UWorld 0; CARS 12. 50 B/B Section Bank: Fri 20 + Sat 30 timed; Keep review current"
               ],
               [
                 "9",
                 "2026-10-27 to 2026-11-02",
                 "Finish physics + Orgo foundations | 24 hr",
-                "UWorld 20; CARS 14. 100 B/B Section Bank; equations cold by Mon Nov 2"
+                "UWorld 0; CARS 12. 50 B/B Section Bank: Fri 20 + Sat 30 timed; Equations cold by Nov 2"
               ],
               [
                 "10",
                 "2026-11-03 to 2026-11-09",
                 "Orgo reactions + finish P/S | 24 hr",
-                "UWorld 20; CARS 14. 100 C/P Section Bank; finish P/S first pass"
+                "UWorld 0; CARS 12. 50 C/P Section Bank: Fri 20 + Sat 30 timed; Finish P/S first pass"
               ],
               [
                 "11",
                 "2026-11-10 to 2026-11-16",
                 "Carbonyls + final Orgo audit | 24 hr",
-                "UWorld 20; CARS 14. 100 C/P Section Bank; all 83 chapters covered by Mon Nov 16"
+                "UWorld 0; CARS 12. 50 C/P Section Bank: Fri 20 + Sat 30 timed; All 83 chapters covered by Nov 16"
               ],
               [
                 "12",
                 "2026-11-17 to 2026-11-23",
                 "Official Exam 1 | 20 hr",
-                "UWorld 0; CARS 15. AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon"
+                "UWorld 0; CARS 15. AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval"
               ],
               [
                 "13",
                 "2026-11-24 to 2026-11-30",
-                "Thanksgiving float + P/S Section Bank | 16 hr",
-                "UWorld 0; CARS 10. 100 P/S Section Bank; Thanksgiving and Sunday off"
+                "Thanksgiving float + mixed Section Banks | 16 hr",
+                "UWorld 0; CARS 10. 100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off"
               ],
               [
                 "14",
                 "2026-12-01 to 2026-12-07",
                 "Official Exam 2 | 20 hr",
-                "UWorld 0; CARS 15. AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon"
+                "UWorld 0; CARS 15. AAMC Practice Exam 2 Sat Dec 5; review Sun-Mon; SB: 30 B/B early-week, replacing retrieval"
               ],
               [
                 "15",
                 "2026-12-08 to 2026-12-14",
                 "Official Exam 3 | 20 hr",
-                "UWorld 0; CARS 15. AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon"
+                "UWorld 0; CARS 15. AAMC Practice Exam 3 Sat Dec 12; review Sun-Mon; SB: 30 C/P early-week, replacing retrieval"
               ],
               [
                 "16",
                 "2026-12-15 to 2026-12-21",
                 "Official Exam 4 + readiness decision | 20 hr",
-                "UWorld 0; CARS 15. AAMC Practice Exam 4 Sat Dec 19; assess January/March after review"
+                "UWorld 0; CARS 15. AAMC Practice Exam 4 Sat Dec 19; assess January/March after review; SB: 30 C/P early-week, replacing retrieval"
               ],
               [
                 "17",
                 "2026-12-22 to 2026-12-28",
-                "Holiday float + finish P/S Section Bank | 18 hr",
-                "UWorld 0; CARS 12. Finish final 100 P/S Section Bank; Christmas and Sunday off"
+                "Holiday float + mixed Section Banks | 18 hr",
+                "UWorld 0; CARS 10. 100 Section Bank: B/B 20, C/P 20, P/S 60; five 20-question blocks; holiday and Sunday off"
               ],
               [
                 "18",
                 "2026-12-29 to 2027-01-04",
                 "Official Exam 5 | 20 hr",
-                "UWorld 0; CARS 15. AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light"
+                "UWorld 0; CARS 15. AAMC Practice Exam 5 Sat Jan 2; keep New Year's Day light; SB: 40 P/S early-week, replacing retrieval"
               ],
               [
                 "19",
                 "2027-01-05 to 2027-01-11",
                 "Final full-length | 20 hr",
-                "UWorld 0; CARS 15. AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder"
+                "UWorld 0; CARS 15. AAMC Practice Exam 6 Sat Jan 9; 13-14 days before placeholder; SB: 40 P/S early-week, replacing retrieval"
               ],
               [
                 "20",
@@ -10699,19 +10836,19 @@
                 "2026-09-01",
                 "Physics and Math Ch. 10 - Mathematics; Physics and Math Ch. 11 - Reasoning About the Design and Execution of Research",
                 "8 UWorld topic questions; 1 CARS passage",
-                "Cap the whole block at 3-3.5 hours including questions/review and 15-20 minutes Anki. Flag unfamiliar topics; repair them after the diagnostic."
+                "Rapid review 30-45 min per chapter + 8 UWorld with review + 1 CARS passage + 15-30 min maintenance. Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes."
               ],
               [
                 "2026-09-02",
                 "General Chemistry Ch. 1 - Atomic Structure; General Chemistry Ch. 2 - The Periodic Table; General Chemistry Ch. 3 - Bonding and Chemical Interactions",
                 "8 UWorld topic questions; 1 CARS passage",
-                "Cap the whole block at 3-3.5 hours including questions/review and 15-20 minutes Anki. Flag unfamiliar topics; repair them after the diagnostic."
+                "Rapid review 30-45 min per chapter + 8 UWorld with review + 1 CARS passage + 15-30 min maintenance. Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes."
               ],
               [
                 "2026-09-03",
                 "General Chemistry Ch. 4 - Compounds and Stoichiometry; Critical Analysis and Reasoning Skills Ch. 1 - About CARS; Critical Analysis and Reasoning Skills Ch. 2 - Analyzing Rhetoric",
                 "8 UWorld topic questions; 1 CARS passage",
-                "Cap the whole block at 3-3.5 hours including questions/review and 15-20 minutes Anki. Flag unfamiliar topics; repair them after the diagnostic."
+                "Rapid review 30-45 min per chapter + 8 UWorld with review + 1 CARS passage + 15-30 min maintenance. Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes."
               ],
               [
                 "2026-09-04",
@@ -10800,22 +10937,22 @@
             "headers": [
               "Weeks",
               "Section Bank",
-              "Reviewed questions"
+              "Questions"
             ],
             "rows": [
               [
-                "8-9",
-                "B/B Volumes 1-2",
+                "8-9; 12-14; 17",
+                "B/B; 20-30 per block",
                 "200"
               ],
               [
-                "10-11",
-                "C/P Volumes 1-2",
+                "10-11; 13; 15-17",
+                "C/P; 20-30 per block",
                 "200"
               ],
               [
-                "13 and 17",
-                "P/S Volumes 1-2",
+                "13; 17-19",
+                "P/S; 20 per block",
                 "200"
               ]
             ]
@@ -10823,6 +10960,10 @@
           {
             "type": "paragraph",
             "text": "Unscored Sample: log section accuracy, confidence and timing; do not invent a scaled score. Final official full-length January 9 is 13-14 days before the placeholder window; re-anchor after registration."
+          },
+          {
+            "type": "paragraph",
+            "text": "October 24/31 and November 7/14: timed 30-question science checkpoints, followed by review, within the scheduled Section Bank volume. These provide section-level feedback during the 42-day full-length gap, not a substitute scaled score or stamina test. Keep January 9 as the final full-length; all new Section Bank questions finish January 6."
           }
         ]
       },
@@ -11510,7 +11651,12 @@
         "Practice / retrieval",
         "Evidence-driven review",
         "Rest",
-        "Rapid review"
+        "Rapid review",
+        "Light retrieval",
+        "Exam under test conditions",
+        "Section Bank / review",
+        "Logistics",
+        "Exam if officially scheduled"
       ]
     }
   },
@@ -11527,130 +11673,206 @@
     "chapterAssignments": 83,
     "uniqueChapterAssignments": 83,
     "unknownChapterIds": [],
-    "displayNormalizations": {
-      "singularCarsPassageLabels": 0,
-      "sourceRowsChanged": 0
-    },
     "weeklyChecks": [
       {
         "week": 1,
         "dailyRows": 7,
         "carsPassages": 13,
-        "uworldQuestions": 24
+        "uworldQuestions": 24,
+        "estimatedLowMinutes": 1286,
+        "estimatedHighMinutes": 1706,
+        "budgetMinutes": 1560,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 2,
         "dailyRows": 7,
         "carsPassages": 8,
-        "uworldQuestions": 90
+        "uworldQuestions": 90,
+        "estimatedLowMinutes": 1040,
+        "estimatedHighMinutes": 1766,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 3,
         "dailyRows": 7,
         "carsPassages": 9,
-        "uworldQuestions": 95
+        "uworldQuestions": 95,
+        "estimatedLowMinutes": 1025,
+        "estimatedHighMinutes": 1743,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 4,
         "dailyRows": 7,
         "carsPassages": 10,
-        "uworldQuestions": 90
+        "uworldQuestions": 90,
+        "estimatedLowMinutes": 1020,
+        "estimatedHighMinutes": 1730,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 5,
         "dailyRows": 7,
         "carsPassages": 12,
-        "uworldQuestions": 95
+        "uworldQuestions": 95,
+        "estimatedLowMinutes": 1110,
+        "estimatedHighMinutes": 1864,
+        "budgetMinutes": 1440,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 6,
         "dailyRows": 7,
         "carsPassages": 12,
-        "uworldQuestions": 20
+        "uworldQuestions": 20,
+        "estimatedLowMinutes": 1280,
+        "estimatedHighMinutes": 1716,
+        "budgetMinutes": 1320,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 7,
         "dailyRows": 7,
         "carsPassages": 12,
-        "uworldQuestions": 70
+        "uworldQuestions": 70,
+        "estimatedLowMinutes": 1170,
+        "estimatedHighMinutes": 1909,
+        "budgetMinutes": 1440,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 8,
         "dailyRows": 7,
-        "carsPassages": 14,
-        "uworldQuestions": 20
+        "carsPassages": 12,
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1010,
+        "estimatedHighMinutes": 1629,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 9,
         "dailyRows": 7,
-        "carsPassages": 14,
-        "uworldQuestions": 20
+        "carsPassages": 12,
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1060,
+        "estimatedHighMinutes": 1709,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 10,
         "dailyRows": 7,
-        "carsPassages": 14,
-        "uworldQuestions": 20
+        "carsPassages": 12,
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1060,
+        "estimatedHighMinutes": 1709,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 11,
         "dailyRows": 7,
-        "carsPassages": 14,
-        "uworldQuestions": 20
+        "carsPassages": 12,
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1010,
+        "estimatedHighMinutes": 1629,
+        "budgetMinutes": 1440,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 12,
         "dailyRows": 7,
         "carsPassages": 15,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1135,
+        "estimatedHighMinutes": 1502,
+        "budgetMinutes": 1200,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 13,
         "dailyRows": 7,
         "carsPassages": 10,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 725,
+        "estimatedHighMinutes": 1230,
+        "budgetMinutes": 960,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 14,
         "dailyRows": 7,
         "carsPassages": 15,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1135,
+        "estimatedHighMinutes": 1502,
+        "budgetMinutes": 1200,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 15,
         "dailyRows": 7,
         "carsPassages": 15,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1135,
+        "estimatedHighMinutes": 1502,
+        "budgetMinutes": 1200,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 16,
         "dailyRows": 7,
         "carsPassages": 15,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1135,
+        "estimatedHighMinutes": 1502,
+        "budgetMinutes": 1200,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 17,
         "dailyRows": 7,
-        "carsPassages": 12,
-        "uworldQuestions": 0
+        "carsPassages": 10,
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 725,
+        "estimatedHighMinutes": 1230,
+        "budgetMinutes": 1080,
+        "capacityRisk": "upper-over-budget"
       },
       {
         "week": 18,
         "dailyRows": 7,
         "carsPassages": 15,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1165,
+        "estimatedHighMinutes": 1542,
+        "budgetMinutes": 1200,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 19,
         "dailyRows": 7,
         "carsPassages": 15,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 1165,
+        "estimatedHighMinutes": 1542,
+        "budgetMinutes": 1200,
+        "capacityRisk": "midpoint-over-budget"
       },
       {
         "week": 20,
         "dailyRows": 7,
         "carsPassages": 6,
-        "uworldQuestions": 0
+        "uworldQuestions": 0,
+        "estimatedLowMinutes": 235,
+        "estimatedHighMinutes": 492,
+        "budgetMinutes": 480,
+        "capacityRisk": "upper-over-budget"
       }
     ],
     "planWeeks": 20,

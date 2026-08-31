@@ -1,4 +1,4 @@
-import { getModeDetails } from "../data.js";
+import { getModeDetails, modeLabel } from "../data.js";
 import { escapeAttr, escapeHTML, formatDateLong, countPracticeQuestions } from "../utils.js";
 
 export function statusLabel(status = "not-started") {
@@ -49,7 +49,7 @@ export function assignmentDetailHTML(row, data, state) {
       </section>
       <dl class="detail-list detail-list--grid">
         <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "No resource required")}</dd></div>
-        <div><dt>Mode</dt><dd>${escapeHTML(row.mode)}</dd></div>
+        <div><dt>Mode</dt><dd>${escapeHTML(modeLabel(row.mode))}</dd></div>
         <div><dt>Practice</dt><dd>${escapeHTML(row.practiceTargetDisplay || "No practice quota")}</dd></div>
         <div><dt>CARS</dt><dd>${row.carsPassages || 0} passage${row.carsPassages === 1 ? "" : "s"}</dd></div>
         <div><dt>Milestone</dt><dd>${escapeHTML(row.weeklyMilestone)}</dd></div>

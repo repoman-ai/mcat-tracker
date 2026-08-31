@@ -161,7 +161,7 @@ export function createBackup(state) {
   };
 }
 
-export function validateBackup(payload) {
+export function validateBackup(payload, schedule = null) {
   if (!payload || typeof payload !== "object") throw new Error("The selected file does not contain a JSON object.");
   if (payload.format !== "mcat-tracker-backup") throw new Error("This is not an MCAT tracker backup file.");
   if (!payload.state || typeof payload.state !== "object") throw new Error("The backup is missing its state payload.");
@@ -173,10 +173,14 @@ export function validateBackup(payload) {
   const ids = (rawMistakes || []).map((entry) => entry?.id).filter(Boolean);
   if (new Set(ids).size !== ids.length) throw new Error("The backup contains duplicate mistake entry IDs. No data was changed.");
   const state = normalizeState(payload.state);
+  const activeIds = schedule ? new Set(schedule.map((row) => row.id)) : null;
+  const activeDailyRecords = activeIds ? Object.keys(state.daily).filter((id) => activeIds.has(id)).length : null;
   return {
     state,
     summary: {
       dailyRecords: Object.keys(state.daily).length,
+      activeDailyRecords,
+      historicalDailyRecords: activeIds ? Object.keys(state.daily).length - activeDailyRecords : null,
       mistakeEntries: state.mistakes.length,
       examRecords: Object.keys(state.exams).length,
       masteryRecords: Object.keys(state.mastery).length,

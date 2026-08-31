@@ -33,16 +33,27 @@ export function getTodayContext(data, iso = todayISO()) {
 }
 
 export function getModeDetails(data, modeString = "") {
-  return modeString
-    .split(";")
-    .map((name) => name.trim())
-    .filter(Boolean)
+  return uniqueModeNames(modeString)
     .map((name) => data.index.modeByName.get(name.toLowerCase()) || {
       id: name.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-"),
       name,
       summary: "Follow the named block and use the operating rules for review depth.",
       completeInstructions: "Follow the named block and use the operating rules for review depth.",
     });
+}
+
+export function uniqueModeNames(modeString = "") {
+  const seen = new Set();
+  return modeString.split(";").map((name) => name.trim()).filter((name) => {
+    const key = name.toLowerCase();
+    if (!name || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+export function modeLabel(modeString) {
+  return uniqueModeNames(modeString).join("; ");
 }
 
 export function weekRows(data, weekNumber) {

@@ -7,7 +7,7 @@ index, live application, and Supabase project before continuing.
 
 The schedule now starts September 1: 145 days, 20 Tuesday–Monday weeks. Diagnostic September 5,
 protected review September 6–7. All 83 chapters finish by November 16. Third-party FL October 10;
-six official FL dates remain November 21, December 5/12/19 and January 2/9. There are 564 scheduled
+six official FL dates remain November 21, December 5/12/19 and January 2/9. There are 484 scheduled
 UWorld questions and 600 Section Bank questions. No authentication, cloud data or saved progress was
 reset. Date keys and exam IDs retain their existing format.
 
@@ -17,11 +17,20 @@ Office files were regenerated with explicitly user-approved local Python librari
 mistake-log, mastery and existing validation-list data were preserved. The source workbook is read
 only for fields, lists and mastery topics, not website dates or progress. Original August files remain
 archived. The builder is `scripts/build_restart_office.py` in the parent workspace. Workbook previews
-and content checks passed; full Word pagination QA was unavailable because LibreOffice is absent.
+and content checks passed. The bundled runtime became available during the workload revision;
+all 11 Word pages were rendered and visually checked, superseding the earlier pagination limitation.
 
 Run `python3 -S scripts/generate_site_data.py` and `node --test tests/*.test.mjs` from this directory.
 The restart-specific regression tests cover dates, coverage, holidays, exam review, UI and saved-state
 preservation. Do not run the old August plan builders; they would restore obsolete assumptions.
+
+The workload review distributes SBs in 20–30-question blocks through January 6. Weeks 8–11
+have 50 SB questions each (Friday 20, Saturday 30) and no extra UWorld. Official-exam weeks
+use early-week SB blocks; holidays/rest and full-length review have no extra quotas. Weekly
+budgets are unchanged (426 total): low-bound overrun fails generation; midpoint/upper-bound
+risks remain explicit in the Plan UI. Unknown modes fail before special-day branches. Source
+hashes replace wall-clock generatedAt; unchanged inputs regenerate byte-identically. Mode
+deduplication is display-only. Backup counts distinguish current schedule records and history.
 
 ## Project
 

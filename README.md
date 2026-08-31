@@ -56,6 +56,16 @@ Files in `archive/` are superseded versions and are **not** sources.
 
 Week 1 counts four warm-up CARS passages plus the nine-passage diagnostic. Thanksgiving and Christmas practice targets are redistributed away from the rest days. Weekly totals are reconciled at generation time.
 
+### Workload review
+
+The weekly hours are capacity budgets, totaling 426 hours; inferred durations are advisory ranges, not fitted promises. Generation fails when a week's low estimate exceeds its budget. Plan shows both the full range and warnings when the midpoint or upper estimate exceeds capacity. No estimate is clamped to a week number. Mode costs are explicit, unknown modes fail, and question costs include answer review. All source mode tokens count toward chapter costs, but repeated labels/cards are shown only once.
+
+The plan now has 484 UWorld questions and 600 Section Bank questions in 20–30-question blocks, October 23–January 6. Weeks 8–11 contain 50 SB questions each, replacing UWorld micro-quotas; holiday floats mix sciences and official-exam weeks use early-week blocks. Saturday science checkpoints bridge the October 10–November 21 full-length gap without adding a full-length. Rest and full-length review days carry no extra quotas. Logistics and conditional placeholder test days are costed explicitly.
+
+The preparation estimate is approximately 344–519 hours. Every low bound fits, but several midpoint estimates still exceed capacity—especially exam weeks. Those are visible risks, not claims that the whole plan will fit regardless of review depth. Prioritize review, reduce new volume, and replan after two actual overruns. Existing August history remains preserved; backup import distinguishes current-plan records from history.
+
+Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`. The one-time `scripts/rebalance_plan.py` records this revision; routine regeneration never reruns a migration.
+
 ### Placeholder exam dates
 
 January 22–23, 2027 are **planning placeholders**, labelled as such everywhere they appear. The countdown says "Placeholder window" until you enter a real date under **Exams → Registered MCAT date**, after which it switches to "Registered MCAT" and counts to your actual date. That date syncs across your devices.
@@ -75,14 +85,7 @@ For date-specific checks, add `?today=YYYY-MM-DD` before the hash, e.g. `http://
 Run the test suites:
 
 ```bash
-node tests/pin.test.mjs
-node tests/username.test.mjs
-node tests/account-auth.test.mjs
-node tests/storage.test.mjs
-node tests/sync-merge.test.mjs
-node tests/export.test.mjs
-node tests/ui-auth.test.mjs
-node tests/supabase-artifacts.test.mjs
+node --test tests/*.test.mjs
 ```
 
 ---

@@ -56,14 +56,22 @@ function weekCard(week, rows, context, currentWeek, detail) {
   const completed = rows.filter((row) => !row.isRest && context.state.daily[row.id]?.status === "complete").length;
   const studyDays = rows.filter((row) => !row.isRest).length;
   const open = week.week === currentWeek || matching.some((row) => row.date === detail);
+  const workload = context.data.validation.weeklyChecks.find((check) => check.week === week.week);
+  const estimate = workload ? `${(workload.estimatedLowMinutes / 60).toFixed(1)}–${(workload.estimatedHighMinutes / 60).toFixed(1)} hr` : "Not available";
+  const warning = workload?.capacityRisk === "midpoint-over-budget"
+    ? "Capacity risk: even the range midpoint exceeds the budget. Prioritize review, trim lower-priority volume, and replan if actual time confirms the overrun."
+    : workload?.capacityRisk === "upper-over-budget"
+      ? "Deeper review may exceed the budget. Stop new questions at the time limit; do not skip their review or borrow from sleep."
+      : "Estimated workload fits the budget.";
   return `
     <details class="week-card" ${open ? "open" : ""} id="week-${week.week}">
       <summary>
         <div class="week-number"><span>Week</span><strong>${week.week}</strong></div>
-        <div class="week-summary"><span class="eyebrow">${escapeHTML(week.phase)} · ${week.planned_hours} planned hours</span><h3>${escapeHTML(week.focus)}</h3><p>${escapeHTML(week.milestone)}</p></div>
+        <div class="week-summary"><span class="eyebrow">${escapeHTML(week.phase)} · ${week.planned_hours} planned hours</span><h3>${escapeHTML(week.focus)}</h3><p>${escapeHTML(week.milestone)}</p><p>Advisory estimate: ${escapeHTML(estimate)}${workload?.capacityRisk === "midpoint-over-budget" ? " · Capacity risk" : ""}</p></div>
         <div class="week-score"><strong>${completed}/${studyDays}</strong><span>days</span></div><span class="disclosure-icon" aria-hidden="true">⌄</span>
       </summary>
       <div class="week-card__body">
+        <p class="muted">${escapeHTML(warning)} <a href="#guide/honest-time-templates">Budget and estimate rules</a></p>
         <div class="week-targets"><span><strong>${week.uworld_questions}</strong> UWorld</span><span><strong>${week.cars_passages}</strong> CARS passages</span>${week.exam_or_section_bank ? `<span><strong>${escapeHTML(week.exam_or_section_bank)}</strong> event</span>` : ""}</div>
         <div class="plan-days">${matching.map((row) => dayCard(row, context, row.date === detail)).join("")}</div>
       </div>
@@ -87,7 +95,7 @@ export function renderPlan(context, route) {
         <label>Phase<select data-plan-filter="phase">${option("all", "All phases", filters.phase)}${phases.map((phase) => option(phase, phase, filters.phase)).join("")}</select></label>
         <label>Resource<select data-plan-filter="resource">${option("all", "All resources", filters.resource)}${resources.map((resource) => option(resource, resource, filters.resource)).join("")}</select></label>
         <label>Status<select data-plan-filter="status">${option("all", "Complete + incomplete", filters.status)}${option("complete", "Complete", filters.status)}${option("incomplete", "Incomplete", filters.status)}</select></label>
-        <label>Day type<select data-plan-filter="dayType">${option("all", "All day types", filters.dayType)}${option("study", "Study days", filters.dayType)}${option("exam", "Full-length days", filters.dayType)}${option("full-length-review", "FL review days", filters.dayType)}${option("section-bank", "Section Bank days", filters.dayType)}${option("rest", "Rest days", filters.dayType)}${option("test-window", "Placeholder window", filters.dayType)}</select></label>
+        <label>Day type<select data-plan-filter="dayType">${option("all", "All day types", filters.dayType)}${option("study", "Study days", filters.dayType)}${option("exam", "Full-length days", filters.dayType)}${option("full-length-review", "FL review days", filters.dayType)}${option("section-bank", "Section Bank days", filters.dayType)}${option("rest", "Rest days", filters.dayType)}${option("logistics", "Logistics tasks", filters.dayType)}${option("test-window", "Placeholder window", filters.dayType)}</select></label>
         <label class="check-control"><input type="checkbox" data-plan-current ${filters.currentWeekOnly ? "checked" : ""}><span>Current week only</span></label>
         <button class="button button--quiet" type="button" data-plan-reset>Reset filters</button>
       </div>

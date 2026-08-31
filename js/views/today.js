@@ -1,4 +1,4 @@
-import { getTodayContext, weekRows } from "../data.js";
+import { getTodayContext, weekRows, modeLabel } from "../data.js";
 import {
   countPracticeQuestions,
   daysBetween,
@@ -101,7 +101,7 @@ export function renderToday(context) {
           ${row.chapters.length ? `<p class="chapter-line">${row.chapters.map((chapter) => `<span>${escapeHTML(chapter.id)}</span> ${escapeHTML(chapter.title)}`).join(" · ")}</p>` : ""}
           <dl class="today-facts">
             <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "None required")}</dd></div>
-            <div><dt>Mode</dt><dd>${escapeHTML(row.mode)}</dd></div>
+            <div><dt>Mode</dt><dd>${escapeHTML(modeLabel(row.mode))}</dd></div>
             <div><dt>Practice</dt><dd>${escapeHTML(row.practiceTargetDisplay || "No practice quota")}</dd></div>
             <div><dt>CARS</dt><dd>${row.carsPassages || 0} passage${row.carsPassages === 1 ? "" : "s"}</dd></div>
           </dl>
