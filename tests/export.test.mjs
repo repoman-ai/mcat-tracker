@@ -109,6 +109,16 @@ for (const { handle, filename } of captured) {
   const entry = written.find((item) => item.handle === handle);
   if (!entry) throw new Error(`No blob captured for ${filename}`);
   const buffer = Buffer.from(await entry.blob.arrayBuffer());
+  if (filename.endsWith(".xlsx")) {
+    const exported = new ExcelJS.Workbook();
+    await exported.xlsx.load(buffer);
+    const schedule = exported.getWorksheet("Daily Schedule");
+    const progress = exported.getWorksheet(`${data.plan.prep_weeks}-Week Progress`);
+    if (schedule.rowCount !== data.schedule.length + 1) throw new Error("Exported daily schedule has stale row count");
+    if (!progress || progress.rowCount !== data.plan.prep_weeks + 1) throw new Error("Exported week progress is stale");
+    if (schedule.getCell("A2").value.toISOString().slice(0, 10) !== data.plan.plan_start) throw new Error("Exported start date is stale");
+    if (exported.getWorksheet("Full-Length Scores").getCell("C2").value.toISOString().slice(0, 10) !== data.exams[0].plannedDate) throw new Error("Exported diagnostic date is stale");
+  }
   await fs.writeFile(path.join(outputDir, filename), buffer);
 }
 

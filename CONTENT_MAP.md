@@ -4,9 +4,9 @@ This map shows where every authoritative source component appears. `data/site-da
 
 | Authoritative source | Source component | Website location | Treatment |
 |---|---|---|---|
-| `schedule.csv` | All 158 dated rows | Today; Plan; Daily Schedule export | Today prioritizes the current/next action; Plan exposes every row and complete details. |
-| `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text is preserved. A display-only grammar normalization changes “1 CARS passages” to “1 CARS passage” in 6 rows. |
-| `plan.json` | Metadata, 22 weeks, targets, phases | Today; Plan; Guide | Weekly progress uses the exact planned hours, UWorld, CARS, focus, and milestone values. |
+| `schedule.csv` | All 145 dated rows | Today; Plan; Daily Schedule export | Today prioritizes the current/next action; Plan exposes every row and complete details. |
+| `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text is preserved. A display-only grammar normalization changes “1 CARS passages” to “1 CARS passage” in 0 rows. |
+| `plan.json` | Metadata, 20 weeks, targets, phases | Today; Plan; Guide | Weekly progress uses the exact planned hours, UWorld, CARS, focus, and milestone values. |
 | `plan.json` | Preferred/fallback windows, placeholders, registration, readiness rules | Today countdown; Exams; Guide | January 22-23 remain clearly labeled placeholders until a registered date is saved. |
 | `plan.json` + guide | Study modes and complete instructions | Today/Plan detail drawer; Guide | The plan summary is merged with the guide’s when-to-use and required-output rules. |
 | `kaplan-mcat-books.md` | 83 chapter IDs, titles, and every subsection | Today/Plan chapter details; Log chapter selector | Generated directly; no second editable chapter-title list is maintained. |
@@ -18,22 +18,20 @@ This map shows where every authoritative source component appears. `data/site-da
 | Study guide | Full-Length and Section Bank Schedule | Exams; Plan; Guide | All eight exams and all 600 Section Bank questions are linked to dated assignments. |
 | Study guide | January vs. March Decision + March protocol | Exams readiness card; Guide | The plan’s own decision rule is shown as guidance, not definitive advice. |
 | Study guide | Registration and Resource Controls + source links | Exams date setting; Guide | Full content and clickable source links. |
-| Workbook | Mistake Log fields and validation lists | Log → Capture; Log → Entries; CSV/XLSX | The fast form keeps common fields visible and retains workbook-compatible concepts. Advanced fields stay behind “More details”. |
-| Workbook | Weekly Pattern Review | Log → Repair; XLSX export | Counts by error, topic, section, source, repeat issue, and retest status. |
+| Workbook | Mistake Log fields and validation lists | Log quick capture; complete log; CSV/XLSX | The fast form keeps common fields visible and retains workbook-compatible concepts. |
+| Workbook | Weekly Pattern Review | Log summaries; XLSX export | Counts by error, topic, section, source, repeat issue, and retest status. |
 | Workbook | Complete 40-topic mastery checklist | Log → Mastery | Confidence, review dates, notes, related mistakes, and contextual links. |
-| Workbook | Daily Schedule / 22-Week Tracker / Lists | Plan; progress summaries; XLSX export | Current browser state is added at export time. |
+| `schedule.csv` + `plan.json` | Daily Schedule / week progress | Plan; progress summaries; XLSX export | Dates come from the current plan, not the legacy workbook. Current browser state is added at export time. |
 
 ## Validation snapshot
 
-- Daily rows: 158 (2026-08-19 through 2027-01-23, continuous)
+- Daily rows: 145 (2026-09-01 through 2027-01-23, continuous)
 - Duplicate dates: 0
 - Missing dates: 0
-- Week boundaries: Wednesday-Tuesday
+- Week boundaries: Tuesday-Monday
 - Kaplan assignments resolved: 83 / 83; unknown IDs: 0
-- Plan weeks reconciled: 22 / 22
+- Plan weeks reconciled: 20 / 20
 - Full-length events: 8
 - Section Bank questions: 600
 - Mastery topics: 40
 - Meaningful guide sections mapped: 9 / 9, plus plan overview and source links
-
-The Log view is divided into five deep-linkable panels — `#log/capture`, `#log/repair`, `#log/entries`, `#log/mastery`, `#log/export` — so no single screen has to carry all of this content at once.

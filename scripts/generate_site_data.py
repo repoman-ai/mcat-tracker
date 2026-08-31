@@ -28,7 +28,7 @@ CONTENT_MAP_PATH = TRACKER_ROOT / "CONTENT_MAP.md"
 SCHEDULE_PATH = SOURCE_ROOT / "schedule.csv"
 PLAN_PATH = SOURCE_ROOT / "plan.json"
 CHAPTERS_PATH = SOURCE_ROOT / "kaplan-mcat-books.md"
-GUIDE_PATH = SOURCE_ROOT / "MCAT_Study_Plan_2026-08-19.docx"
+GUIDE_PATH = SOURCE_ROOT / "study-guide.json"
 WORKBOOK_PATH = SOURCE_ROOT / "MCAT_520_Plus_Mistake_Log.xlsx"
 README_PATH = SOURCE_ROOT / "README.md"
 
@@ -188,6 +188,12 @@ def table_payload(node: ET.Element) -> dict[str, Any] | None:
 
 
 def parse_guide() -> dict[str, Any]:
+    if GUIDE_PATH.suffix == ".json":
+        guide = json.loads(GUIDE_PATH.read_text(encoding="utf-8"))
+        ids = [section["id"] for section in guide["sections"]]
+        if len(ids) != len(set(ids)) or not EXPECTED_GUIDE_SECTIONS.issubset(ids):
+            fail("Study guide has missing or duplicate sections")
+        return guide
     with zipfile.ZipFile(GUIDE_PATH) as archive:
         root = ET.fromstring(archive.read("word/document.xml"))
     body = root.find(f"{W}body")
@@ -474,6 +480,12 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
         return {"lowMinutes": 0, "highMinutes": 30, "label": "Rest day", "basis": "Optional light maintenance only"}
     if row["isExam"]:
         return {"lowMinutes": 450, "highMinutes": 480, "label": "~7.5-8 hr", "basis": "Full-length under test conditions"}
+    if row["isFullLengthReview"]:
+        sunday = row["day"] == "Sun"
+        return {"lowMinutes": 240 if sunday else 120, "highMinutes": 300 if sunday else 150, "label": "~4-5 hr" if sunday else "~2-2.5 hr", "basis": "Protected exam review; no new chapters"}
+    if row["week"] == 1:
+        light = row["day"] == "Fri"
+        return {"lowMinutes": 60 if light else 180, "highMinutes": 90 if light else 210, "label": "~1-1.5 hr" if light else "~3-3.5 hr", "basis": "Launch time cap includes questions, review and brief Anki; flag gaps for after the diagnostic"}
 
     low = 0
     high = 0
@@ -543,7 +555,7 @@ def guide_links_for(row: dict[str, Any]) -> list[str]:
         links.append("full-length-and-section-bank-schedule")
     if row["isTestWindow"]:
         links.append("registration-and-resource-controls")
-    if row["week"] in {18, 20, 21, "TEST"}:
+    if row["week"] in {16, 17, 18, 19, 20, "TEST"}:
         links.append("january-vs-march-decision")
     return list(dict.fromkeys(links))
 
@@ -557,8 +569,9 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             fail(f"Schedule columns mismatch. Missing={missing}; extra={extra}")
         raw_rows = list(reader)
 
-    if len(raw_rows) != 158:
-        fail(f"Expected exactly 158 daily schedule rows, found {len(raw_rows)}")
+    expected_days = (date.fromisoformat(plan["plan_end"]) - date.fromisoformat(plan["plan_start"])).days + 1
+    if len(raw_rows) != expected_days:
+        fail(f"Expected exactly {expected_days} daily schedule rows, found {len(raw_rows)}")
 
     schedule: list[dict[str, Any]] = []
     unknown_chapters: set[str] = set()
@@ -643,6 +656,8 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         fail(f"Schedule/chapter source mismatch. Missing={sorted(set(chapter_index) - set(assigned_chapters))}; extra={sorted(set(assigned_chapters) - set(chapter_index))}")
 
     dates = [date.fromisoformat(row["date"]) for row in schedule]
+    if dates[0] != start or dates[-1].isoformat() != plan["plan_end"]:
+        fail("Schedule endpoints do not match plan dates")
     duplicates = [value.isoformat() for value, count in Counter(dates).items() if count > 1]
     if duplicates:
         fail(f"Duplicate schedule dates: {duplicates}")
@@ -659,12 +674,13 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             if row["week"] != expected_week:
                 fail(f"Week boundary mismatch on {row['date']}: expected Week {expected_week}, found {row['week']}")
             week_start = start + timedelta(days=(row["week"] - 1) * 7)
-            if week_start.strftime("%a") != "Wed" or (week_start + timedelta(days=6)).strftime("%a") != "Tue":
-                fail(f"Week {row['week']} is not Wednesday-Tuesday")
+            boundary = f"{week_start.strftime('%A')}-{(week_start + timedelta(days=6)).strftime('%A')}"
+            if boundary != plan["week_boundary"]:
+                fail(f"Week {row['week']} is not {plan['week_boundary']}")
 
     plan_weeks = {int(week["week"]): week for week in plan["weeks"]}
-    if set(plan_weeks) != set(range(1, 23)):
-        fail("plan.json must contain all 22 weeks exactly once")
+    if len(plan["weeks"]) != plan["prep_weeks"] or set(plan_weeks) != set(range(1, plan["prep_weeks"] + 1)):
+        fail("plan.json must contain every preparation week exactly once")
     weekly_checks = []
     for week_number, week in plan_weeks.items():
         rows = [row for row in schedule if row["week"] == week_number]
@@ -691,8 +707,8 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         "dateRange": {"start": schedule[0]["date"], "end": schedule[-1]["date"]},
         "duplicateDates": 0,
         "missingDates": 0,
-        "weekBoundary": "Wednesday-Tuesday",
-        "numericWeeks": 22,
+        "weekBoundary": plan["week_boundary"],
+        "numericWeeks": plan["prep_weeks"],
         "chapterAssignments": len(assigned_chapters),
         "uniqueChapterAssignments": len(set(assigned_chapters)),
         "unknownChapterIds": [],
@@ -755,6 +771,8 @@ def derive_exams(schedule: list[dict[str, Any]]) -> list[dict[str, Any]]:
         )
     if len(exams) != 8:
         fail(f"Expected eight full-length/diagnostic exams, found {len(exams)}")
+    if any(date.fromisoformat(exam["plannedDate"]).weekday() != 5 or len(exam["reviewAssignmentIds"]) != 2 for exam in exams):
+        fail("Every full-length needs a Saturday exam and two protected review days")
     return exams
 
 
@@ -772,6 +790,8 @@ def derive_section_banks(schedule: list[dict[str, Any]]) -> list[dict[str, Any]]
         output.append(group)
     if sum(group["totalQuestions"] for group in output) != 600:
         fail(f"Section Bank total must be 600 questions, found {sum(group['totalQuestions'] for group in output)}")
+    if {group["section"]: group["totalQuestions"] for group in output} != {"B/B": 200, "C/P": 200, "P/S": 200}:
+        fail("Section Banks must contain 200 questions per science section")
     return output
 
 
@@ -837,7 +857,7 @@ This map shows where every authoritative source component appears. `data/site-da
 |---|---|---|---|
 | `schedule.csv` | All {validation['dailyRows']} dated rows | Today; Plan; Daily Schedule export | Today prioritizes the current/next action; Plan exposes every row and complete details. |
 | `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text is preserved. A display-only grammar normalization changes “1 CARS passages” to “1 CARS passage” in {validation['displayNormalizations']['singularCarsPassageLabels']} rows. |
-| `plan.json` | Metadata, 22 weeks, targets, phases | Today; Plan; Guide | Weekly progress uses the exact planned hours, UWorld, CARS, focus, and milestone values. |
+| `plan.json` | Metadata, {validation['numericWeeks']} weeks, targets, phases | Today; Plan; Guide | Weekly progress uses the exact planned hours, UWorld, CARS, focus, and milestone values. |
 | `plan.json` | Preferred/fallback windows, placeholders, registration, readiness rules | Today countdown; Exams; Guide | January 22-23 remain clearly labeled placeholders until a registered date is saved. |
 | `plan.json` + guide | Study modes and complete instructions | Today/Plan detail drawer; Guide | The plan summary is merged with the guide’s when-to-use and required-output rules. |
 | `kaplan-mcat-books.md` | 83 chapter IDs, titles, and every subsection | Today/Plan chapter details; Log chapter selector | Generated directly; no second editable chapter-title list is maintained. |
@@ -852,7 +872,7 @@ This map shows where every authoritative source component appears. `data/site-da
 | Workbook | Mistake Log fields and validation lists | Log quick capture; complete log; CSV/XLSX | The fast form keeps common fields visible and retains workbook-compatible concepts. |
 | Workbook | Weekly Pattern Review | Log summaries; XLSX export | Counts by error, topic, section, source, repeat issue, and retest status. |
 | Workbook | Complete 40-topic mastery checklist | Log → Mastery | Confidence, review dates, notes, related mistakes, and contextual links. |
-| Workbook | Daily Schedule / 22-Week Tracker / Lists | Plan; progress summaries; XLSX export | Current browser state is added at export time. |
+| `schedule.csv` + `plan.json` | Daily Schedule / week progress | Plan; progress summaries; XLSX export | Dates come from the current plan, not the legacy workbook. Current browser state is added at export time. |
 
 ## Validation snapshot
 
@@ -861,7 +881,7 @@ This map shows where every authoritative source component appears. `data/site-da
 - Missing dates: {validation['missingDates']}
 - Week boundaries: {validation['weekBoundary']}
 - Kaplan assignments resolved: {validation['chapterAssignments']} / 83; unknown IDs: 0
-- Plan weeks reconciled: 22 / 22
+- Plan weeks reconciled: {validation['numericWeeks']} / {validation['numericWeeks']}
 - Full-length events: 8
 - Section Bank questions: 600
 - Mastery topics: 40

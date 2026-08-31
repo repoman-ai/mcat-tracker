@@ -1,6 +1,12 @@
 # MCAT Momentum
 
-A private, local-first, phone-first MCAT study tracker generated from the authoritative plan files in the parent directory. It answers **"what should I study right now?"** first, then keeps the complete 22-week schedule, study guide, exam tracker, mistake log, repair queue, and mastery checklist one tap away.
+A private, local-first, phone-first MCAT study tracker generated from the authoritative plan files in the parent directory. It answers **"what should I study right now?"** first, then keeps the complete 20-week schedule, study guide, exam tracker, mistake log, repair queue, and mastery checklist one tap away.
+
+## September 1 restart
+
+The current plan starts Tuesday, September 1, 2026. Diagnostic: Saturday, September 5; review: September 6–7. All 83 chapters remain scheduled, with a 26-hour launch and mostly 22–24-hour content weeks. August assignments are no longer part of the schedule. Browser/cloud records, logs, settings, exam IDs, and authentication are preserved.
+
+The current guide comes from `study-guide.json`, not the superseded August DOCX. The legacy XLSX supplies only mistake-log fields, validation options and mastery topics; website exports use the new dates and 20-week plan. Standalone Office-file regeneration is pending the configured artifact runtime. Do not use the old Office-file dates.
 
 No build step, no framework. Plain HTML, CSS, and ES modules. It always saves locally, and after you unlock it with a PIN it keeps the same progress on your phone and your computer.
 
@@ -19,7 +25,7 @@ No build step, no framework. Plain HTML, CSS, and ES modules. It always saves lo
 | View | What it holds |
 | --- | --- |
 | **Today** | Next action, workload, weekly momentum, carryover, exam countdown, optional 25-minute focus timer |
-| **Plan** | Phase map, all 22 weeks, filters, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
+| **Plan** | Phase map, all 20 weeks, filters, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
 | **Exams** | Eight scheduled full-lengths, section and total trends, timing and review status, the plan's readiness rule, registered-date setting |
 | **Log** | Five panels — Capture, Repair, Entries, Mastery, Export |
 | **Guide** | The complete study guide with search, deep links, and accessible sections |
@@ -41,14 +47,14 @@ The generator reads only these files from the parent directory:
 - `schedule.csv`
 - `plan.json`
 - `kaplan-mcat-books.md`
-- `MCAT_Study_Plan_2026-08-19.docx`
+- `study-guide.json`
 - `MCAT_520_Plus_Mistake_Log.xlsx`
 
-It refuses to write output unless the sources pass every integrity check: exactly 158 continuous dated rows, no duplicate or missing dates, 22 Wednesday–Tuesday weeks, all 83 chapter IDs resolving with no unknown IDs, weekly CARS and UWorld totals matching `plan.json`, the full-length and Section Bank schedule matching the plan, and complete guide and mastery coverage.
+It refuses to write output unless the sources pass every integrity check: the complete date range declared in `plan.json` (currently 145 continuous dated rows), no duplicate or missing dates, 20 Tuesday–Monday weeks, all 83 chapter IDs resolving with no unknown IDs, weekly CARS and UWorld totals matching `plan.json`, eight Saturday full-lengths with two review days each, 200 Section Bank questions per science section, and complete guide/mastery coverage.
 
 Files in `archive/` are superseded versions and are **not** sources.
 
-> During the original build, three genuine weekly CARS-target mismatches were corrected at the source: Week 1 now includes the nine-passage diagnostic, and the Week 15/19 holiday passages were redistributed so the scheduled totals remain 10 and 12. The schedule design and date range were otherwise preserved.
+Week 1 counts four warm-up CARS passages plus the nine-passage diagnostic. Thanksgiving and Christmas practice targets are redistributed away from the rest days. Weekly totals are reconciled at generation time.
 
 ### Placeholder exam dates
 
@@ -195,7 +201,7 @@ If the status reads **Sync paused**, open the sync panel for the reason. Local p
 
 Everything is under **Log → Export**. All three work offline and none of them change your data.
 
-**Excel workbook** — seven sheets (Daily Schedule, 22-Week Progress, Mistake Log, Weekly Pattern Review, High-Yield Mastery, Full-Length Scores, Lists), with frozen headers, autofilters, real date cells, wrapped long text, and no formulas to break. Generated locally with a vendored copy of ExcelJS.
+**Excel workbook** — seven sheets (Daily Schedule, 20-Week Progress, Mistake Log, Weekly Pattern Review, High-Yield Mastery, Full-Length Scores, Lists), with frozen headers, autofilters, real date cells, wrapped long text, and no formulas to break. Generated locally with a vendored copy of ExcelJS.
 
 **Mistake log CSV** — every field with stable headers, fully quoted, UTF-8 with BOM so Excel opens accents correctly. Commas, quotes, and newlines inside notes are escaped properly.
 

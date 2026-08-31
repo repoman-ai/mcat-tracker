@@ -7,7 +7,7 @@ export async function loadSiteData() {
   const response = await fetch("./data/site-data.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`Could not load study data (${response.status})`);
   const data = await response.json();
-  if (data?.validation?.status !== "passed" || data?.validation?.dailyRows !== 158) {
+  if (data?.validation?.status !== "passed" || !data.schedule?.length || data.validation.dailyRows !== data.schedule.length || data.validation.numericWeeks !== data.plan?.prep_weeks) {
     throw new Error("Generated study data did not pass validation.");
   }
   data.index = {
@@ -54,6 +54,6 @@ export function scheduledWeekForDate(data, iso = todayISO()) {
   if (row && typeof row.week === "number") return row.week;
   if (iso < data.plan.plan_start) return 1;
   const lastNumeric = [...data.schedule].reverse().find((item) => typeof item.week === "number");
-  if (lastNumeric && iso > lastNumeric.date) return 22;
+  if (lastNumeric && iso > lastNumeric.date) return lastNumeric.week;
   return null;
 }

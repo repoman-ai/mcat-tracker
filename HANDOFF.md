@@ -3,6 +3,24 @@
 This file is a convenience snapshot, not a source of truth. Always inspect the working tree, Git
 index, live application, and Supabase project before continuing.
 
+## September restart — August 31, 2026
+
+The schedule now starts September 1: 145 days, 20 Tuesday–Monday weeks. Diagnostic September 5,
+protected review September 6–7. All 83 chapters finish by November 16. Third-party FL October 10;
+six official FL dates remain November 21, December 5/12/19 and January 2/9. There are 564 scheduled
+UWorld questions and 600 Section Bank questions. No authentication, cloud data or saved progress was
+reset. Date keys and exam IDs retain their existing format.
+
+`study-guide.json` is the current guide source; `MCAT_Study_Plan_2026-09-01.md` is the readable local
+copy. The old DOCX and XLSX calendars are superseded, with preserved backups in the parent archive.
+Office-file regeneration is pending the bundled artifact runtime (not configured this session).
+The website XLSX export already uses the new schedule and 20-week progress tab. The old workbook
+is read only for mistake-log fields, lists and mastery topics, not dates or progress.
+
+Run `python3 -S scripts/generate_site_data.py` and `node --test tests/*.test.mjs` from this directory.
+The restart-specific regression tests cover dates, coverage, holidays, exam review, UI and saved-state
+preservation. Do not run the old August plan builders; they would restore obsolete assumptions.
+
 ## Project
 
 `/Users/macbookpro/Documents/Claude/MCAT/mcat-tracker` is a static, no-build, local-first MCAT study

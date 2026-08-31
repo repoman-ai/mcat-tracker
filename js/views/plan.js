@@ -78,7 +78,7 @@ export function renderPlan(context, route) {
   const testRows = context.data.schedule.filter((row) => row.week === "TEST").filter((row) => rowMatches(row, context.state, currentWeek));
 
   return `
-    <header class="view-header"><div><span class="eyebrow">158 dated rows · 22 Wednesday–Tuesday weeks</span><h1>Plan</h1><p>See the whole arc without turning it into a wall of text. Expand only the week or day you need.</p></div>
+    <header class="view-header"><div><span class="eyebrow">${context.data.schedule.length} dated rows · ${context.data.plan.prep_weeks} ${escapeHTML(context.data.plan.week_boundary)} weeks</span><h1>Plan</h1><p>Fresh start September 1. August work is superseded, not overdue. Expand the week or day you need.</p></div>
       <div class="button-row"><button class="button button--primary" type="button" data-plan-jump>Jump to week ${currentWeek}</button><a class="button" href="#guide/week-by-week-plan">Plan guidance</a></div></header>
     ${phaseMap(context.data, currentWeek)}
     <section class="filter-panel" aria-labelledby="plan-filter-heading">
@@ -92,7 +92,7 @@ export function renderPlan(context, route) {
         <button class="button button--quiet" type="button" data-plan-reset>Reset filters</button>
       </div>
     </section>
-    <section class="week-list" aria-label="22-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p></div>`}</section>
+    <section class="week-list" aria-label="${context.data.plan.prep_weeks}-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p></div>`}</section>
     ${testRows.length ? `<section class="test-window-section"><div class="section-heading"><div><span class="eyebrow">Not a confirmed exam date</span><h2>Placeholder test window</h2></div><a href="#exams">Set registered date</a></div><p>January 22-23 are planning placeholders. The registered date setting controls the live countdown.</p><div class="plan-days">${testRows.map((row) => dayCard(row, context, row.date === route.detail)).join("")}</div></section>` : ""}`;
 }
 

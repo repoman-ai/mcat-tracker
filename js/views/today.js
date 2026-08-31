@@ -97,6 +97,7 @@ export function renderToday(context) {
             <span class="workload-pill">${escapeHTML(row.estimatedWorkload.label)}</span>
           </div>
           <h2>${escapeHTML(row.assignment)}</h2>
+          ${row.week === 1 && data.plan.restart ? `<p class="gentle-copy">Fresh start · diagnostic Saturday, September 5. ${escapeHTML(row.sourceNotes || data.plan.restart.note)}</p>` : ""}
           ${row.chapters.length ? `<p class="chapter-line">${row.chapters.map((chapter) => `<span>${escapeHTML(chapter.id)}</span> ${escapeHTML(chapter.title)}`).join(" · ")}</p>` : ""}
           <dl class="today-facts">
             <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "None required")}</dd></div>

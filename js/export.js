@@ -195,7 +195,7 @@ export async function exportWorkbook(data, state) {
     dailyRows(data, state), [13, 8, 8, 18, 28, 24, 18, 52, 25, 42, 13, 46, 18, 15, 12, 38, 22],
     { dateColumns: [1], highlightStatusColumn: 13, tabColor: "2B6F8A" });
 
-  const progress = addSheet(workbook, "22-Week Progress",
+  const progress = addSheet(workbook, `${data.plan.prep_weeks}-Week Progress`,
     ["Week", "Dates", "Phase", "Focus", "Planned Hours", "Study Days", "Completed Days", "Completion %", "Planned Questions", "Actual Questions", "CARS Target", "Actual CARS", "Milestone", "FL / Section Bank"],
     progressRows(data, state), [8, 24, 19, 32, 14, 12, 15, 14, 17, 16, 13, 12, 48, 22],
     { tabColor: "5C8D79" });
