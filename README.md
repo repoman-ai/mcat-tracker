@@ -6,7 +6,7 @@ A private, local-first, phone-first MCAT study tracker generated from the author
 
 The current plan starts Tuesday, September 1, 2026. Diagnostic: Saturday, September 5; review: September 6–7. All 83 chapters remain scheduled, with a 26-hour launch and mostly 22–24-hour content weeks. August assignments are no longer part of the schedule. Browser/cloud records, logs, settings, exam IDs, and authentication are preserved.
 
-The current guide comes from `study-guide.json`, not the superseded August DOCX. The legacy XLSX supplies only mistake-log fields, validation options and mastery topics; website exports use the new dates and 20-week plan. Standalone Office-file regeneration is pending the configured artifact runtime. Do not use the old Office-file dates.
+The current guide comes from `study-guide.json`; `MCAT_Study_Plan_2026-09-01.docx` is the matching Word copy. The standalone XLSX was regenerated with the 145-day schedule and 20-week tracker. It supplies mistake-log fields, validation options and mastery topics to the website; website exports add current browser/cloud progress. The original August files are archived. Do not use the August DOCX dates.
 
 No build step, no framework. Plain HTML, CSS, and ES modules. It always saves locally, and after you unlock it with a PIN it keeps the same progress on your phone and your computer.
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-31T18:01:08.878629+00:00",
+  "generatedAt": "2026-08-31T18:16:44.933199+00:00",
   "sourceProvenance": [
     {
       "file": "schedule.csv",
@@ -24,13 +24,13 @@
     },
     {
       "file": "MCAT_520_Plus_Mistake_Log.xlsx",
-      "sha256": "02be24061aebc91f187267d00a5c1cc5ed958a9f84eb29383e1da736d2be498a",
-      "bytes": 44373
+      "sha256": "1d752eb0f9b8183c61f104fd2ce7f76858e3f0cb3eb0e56554f21b2bbcb91881",
+      "bytes": 46551
     },
     {
       "file": "README.md",
-      "sha256": "a1eadaede3ca2c4308c778850dba92366fff072406b0e1837f662b78a06c97e0",
-      "bytes": 3889
+      "sha256": "d48efb7332826a9fc1daf5b87c9c27a214c3fe2fd3ac75cfd51cbe8722457f69",
+      "bytes": 4476
     }
   ],
   "plan": {
@@ -10931,7 +10931,7 @@
   "workbook": {
     "sheetNames": [
       "Daily Schedule",
-      "22-Week Tracker",
+      "20-Week Tracker",
       "Mistake Log",
       "Weekly Pattern Review",
       "High-Yield Mastery Checklist",
@@ -11509,7 +11509,8 @@
         "Questions first",
         "Practice / retrieval",
         "Evidence-driven review",
-        "Rest"
+        "Rest",
+        "Rapid review"
       ]
     }
   },

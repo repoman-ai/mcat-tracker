@@ -11,11 +11,13 @@ six official FL dates remain November 21, December 5/12/19 and January 2/9. Ther
 UWorld questions and 600 Section Bank questions. No authentication, cloud data or saved progress was
 reset. Date keys and exam IDs retain their existing format.
 
-`study-guide.json` is the current guide source; `MCAT_Study_Plan_2026-09-01.md` is the readable local
-copy. The old DOCX and XLSX calendars are superseded, with preserved backups in the parent archive.
-Office-file regeneration is pending the bundled artifact runtime (not configured this session).
-The website XLSX export already uses the new schedule and 20-week progress tab. The old workbook
-is read only for mistake-log fields, lists and mastery topics, not dates or progress.
+`study-guide.json` is the current guide source; `MCAT_Study_Plan_2026-09-01.md` and the matching `.docx`
+are readable local copies. The standalone XLSX now has 145 dated rows and a `20-Week Tracker` tab.
+Office files were regenerated with explicitly user-approved local Python libraries; independent
+mistake-log, mastery and existing validation-list data were preserved. The source workbook is read
+only for fields, lists and mastery topics, not website dates or progress. Original August files remain
+archived. The builder is `scripts/build_restart_office.py` in the parent workspace. Workbook previews
+and content checks passed; full Word pagination QA was unavailable because LibreOffice is absent.
 
 Run `python3 -S scripts/generate_site_data.py` and `node --test tests/*.test.mjs` from this directory.
 The restart-specific regression tests cover dates, coverage, holidays, exam review, UI and saved-state

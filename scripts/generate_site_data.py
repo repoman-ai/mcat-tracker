@@ -375,7 +375,6 @@ def workbook_content() -> dict[str, Any]:
     sheets = parse_xlsx_sheets()
     expected = {
         "Daily Schedule",
-        "22-Week Tracker",
         "Mistake Log",
         "Weekly Pattern Review",
         "High-Yield Mastery Checklist",
