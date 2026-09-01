@@ -1,0 +1,261 @@
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import { test } from "node:test";
+import { completedRows, dueEntries, isStudyRow, loadSiteData, pendingRows } from "../js/data.js";
+import { withDailyStatus } from "../js/daily.js";
+import { createBackup, mergeStates, normalizeState, SCHEMA_VERSION, validateBackup } from "../js/storage.js";
+import { bindToday, leaveToday, renderToday } from "../js/views/today.js";
+import { bindCompletionButtons } from "../js/views/shared.js";
+import { bindPlan, renderPlan } from "../js/views/plan.js";
+
+const raw = JSON.parse(await fs.readFile(new URL("../data/site-data.json", import.meta.url), "utf8"));
+globalThis.fetch = async () => ({ ok: true, json: async () => structuredClone(raw) });
+globalThis.window = { location: { search: "?today=2026-09-10", hash: "#today" } };
+const data = await loadSiteData();
+const empty = () => normalizeState({});
+const preview = (date) => { window.location.search = `?today=${date}`; };
+
+test("before/first plan day has no pending work, including superseded August history", () => {
+  const state = normalizeState({ daily: { "2026-08-19": { status: "in-progress" } } });
+  for (const date of ["2026-08-31", "2026-09-01"]) {
+    preview(date);
+    assert.deepEqual(pendingRows(data, state), []);
+    assert.doesNotMatch(renderToday({ data, state }), /class="catchup-card"/);
+  }
+});
+
+test("all past unfinished study days are oldest first, ahead of today, regardless of input order", () => {
+  preview("2026-09-10");
+  const state = empty();
+  const rows = pendingRows({ ...data, schedule: [...data.schedule].reverse() }, state);
+  assert.deepEqual(rows.map((row) => row.date), data.schedule.filter((row) => isStudyRow(row) && row.date < "2026-09-10").map((row) => row.date));
+  const html = renderToday({ data, state });
+  assert.ok(html.indexOf('class="catchup-card"') < html.indexOf('class="today-action '));
+  assert.ok(html.indexOf('data-work-row="2026-09-09"') < html.indexOf('class="today-action '));
+  assert.match(html, /Past due · yesterday/);
+  assert.match(html, new RegExp(`Scroll for all ${rows.length} items`));
+});
+
+test("rest, test-window, today and future rows are excluded; exam and review days count", () => {
+  const rows = pendingRows(data, empty(), "2027-01-24");
+  assert.ok(rows.some((row) => row.isExam));
+  assert.ok(rows.some((row) => row.isFullLengthReview));
+  assert.ok(rows.every((row) => !row.isRest && !row.isTestWindow));
+  assert.ok(pendingRows(data, empty(), "2026-09-10").every((row) => row.date < "2026-09-10"));
+});
+
+test("only complete clears a day; deferred and unknown legacy states remain visible", () => {
+  for (const status of [undefined, "not-started", "in-progress", "deferred", "custom"]) {
+    const state = normalizeState({ daily: { "2026-09-01": { status } } });
+    assert.equal(pendingRows(data, state, "2026-09-02").length, 1);
+  }
+  assert.equal(pendingRows(data, normalizeState({ daily: { "2026-09-01": { status: "complete" } } }), "2026-09-02").length, 0);
+});
+
+test("no horizon or item cap silently drops old work", () => {
+  preview("2027-01-24");
+  const state = empty();
+  const rows = pendingRows(data, state);
+  assert.equal(rows.length, data.schedule.filter(isStudyRow).length);
+  const html = renderToday({ data, state });
+  assert.equal((html.match(/data-work-row=/g) || []).length, rows.length);
+  assert.match(html, /data-work-row="2026-09-01"/);
+  assert.match(html, /End of the dated plan/);
+  assert.doesNotMatch(html, /<h1>Plan complete/);
+});
+
+test("catch-up stays present on rest, exam, placeholder and after-plan days", () => {
+  for (const date of ["2026-09-05", "2026-11-26", "2027-01-22", "2027-01-24"]) {
+    preview(date);
+    assert.match(renderToday({ data, state: empty() }), /class="catchup-card"/);
+  }
+});
+
+test("today's check-off and start controls precede long instructions", () => {
+  preview("2026-09-10");
+  const html = renderToday({ data, state: empty() });
+  const start = html.indexOf("data-start-day=");
+  assert.ok(start > 0 && start < html.indexOf('class="today-facts"'));
+  assert.ok(html.indexOf('data-toggle-complete="2026-09-10"') < start);
+});
+
+test("Completed includes every saved completion and historical records, newest date first", () => {
+  const state = normalizeState({ daily: {
+    "2026-09-01": { status: "complete", notes: "keep" },
+    "2026-09-09": { status: "complete" },
+    "2026-08-19": { status: "complete" },
+    "2026-09-02": { status: "in-progress" },
+  } });
+  const before = JSON.stringify(state);
+  assert.deepEqual(completedRows(data, state).map((row) => row.id), ["2026-09-09", "2026-09-01", "2026-08-19"]);
+  const html = renderToday({ data, state }, { detail: "completed" });
+  assert.match(html, /Saved history · outside the current plan/);
+  assert.match(html, /disabled aria-pressed="true" aria-label="Completed — saved history \(read-only\): Wednesday, August 19, 2026/);
+  assert.doesNotMatch(html, /data-toggle-complete="2026-08-19"/);
+  assert.match(html, /aria-label="Completed — reopen Wednesday, September 9, 2026/);
+  assert.doesNotMatch(html, /class="catchup-card"/);
+  assert.equal(JSON.stringify(state), before);
+});
+
+test("completion preserves all fields and uses real edit time, not the preview date", () => {
+  preview("2027-01-24");
+  const state = normalizeState({ daily: { "2026-09-01": { status: "deferred", notes: "Review optics", actualQuestions: 12, actualCars: 2, custom: { retained: true }, updatedAt: "2026-01-01T00:00:00.000Z" } } });
+  const before = JSON.stringify(state);
+  const start = Date.now();
+  const next = withDailyStatus(state, "2026-09-01", "complete");
+  const record = next.daily["2026-09-01"];
+  assert.equal(record.notes, "Review optics");
+  assert.equal(record.actualQuestions, 12);
+  assert.equal(record.actualCars, 2);
+  assert.deepEqual(record.custom, { retained: true });
+  assert.ok(Date.parse(record.updatedAt) >= start && Date.parse(record.updatedAt) <= Date.now());
+  assert.equal(record.completedLate, undefined);
+  assert.equal(record.completedOn, undefined);
+  assert.equal(JSON.stringify(state), before);
+  assert.equal(SCHEMA_VERSION, 3);
+  assert.deepEqual(validateBackup(createBackup(next)).state.daily, next.daily);
+  assert.deepEqual(mergeStates(state, next).daily, next.daily);
+  assert.deepEqual(mergeStates(next, state).daily, next.daily);
+});
+
+function buttonHarness(state, ids, fail = false) {
+  const handlers = new Map();
+  const messages = [];
+  const container = { querySelectorAll: () => ids.map((id) => ({ dataset: { toggleComplete: id }, addEventListener: (_, handler) => handlers.set(id, handler) })) };
+  const context = { state, updateState: (next, options = {}) => { if (fail) return false; context.state = next; options.onSaved?.(next); if (options.success) messages.push([options.success]); return true; }, showToast: (...args) => messages.push(args) };
+  bindCompletionButtons(container, context);
+  return { context, messages, click: (id) => handlers.get(id)({ preventDefault() {} }) };
+}
+
+test("every check-off binds, undo restores previous status, and reopening does not erase notes", () => {
+  const harness = buttonHarness(normalizeState({ daily: { "2026-09-01": { status: "in-progress", notes: "saved", actualQuestions: 12 } } }), ["2026-09-01", "2026-09-02"]);
+  harness.click("2026-09-01");
+  assert.equal(harness.context.state.daily["2026-09-01"].status, "complete");
+  harness.messages.at(-1)[2].onClick();
+  assert.equal(harness.context.state.daily["2026-09-01"].status, "in-progress");
+  harness.click("2026-09-02");
+  assert.equal(harness.context.state.daily["2026-09-02"].status, "complete");
+  harness.click("2026-09-01");
+  harness.click("2026-09-01");
+  assert.equal(harness.context.state.daily["2026-09-01"].status, "not-started");
+  assert.equal(harness.context.state.daily["2026-09-01"].notes, "saved");
+  assert.equal(harness.context.state.daily["2026-09-01"].actualQuestions, 12);
+});
+
+test("failed saves cannot claim success or supply a destructive undo", () => {
+  const state = empty();
+  const harness = buttonHarness(state, ["2026-09-01"], true);
+  harness.click("2026-09-01");
+  assert.equal(harness.context.state, state);
+  assert.equal(harness.messages.length, 0);
+});
+
+test("undo never overwrites a newer synced edit", () => {
+  const harness = buttonHarness(empty(), ["2026-09-01"]);
+  harness.click("2026-09-01");
+  const undo = harness.messages.at(-1)[2].onClick;
+  harness.context.state.daily["2026-09-01"] = { status: "complete", notes: "Another device", updatedAt: "2099-01-01T00:00:00.000Z" };
+  undo();
+  assert.equal(harness.context.state.daily["2026-09-01"].notes, "Another device");
+  assert.equal(harness.context.state.daily["2026-09-01"].status, "complete");
+  assert.match(harness.messages.at(-1)[0], /has changed/);
+});
+
+test("retest summary shares the Log derivation and remains visible without overdue study days", () => {
+  preview("2026-09-01");
+  const state = normalizeState({ mistakes: [
+    { id: "past", retestDate: "2026-08-30", retestStatus: "Scheduled" },
+    { id: "today", retestDate: "2026-09-01", retestStatus: "Scheduled" },
+    { id: "future", retestDate: "2026-09-02", retestStatus: "Scheduled" },
+    { id: "done", retestDate: "2026-08-29", retestStatus: "Retested" },
+    { id: "resolved", retestDate: "2026-08-29", retestStatus: "Resolved" },
+  ] });
+  assert.deepEqual(dueEntries(state).map((entry) => entry.dueState), ["overdue", "today", "upcoming"]);
+  assert.match(renderToday({ data, state }), /2 retests due/);
+  assert.doesNotMatch(renderToday({ data, state }), /class="catchup-card"/);
+});
+
+test("Plan's past-due filter uses the same queue and keeps check-off in collapsed summaries", () => {
+  preview("2026-09-10");
+  const context = { data, state: empty(), rerender() {} };
+  let change;
+  const container = {
+    querySelector: () => null,
+    querySelectorAll: (selector) => selector === "[data-plan-filter]" ? [{ dataset: { planFilter: "status" }, value: "past-due", addEventListener: (_, handler) => { change = handler; } }] : [],
+  };
+  bindPlan(container, context);
+  change();
+  const html = renderPlan(context, {});
+  const ids = [...html.matchAll(/data-assignment-details="([^"]+)"/g)].map((match) => match[1]);
+  assert.deepEqual(ids, pendingRows(data, context.state).map((row) => row.id));
+  assert.match(html, /class="past-due-label">Past due/);
+  assert.ok(html.indexOf('data-toggle-complete="2026-09-01"') < html.indexOf('class="plan-day__detail"'));
+});
+
+test("View all opens only matching weeks and Plan resolves the preview date once", () => {
+  preview("2026-10-26");
+  const state = empty();
+  data.schedule.filter((row) => row.week === 1).forEach((row) => { state.daily[row.id] = { status: "complete" }; });
+  let reads = 0;
+  const search = window.location.search;
+  Object.defineProperty(window.location, "search", { configurable: true, get() { reads += 1; return search; } });
+  try {
+    const html = renderPlan({ data, state }, { detail: "past-due" });
+    assert.equal(reads, 1);
+    const weeks = [...html.matchAll(/class="week-card" open id="week-(\d+)"/g)].map((match) => Number(match[1]));
+    assert.deepEqual(weeks, [...new Set(pendingRows(data, state, "2026-10-26").map((row) => row.week))]);
+    assert.ok(!weeks.includes(1));
+    assert.ok(!weeks.includes(9));
+  } finally { Object.defineProperty(window.location, "search", { configurable: true, writable: true, value: search }); }
+});
+
+test("checking off work and rerendering keeps one focus timer and its original assignment", () => {
+  preview("2026-09-10");
+  const originalSet = globalThis.setInterval;
+  const originalClear = globalThis.clearInterval;
+  let ticks;
+  let intervalCount = 0;
+  let cleared = 0;
+  globalThis.setInterval = (callback) => { ticks = callback; intervalCount += 1; return 123; };
+  globalThis.clearInterval = () => { cleared += 1; };
+  const mount = (context) => {
+    const elements = Object.fromEntries(["clock", "toggle", "finish"].map((name) => [name, { addEventListener(_, callback) { this.click = callback; } }]));
+    const selectors = { "[data-focus-clock]": elements.clock, "[data-focus-toggle]": elements.toggle, "[data-focus-finish]": elements.finish };
+    bindToday({ querySelector: (selector) => selectors[selector] || null, querySelectorAll: () => [] }, context);
+    return elements;
+  };
+  const context = { data, state: empty(), updateState(next, options = {}) { this.state = next; options.onSaved?.(next); return true; }, showToast() {} };
+  try {
+    const first = mount(context);
+    first.toggle.click();
+    ticks();
+    assert.equal(first.clock.textContent, "24:59");
+    context.state = withDailyStatus(context.state, "2026-09-01", "complete");
+    const second = mount(context);
+    assert.equal(second.clock.textContent, "24:59");
+    assert.equal(second.toggle.textContent, "Pause");
+    assert.equal(second.finish.disabled, false);
+    assert.equal(intervalCount, 1);
+    leaveToday();
+    assert.equal(cleared, 1);
+    const third = mount(context);
+    assert.equal(third.toggle.textContent, "Resume");
+    assert.equal(third.clock.textContent, "24:59");
+    third.toggle.click();
+    assert.equal(intervalCount, 2);
+    for (let i = 0; i < 1499; i += 1) ticks();
+    assert.equal(third.clock.textContent, "00:00");
+    assert.equal(third.toggle.textContent, "Save block");
+    assert.equal(third.toggle.disabled, false);
+    preview("2026-09-11");
+    third.toggle.click();
+    assert.equal(cleared, 3);
+    assert.equal(context.state.focusSessions.length, 1);
+    assert.equal(context.state.focusSessions[0].assignmentId, "2026-09-10");
+    assert.equal(third.clock.textContent, "25:00");
+    assert.equal(third.finish.disabled, true);
+  } finally {
+    globalThis.setInterval = originalSet;
+    globalThis.clearInterval = originalClear;
+  }
+});

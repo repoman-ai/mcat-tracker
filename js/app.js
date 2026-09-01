@@ -5,11 +5,14 @@ import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName,
 import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js";
 import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js";
 import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js";
-import { renderToday, bindToday } from "./views/today.js";
+import { renderToday, bindToday, leaveToday } from "./views/today.js";
 import { renderPlan, bindPlan } from "./views/plan.js";
 import { renderExams, bindExams } from "./views/exams.js";
 import { renderLog, bindLog } from "./views/log.js";
 import { renderGuide, bindGuide } from "./views/guide.js";
+import { createStateUpdater } from "./state-actions.js";
+import { createToastController } from "./toast.js";
+import { captureViewState } from "./view-state.js";
 
 const root = document.querySelector("#view-root");
 const dialog = document.querySelector("#app-dialog");
@@ -24,9 +27,9 @@ let state;
 let currentRoute = { view: "today", detail: "" };
 let previousFocus = null;
 let quickLogPrefill = null;
-let toastTimer = null;
 let syncStatus = getSyncStatus();
 let lockEmailOverride = false;
+let renderedRoute = "";
 
 const lockScreen = document.querySelector("[data-lock-screen]");
 const lockForm = lockScreen.querySelector("[data-lock-form]");
@@ -35,13 +38,7 @@ const lockMessage = lockScreen.querySelector("[data-lock-message]");
 const lockAccount = lockScreen.querySelector("[data-lock-account]");
 const lockEmailField = lockScreen.querySelector("[data-lock-email-field]");
 
-function showToast(message, tone = "success") {
-  clearTimeout(toastTimer);
-  toast.textContent = message;
-  toast.dataset.tone = tone;
-  toast.classList.add("is-visible");
-  toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 3200);
-}
+const showToast = createToastController(toast, document);
 
 function openDialog({ title, body, onMount }) {
   if (dialog.open) dialog.close();
@@ -53,16 +50,13 @@ function openDialog({ title, body, onMount }) {
   dialog.querySelector("button, a, input, select, textarea")?.focus();
 }
 
-function updateState(nextState, options = {}) {
-  try {
-    state = saveState(nextState, options);
-    context.state = state;
-    scheduleCloudSync();
-    if (options.notify !== false) renderCurrent();
-  } catch (error) {
-    showToast(`Could not save locally: ${error.message}`, "error");
-  }
-}
+const updateState = createStateUpdater({
+  save: saveState,
+  apply: (saved) => { state = saved; context.state = saved; },
+  render: () => renderCurrent(),
+  sync: scheduleCloudSync,
+  showToast,
+});
 
 function applySyncedState(nextState) {
   state = saveState(nextState, { notify: false });
@@ -108,9 +102,10 @@ function bindDisplayNameField(scope) {
   if (!form) return;
   const save = (value) => {
     const displayName = sanitizeDisplayName(value);
-    updateState({ ...state, settings: { ...state.settings, displayName, updatedAt: new Date().toISOString() } });
-    if (dialog.open) dialog.close();
-    showToast(displayName ? `Display name saved as ${displayName}` : "Display name removed");
+    updateState({ ...state, settings: { ...state.settings, displayName, updatedAt: new Date().toISOString() } }, {
+      success: displayName ? `Display name saved as ${displayName}` : "Display name removed",
+      onSaved: () => { if (dialog.open) dialog.close(); },
+    });
   };
   form.addEventListener("submit", (event) => { event.preventDefault(); save(form.elements.displayName.value); });
   form.querySelector("[data-display-name-clear]")?.addEventListener("click", () => save(""));
@@ -331,7 +326,7 @@ const context = {
   showToast,
   openQuickLog,
   clearQuickLogPrefill,
-  rerender: () => renderCurrent(),
+  rerender: (options) => renderCurrent(options),
 };
 
 function renderBanner() {
@@ -372,8 +367,12 @@ function updateNav(view) {
   });
 }
 
-function renderCurrent() {
+function renderCurrent({ preserveView = true } = {}) {
   if (!data || !state) return;
+  const routeKey = `${currentRoute.view}/${currentRoute.detail}`;
+  const sameRoute = renderedRoute === routeKey;
+  const restoreView = sameRoute && preserveView ? captureViewState(root, window) : null;
+  if (renderedRoute === "today/" && routeKey !== "today/") leaveToday();
   context.data = data;
   context.state = state;
   context.quickLogPrefill = quickLogPrefill;
@@ -381,11 +380,13 @@ function renderCurrent() {
   renderBanner();
   topbarDate.innerHTML = `<span>${escapeHTML(formatDateLong(todayISO()))}</span>${new URLSearchParams(location.search).get("today") ? `<strong>Preview date</strong>` : ""}`;
   try {
-    if (currentRoute.view === "today") { setDocumentTitle("Today"); root.innerHTML = renderToday(context, currentRoute); bindToday(root, context, currentRoute); }
-    else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute); bindPlan(root, context, currentRoute); }
+    if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute); bindToday(root, context, currentRoute); }
+    else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute); bindPlan(root, context, { isRouteChange: !sameRoute }); }
     else if (currentRoute.view === "exams") { setDocumentTitle("Exams"); root.innerHTML = renderExams(context, currentRoute); bindExams(root, context, currentRoute); }
     else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute); bindLog(root, context, currentRoute); }
     else { setDocumentTitle("Guide"); root.innerHTML = renderGuide(context, currentRoute); bindGuide(root, context, currentRoute); }
+    renderedRoute = routeKey;
+    restoreView?.();
   } catch (error) {
     console.error(error);
     root.innerHTML = `<section class="fatal-state"><span class="eyebrow">The view could not be rendered</span><h1>Something went wrong</h1><p>${escapeHTML(error.message)}</p><button class="button button--primary" type="button" data-retry-view>Try again</button></section>`;

@@ -1,4 +1,5 @@
-import { getTodayContext, weekRows, modeLabel } from "../data.js";
+import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js";
+import { withDailyStatus } from "../daily.js";
 import {
   countPracticeQuestions,
   daysBetween,
@@ -11,7 +12,17 @@ import {
   todayISO,
   uniqueId,
 } from "../utils.js";
-import { assignmentDetailHTML, bindAssignmentDetail, progressBar, statusLabel } from "./shared.js";
+import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, emptyState, progressBar, statusLabel } from "./shared.js";
+
+// Completion and sync rerender Today. Keep one timer across those renders so
+// checking off a past day doesn't reset a running block or orphan intervals.
+const focus = { remaining: 25 * 60, timer: null, startedAt: "", assignmentId: "", paint: () => {} };
+
+export function leaveToday() {
+  clearInterval(focus.timer);
+  focus.timer = null;
+  focus.paint = () => {};
+}
 
 function countdown(data, state, today) {
   const registered = state.settings.registeredExamDate;
@@ -28,10 +39,36 @@ function countdown(data, state, today) {
     </section>`;
 }
 
-function carryoverRows(data, state, today, activeId) {
-  return data.schedule
-    .filter((row) => row.date < today && row.id !== activeId && !row.isRest && !row.isTestWindow && state.daily[row.id]?.status !== "complete")
-    .slice(-2);
+function todayTabs(completedCount, completed = false) {
+  return `<nav class="today-tabs" aria-label="Study work"><a href="#today" ${completed ? "" : 'aria-current="page"'}>Today</a><a href="#today/completed" ${completed ? 'aria-current="page"' : ""}>Completed <span>${completedCount}</span></a></nav>`;
+}
+
+function workRow(row, state, today, completed = false) {
+  const age = daysBetween(row.date, today);
+  const timing = completed ? "Completed" : `Past due · ${age === 1 ? "yesterday" : `${age} days ago`}`;
+  const text = `<span class="work-row__date">${escapeHTML(formatDate(row.date, { includeYear: completed }))} · ${escapeHTML(timing)}</span><strong>${escapeHTML(row.assignment)}</strong>`;
+  return `<li class="work-row" data-work-row="${escapeAttr(row.id)}">
+    ${completionButton(row, state, { compact: true })}
+    ${row.historical ? `<div class="work-row__detail">${text}<small>Saved history · outside the current plan</small></div>` : `<button class="work-row__detail" type="button" data-open-assignment="${escapeAttr(row.id)}" aria-label="${escapeAttr(`Open ${formatDateLong(row.date)} — ${row.assignment}`)}">${text}</button>`}
+  </li>`;
+}
+
+function catchUpSection(rows, state, today) {
+  if (!rows.length) return "";
+  return `<section class="catchup-card" aria-labelledby="catchup-title">
+    <header><h2 id="catchup-title">Past due <span>${rows.length}</span></h2><a href="#plan/past-due">View all</a></header>
+    <ul class="catchup-list" data-view-scroll="catchup" tabindex="0" aria-label="Past-due assignments, oldest first" aria-describedby="catchup-hint">${rows.map((row) => workRow(row, state, today)).join("")}</ul>
+    <p id="catchup-hint">${rows.length > 1 ? `Oldest first · Scroll for all ${rows.length} items` : "One unfinished block · Tap its title for details"}</p>
+  </section>`;
+}
+
+function renderCompleted(context, rows, today) {
+  return `<header class="view-header today-header"><div><span class="eyebrow">Your finished work</span><h1>Completed</h1></div></header>
+    ${todayTabs(rows.length, true)}
+    <section class="completed-work" aria-label="Completed assignments">
+      <p class="muted">All checked-off days, newest scheduled date first. Tap a checked box to reopen a current-plan day; notes and counts stay saved. Earlier plan history is read-only.</p>
+      ${rows.length ? `<ul class="completed-list">${rows.map((row) => workRow(row, context.state, today, true)).join("")}</ul>` : emptyState("Nothing checked off yet", "Completed study days will appear here, including work you check off later.", '<a class="button" href="#today">Back to today</a>')}
+    </section>`;
 }
 
 function actionCopy(row, status, contextState) {
@@ -45,32 +82,35 @@ function actionCopy(row, status, contextState) {
   return { eyebrow: "Your next concrete action", button: "Review assignment" };
 }
 
-export function renderToday(context) {
+export function renderToday(context, route = {}) {
   const { data, state } = context;
   const today = todayISO();
+  const completed = completedRows(data, state);
+  if (route.detail === "completed") return renderCompleted(context, completed, today);
+  const pending = pendingRows(data, state, today);
+  const catchup = catchUpSection(pending, state, today);
+  const due = dueEntries(state, today).filter((entry) => entry.dueState !== "upcoming");
+  const repairs = due.length ? `<p class="pending-repairs"><a href="#log/repair">${plural(due.length, "retest")} due</a> · Record retests in Log</p>` : "";
   const todayContext = getTodayContext(data, today);
   const row = todayContext.row;
-  const previewNote = new URLSearchParams(window.location.search).get("today")
-    ? `<span class="preview-pill">Previewing ${escapeHTML(formatDate(today))}</span>` : "";
-
   if (!row) {
     return `
-      <header class="view-header"><div><span class="eyebrow">${escapeHTML(formatDateLong(today))}</span><h1>Plan complete</h1><p>You reached the end of the dated plan. Use your registered exam date and readiness evidence to choose the next block.</p></div>${previewNote}</header>
-      <div class="today-grid">${countdown(data, state, today)}<section class="card card--hero"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><div class="button-row"><a class="button button--primary" href="#log/repair">Open repair queue</a><a class="button" href="#exams">Review exams</a></div></section></div>`;
+      <header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(formatDateLong(today))}</span><h1>End of the dated plan</h1><p>Choose your next block using your registered exam date and readiness evidence.</p></div></header>
+      ${todayTabs(completed.length)}
+      <div class="today-grid"><div class="today-main">${catchup}<section class="card card--hero"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><div class="button-row"><a class="button button--primary" href="#log/repair">Open repair queue</a><a class="button" href="#exams">Review exams</a></div></section>${repairs}</div><aside class="today-sidebar">${countdown(data, state, today)}</aside></div>`;
   }
 
   const daily = state.daily[row.id] || {};
   const status = daily.status || "not-started";
   const copy = actionCopy(row, status, todayContext.state);
   const rows = typeof row.week === "number" ? weekRows(data, row.week) : data.schedule.filter((item) => item.week === "TEST");
-  const studyRows = rows.filter((item) => !item.isRest);
+  const studyRows = rows.filter(isStudyRow);
   const completedDays = studyRows.filter((item) => state.daily[item.id]?.status === "complete").length;
   const plannedQuestions = rows.reduce((sum, item) => sum + countPracticeQuestions(item.practiceTarget), 0);
   const actualQuestions = rows.reduce((sum, item) => sum + Number(state.daily[item.id]?.actualQuestions || 0), 0);
   const plannedCars = rows.reduce((sum, item) => sum + Number(item.carsPassages || 0), 0);
   const actualCars = rows.reduce((sum, item) => sum + Number(state.daily[item.id]?.actualCars || 0), 0);
-  const carryover = row.isRest || row.isTestWindow || row.isExam ? [] : carryoverRows(data, state, today, row.id);
-  const isActionable = !row.isRest && !row.isTestWindow;
+  const isActionable = isStudyRow(row);
   const startsIn = daysBetween(today, row.date);
   const timingLine = todayContext.state === "before-plan"
     ? `The plan begins ${formatDateLong(row.date)} (${plural(startsIn, "day")} from now). No catch-up is needed.`
@@ -87,16 +127,22 @@ export function renderToday(context) {
   return `
     <header class="view-header today-header">
       <div><span class="eyebrow">${escapeHTML(timingLine)}</span><h1>${escapeHTML(name ? `${heading}, ${name}` : heading)}</h1>${isScheduled ? "" : `<p>${escapeHTML(formatDateLong(row.date))}</p>`}</div>
-      ${previewNote}
     </header>
+    ${todayTabs(completed.length)}
     <div class="today-grid">
-      <main class="today-main">
+      <div class="today-main">
+        ${catchup}
         <article class="today-action today-action--${escapeAttr(row.dayType)} ${status === "complete" ? "is-complete" : ""}">
           <div class="today-action__top">
             <div><span class="eyebrow">${escapeHTML(copy.eyebrow)}</span><span class="status-badge status-badge--${escapeAttr(status)}">${escapeHTML(statusLabel(status))}</span></div>
             <span class="workload-pill">${escapeHTML(row.estimatedWorkload.label)}</span>
           </div>
           <h2>${escapeHTML(row.assignment)}</h2>
+          <div class="action-buttons today-primary-actions ${status === "complete" ? "today-primary-actions--complete" : ""}">
+            ${isActionable && isScheduled ? completionButton(row, state) : ""}
+            ${isActionable && status !== "complete" && isScheduled ? `<button class="button button--primary" type="button" data-start-day="${escapeAttr(row.id)}">${status === "in-progress" ? "Continue today" : "Start block"}</button>` : ""}
+            <button class="button ${!isActionable || !isScheduled ? "button--primary action-buttons__lead" : "button--quiet action-buttons__trail"}" type="button" data-open-assignment="${escapeAttr(row.id)}">${escapeHTML(copy.button)}</button>
+          </div>
           ${row.week === 1 && data.plan.restart ? `<p class="gentle-copy">Fresh start · diagnostic Saturday, September 5. ${escapeHTML(row.sourceNotes || data.plan.restart.note)}</p>` : ""}
           ${row.chapters.length ? `<p class="chapter-line">${row.chapters.map((chapter) => `<span>${escapeHTML(chapter.id)}</span> ${escapeHTML(chapter.title)}`).join(" · ")}</p>` : ""}
           <dl class="today-facts">
@@ -106,22 +152,17 @@ export function renderToday(context) {
             <div><dt>CARS</dt><dd>${row.carsPassages || 0} passage${row.carsPassages === 1 ? "" : "s"}</dd></div>
           </dl>
           <div class="milestone-line"><span aria-hidden="true">◇</span><div><strong>This week’s milestone</strong><p>${escapeHTML(row.weeklyMilestone)}</p></div></div>
-          <div class="action-buttons">
-            ${isActionable && status !== "complete" && isScheduled ? `<button class="button button--primary action-buttons__lead" type="button" data-start-day="${escapeAttr(row.id)}">${status === "in-progress" ? "Continue today" : "Start study block"}</button>` : ""}
-            ${isActionable && status !== "complete" && isScheduled ? `<button class="button button--success" type="button" data-complete-day="${escapeAttr(row.id)}">Mark complete</button>` : ""}
-            <button class="button ${row.isRest || row.isTestWindow || status === "complete" || !isScheduled ? "button--primary action-buttons__lead" : ""}" type="button" data-open-assignment="${escapeAttr(row.id)}">${escapeHTML(copy.button)}</button>
-            ${isActionable && isScheduled ? `<button class="button button--quiet action-buttons__trail" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button>` : ""}
-          </div>
+          ${isActionable && isScheduled ? `<div class="button-row"><button class="button button--quiet" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button></div>` : ""}
         </article>
+        ${repairs}
 
         ${isActionable && todayContext.state === "scheduled" ? `
           <section class="focus-card" aria-labelledby="focus-title">
-            <div><span class="eyebrow">Optional focus mode</span><h3 id="focus-title">One calm block</h3><p>Use a simple 25-minute timer. It will only save a session when you finish it.</p></div>
+            <div><span class="eyebrow">Optional focus mode</span><h3 id="focus-title">One calm block</h3><p>A 25-minute timer. Leaving Today pauses it; return to resume. Only finishing saves a session.</p></div>
             <div class="focus-controls"><output data-focus-clock aria-live="polite">25:00</output><button class="button" type="button" data-focus-toggle>Start</button><button class="button button--quiet" type="button" data-focus-finish disabled>Finish block</button></div>
           </section>` : ""}
 
-        ${carryover.length ? `<section class="carryover-card"><div><span class="eyebrow">Keep it manageable</span><h3>Two small carryovers</h3><p>Only bring forward what helps the next useful action.</p></div><ul>${carryover.map((item) => `<li><button type="button" data-open-assignment="${escapeAttr(item.id)}"><span>${escapeHTML(formatDate(item.date))}</span>${escapeHTML(item.assignment)}</button></li>`).join("")}</ul></section>` : ""}
-      </main>
+      </div>
 
       <aside class="today-sidebar">
         ${countdown(data, state, today)}
@@ -129,6 +170,7 @@ export function renderToday(context) {
           <span class="eyebrow">Weekly momentum</span>
           <h3>${typeof row.week === "number" ? `Week ${row.week}` : "Placeholder window"}</h3>
           ${progressBar(completedDays, studyRows.length, "Study days complete")}
+          ${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}
           ${plannedQuestions ? progressBar(actualQuestions, plannedQuestions, "Practice questions complete") : ""}
           ${plannedCars ? progressBar(actualCars, plannedCars, "CARS passages complete") : ""}
           <p class="gentle-copy">${completedDays === 0 ? "A clean start is enough. Finish one manageable block." : completedDays < studyRows.length ? "You are building the week one finished block at a time." : "The week’s planned study days are complete."}</p>
@@ -147,6 +189,8 @@ export function renderToday(context) {
 }
 
 export function bindToday(container, context) {
+  focus.paint = () => {};
+  bindCompletionButtons(container, context);
   container.querySelectorAll("[data-open-assignment]").forEach((button) => {
     button.addEventListener("click", () => {
       const row = context.data.index.scheduleByDate.get(button.dataset.openAssignment);
@@ -160,20 +204,7 @@ export function bindToday(container, context) {
 
   container.querySelector("[data-start-day]")?.addEventListener("click", (event) => {
     const id = event.currentTarget.dataset.startDay;
-    context.updateState({
-      ...context.state,
-      daily: { ...context.state.daily, [id]: { ...(context.state.daily[id] || {}), status: "in-progress", updatedAt: new Date().toISOString() } },
-    });
-    context.showToast("Study block started");
-  });
-
-  container.querySelector("[data-complete-day]")?.addEventListener("click", (event) => {
-    const id = event.currentTarget.dataset.completeDay;
-    context.updateState({
-      ...context.state,
-      daily: { ...context.state.daily, [id]: { ...(context.state.daily[id] || {}), status: "complete", updatedAt: new Date().toISOString() } },
-    });
-    context.showToast("Today marked complete");
+    context.updateState(withDailyStatus(context.state, id, "in-progress"), { success: "Study block started" });
   });
 
   container.querySelector("[data-log-assignment]")?.addEventListener("click", (event) => {
@@ -185,29 +216,36 @@ export function bindToday(container, context) {
   const toggle = container.querySelector("[data-focus-toggle]");
   const finish = container.querySelector("[data-focus-finish]");
   if (clock && toggle && finish) {
-    let remaining = 25 * 60;
-    let timer = null;
-    let startedAt = "";
-    const paint = () => { clock.value = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`; clock.textContent = clock.value; };
-    const stop = () => { clearInterval(timer); timer = null; toggle.textContent = remaining < 25 * 60 ? "Resume" : "Start"; };
+    focus.paint = () => {
+      clock.value = `${String(Math.floor(focus.remaining / 60)).padStart(2, "0")}:${String(focus.remaining % 60).padStart(2, "0")}`;
+      clock.textContent = clock.value;
+      toggle.textContent = focus.remaining === 0 ? "Save block" : focus.timer ? "Pause" : focus.startedAt ? "Resume" : "Start";
+      toggle.disabled = false;
+      finish.disabled = !focus.startedAt;
+    };
+    const stop = () => { clearInterval(focus.timer); focus.timer = null; focus.paint(); };
     toggle.addEventListener("click", () => {
-      if (timer) { stop(); return; }
-      startedAt ||= new Date().toISOString();
-      toggle.textContent = "Pause";
-      finish.disabled = false;
-      timer = setInterval(() => {
-        remaining = Math.max(0, remaining - 1);
-        paint();
-        if (remaining === 0) { stop(); context.showToast("Focus block complete"); }
+      if (focus.remaining === 0) { finish.click(); return; }
+      if (focus.timer) { stop(); return; }
+      if (!focus.startedAt) {
+        focus.startedAt = new Date().toISOString();
+        focus.assignmentId = getTodayContext(context.data, todayISO()).row?.id || "";
+      }
+      focus.timer = setInterval(() => {
+        focus.remaining = Math.max(0, focus.remaining - 1);
+        focus.paint();
+        if (focus.remaining === 0) { stop(); context.showToast("Focus block complete"); }
       }, 1000);
+      focus.paint();
     });
     finish.addEventListener("click", () => {
       stop();
-      const row = getTodayContext(context.data, todayISO()).row;
-      const session = { id: uniqueId("focus"), assignmentId: row?.id || "", startedAt: startedAt || new Date().toISOString(), endedAt: new Date().toISOString(), minutes: Math.max(1, Math.round((25 * 60 - remaining) / 60)) };
-      context.updateState({ ...context.state, focusSessions: [...context.state.focusSessions, session] });
-      context.showToast("Focus session saved");
+      const session = { id: uniqueId("focus"), assignmentId: focus.assignmentId, startedAt: focus.startedAt, endedAt: new Date().toISOString(), minutes: Math.max(1, Math.round((25 * 60 - focus.remaining) / 60)) };
+      context.updateState({ ...context.state, focusSessions: [...context.state.focusSessions, session] }, {
+        success: "Focus session saved",
+        onSaved: () => { Object.assign(focus, { remaining: 25 * 60, startedAt: "", assignmentId: "" }); focus.paint(); },
+      });
     });
-    paint();
+    focus.paint();
   }
 }

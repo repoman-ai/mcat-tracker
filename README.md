@@ -15,8 +15,8 @@ No build step, no framework. Plain HTML, CSS, and ES modules. It always saves lo
 ## Daily use
 
 1. Open the site. **Today** shows the next concrete action — assignment, chapter, mode, workload estimate, and practice target — without scrolling.
-2. Tap **Start study block**, or open **Review assignment** for chapter subsections and the full study-mode instructions.
-3. Tap **Mark complete** when the block is done.
+2. Tap **Start block**, or open **Review assignment** for chapter subsections and the full study-mode instructions.
+3. Tap the prominent **Mark complete** checkbox when the block is done. Past-due blocks appear above today in a compact scrollable list, with one-tap check-off and a **View all** path into Plan. **Today → Completed** holds every checked-off day; tap a checked box to reopen it, or use **Undo** / Ctrl/⌘Z immediately after a change. Notes and actual counts are preserved.
 4. Tap **Log** in the bottom bar to capture a missed, flagged, or guessed-correct question. Date, source, section, chapter, and topic are pre-filled from today's assignment, so only the error type and three short answers are left to type.
 5. Check **Log → Repair** for retests that are due and the repeated patterns worth one repair plan.
 
@@ -24,8 +24,8 @@ No build step, no framework. Plain HTML, CSS, and ES modules. It always saves lo
 
 | View | What it holds |
 | --- | --- |
-| **Today** | Next action, workload, weekly momentum, carryover, exam countdown, optional 25-minute focus timer |
-| **Plan** | Phase map, all 20 weeks, filters, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
+| **Today** | Past-due check-off list above today's action, Completed tab, workload, weekly momentum, due-retest link, exam countdown, optional 25-minute focus timer |
+| **Plan** | Phase map, all 20 weeks, filters including Past due, check-off in day summaries, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
 | **Exams** | Eight scheduled full-lengths, section and total trends, timing and review status, the plan's readiness rule, registered-date setting |
 | **Log** | Five panels — Capture, Repair, Entries, Mastery, Export |
 | **Guide** | The complete study guide with search, deep links, and accessible sections |

@@ -60,6 +60,34 @@ export function weekRows(data, weekNumber) {
   return data.schedule.filter((row) => row.week === weekNumber);
 }
 
+export function isStudyRow(row) {
+  return !row.isRest && !row.isTestWindow;
+}
+
+export function isPastDue(row, state, today = todayISO()) {
+  // Deferred means later, not done. Only an explicit completion clears work.
+  return isStudyRow(row) && row.date < today && state.daily[row.id]?.status !== "complete";
+}
+
+export function pendingRows(data, state, today = todayISO()) {
+  // Derive from the active schedule: superseded dates never become catch-up debt.
+  return data.schedule.filter((row) => isPastDue(row, state, today))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function completedRows(data, state) {
+  const byId = new Map(data.schedule.map((row) => [row.id, row]));
+  return Object.entries(state.daily).filter(([, record]) => record?.status === "complete")
+    .map(([id]) => byId.get(id) || { id, date: id, assignment: "Earlier plan record", historical: true })
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export function dueEntries(state, today = todayISO()) {
+  return state.mistakes.filter((entry) => entry.retestDate && !["Retested", "Resolved"].includes(entry.retestStatus))
+    .sort((a, b) => a.retestDate.localeCompare(b.retestDate))
+    .map((entry) => ({ ...entry, dueState: entry.retestDate < today ? "overdue" : entry.retestDate === today ? "today" : "upcoming" }));
+}
+
 export function scheduledWeekForDate(data, iso = todayISO()) {
   const row = data.index.scheduleByDate.get(iso);
   if (row && typeof row.week === "number") return row.week;

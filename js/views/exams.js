@@ -144,12 +144,10 @@ export function bindExams(container, context) {
   container.querySelector("[data-exam-date-form]")?.addEventListener("submit", (event) => {
     event.preventDefault();
     const registeredExamDate = new FormData(event.currentTarget).get("registeredExamDate") || "";
-    context.updateState({ ...context.state, settings: { ...context.state.settings, registeredExamDate, updatedAt: new Date().toISOString() } });
-    context.showToast("Registered exam date saved");
+    context.updateState({ ...context.state, settings: { ...context.state.settings, registeredExamDate, updatedAt: new Date().toISOString() } }, { success: "Registered exam date saved" });
   });
   container.querySelector("[data-clear-exam-date]")?.addEventListener("click", () => {
-    context.updateState({ ...context.state, settings: { ...context.state.settings, registeredExamDate: "", updatedAt: new Date().toISOString() } });
-    context.showToast("Countdown returned to the placeholder window");
+    context.updateState({ ...context.state, settings: { ...context.state.settings, registeredExamDate: "", updatedAt: new Date().toISOString() } }, { success: "Countdown returned to the placeholder window" });
   });
   container.querySelectorAll("[data-exam-form]").forEach((form) => {
     const sectionInputs = [...form.querySelectorAll('input[name="cp"],input[name="cars"],input[name="bb"],input[name="ps"]')];
@@ -167,8 +165,7 @@ export function bindExams(container, context) {
         completed: form.elements.completed.checked, unfinishedSection: form.elements.unfinishedSection.checked,
         repairThemes: values.repairThemes || "", notes: values.notes || "", updatedAt: new Date().toISOString(),
       };
-      context.updateState({ ...context.state, exams: { ...context.state.exams, [id]: record } });
-      context.showToast("Exam record saved");
+      context.updateState({ ...context.state, exams: { ...context.state.exams, [id]: record } }, { success: "Exam record saved" });
     });
   });
   const canvas = container.querySelector("[data-score-chart]");

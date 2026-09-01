@@ -1,4 +1,5 @@
 import { getModeDetails, modeLabel } from "../data.js";
+import { withDailyStatus } from "../daily.js";
 import { escapeAttr, escapeHTML, formatDateLong, countPracticeQuestions } from "../utils.js";
 
 export function statusLabel(status = "not-started") {
@@ -8,6 +9,40 @@ export function statusLabel(status = "not-started") {
     complete: "Complete",
     deferred: "Deferred",
   }[status] || "Not started";
+}
+
+export function completionButton(row, state, { compact = false } = {}) {
+  const complete = state.daily[row.id]?.status === "complete";
+  const label = `${row.historical ? "Completed — saved history (read-only):" : complete ? "Completed — reopen" : "Mark complete:"} ${formatDateLong(row.date)} — ${row.assignment}`;
+  return `<button class="completion-check ${complete ? "is-checked" : ""} ${compact ? "completion-check--compact" : ""}" type="button" ${row.historical ? "disabled" : `data-toggle-complete="${escapeAttr(row.id)}" data-view-focus="complete-${escapeAttr(row.id)}"`} aria-pressed="${complete}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="completion-check__box" aria-hidden="true">${complete ? "✓" : ""}</span><span>${complete ? "Completed" : "Mark complete"}</span></button>`;
+}
+
+export function bindCompletionButtons(container, context) {
+  container.querySelectorAll("[data-toggle-complete]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      // Plan checkboxes sit in the day summary; checking must not toggle details.
+      event.preventDefault();
+      const id = button.dataset.toggleComplete;
+      const previous = context.state.daily[id]?.status || "not-started";
+      const status = previous === "complete" ? "not-started" : "complete";
+      const next = withDailyStatus(context.state, id, status);
+      // Don't report success (or offer undo) when local storage rejected the write.
+      if (context.updateState(next) === false) return;
+      const savedAt = next.daily[id].updatedAt;
+      context.showToast(`${formatDateLong(id)} ${status === "complete" ? "completed" : "reopened"}`, "success", {
+        label: "Undo",
+        onClick: () => {
+          // An undo must not overwrite a newer edit arriving from another device.
+          const current = context.state.daily[id];
+          if (current?.status !== status || current?.updatedAt !== savedAt) {
+            context.showToast("This day has changed since then. Open its record to edit it.", "error");
+            return;
+          }
+          context.updateState(withDailyStatus(context.state, id, previous), { success: "Completion change undone" });
+        },
+      });
+    });
+  });
 }
 
 export function progressBar(value, total, label) {
@@ -95,9 +130,7 @@ export function bindAssignmentDetail(dialog, context) {
           updatedAt: new Date().toISOString(),
         },
       },
-    });
-    context.showToast("Day saved");
-    if (typeof dialog.close === "function") dialog.close();
+    }, { success: "Day saved", onSaved: () => { if (typeof dialog.close === "function") dialog.close(); } });
   });
 }
 

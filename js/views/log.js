@@ -1,4 +1,5 @@
 import { exportJSON, exportMistakeCSV, exportWorkbook } from "../export.js";
+import { dueEntries } from "../data.js";
 import { mergeStates, validateBackup } from "../storage.js";
 import {
   debounce,
@@ -119,11 +120,6 @@ function quickForm(context) {
       <div class="form-actions"><button class="button button--primary button--large" type="submit">${existing ? "Save changes" : "Save entry"}</button><span class="form-hint">Required: date, result, source, section, topic, error type, cause, reasoning, and fix.</span></div>
     </form>
   </section>`;
-}
-
-function dueEntries(state) {
-  const today = todayISO();
-  return state.mistakes.filter((entry) => entry.retestDate && !["Retested", "Resolved"].includes(entry.retestStatus)).sort((a, b) => a.retestDate.localeCompare(b.retestDate)).map((entry) => ({ ...entry, dueState: entry.retestDate < today ? "overdue" : entry.retestDate === today ? "today" : "upcoming" }));
 }
 
 function retestQueue(context) {
@@ -283,7 +279,7 @@ function openRetest(context, id) {
       event.preventDefault();
       const values = formToObject(event.currentTarget);
       const mistakes = context.state.mistakes.map((item) => item.id === id ? { ...item, retestResult: values.retestResult, retestStatus: values.retestStatus, updatedAt: new Date().toISOString() } : item);
-      context.updateState({ ...context.state, mistakes }); dialog.close(); context.showToast("Retest saved");
+      context.updateState({ ...context.state, mistakes }, { success: "Retest saved", onSaved: () => dialog.close() });
     });
   } });
 }
@@ -304,7 +300,7 @@ function importDialog(context, payload) {
       if (!check.checked) return;
       const strategy = new FormData(form).get("strategy");
       const next = strategy === "merge" ? mergeStates(context.state, validated.state) : validated.state;
-      context.updateState(next); dialog.close(); context.showToast("Backup imported successfully");
+      context.updateState(next, { success: "Backup imported successfully", onSaved: () => dialog.close() });
     });
   } });
 }
@@ -312,11 +308,15 @@ function importDialog(context, payload) {
 export function bindLog(container, context, route) {
   const form = container.querySelector("[data-mistake-form]");
   const draftSave = debounce(() => {
-    if (editingId || !form) return;
+    if (editingId || !form?.isConnected) return;
     const values = { ...formToObject(form), _updatedAt: new Date().toISOString() };
-    context.updateState({ ...context.state, drafts: { ...context.state.drafts, mistake: values } }, { notify: false });
-    const indicator = container.querySelector("[data-autosave-state]");
-    if (indicator) { indicator.textContent = "Draft saved"; indicator.classList.add("is-saved"); }
+    context.updateState({ ...context.state, drafts: { ...context.state.drafts, mistake: values } }, {
+      notify: false,
+      onSaved: () => {
+        const indicator = container.querySelector("[data-autosave-state]");
+        if (indicator) { indicator.textContent = "Draft saved"; indicator.classList.add("is-saved"); }
+      },
+    });
   }, 300);
   form?.addEventListener("input", draftSave);
   form?.addEventListener("change", (event) => {
@@ -332,9 +332,10 @@ export function bindLog(container, context, route) {
     const existing = editingId ? context.state.mistakes.find((entry) => entry.id === editingId) : null;
     const entry = formEntry(form, existing);
     const mistakes = existing ? context.state.mistakes.map((item) => item.id === existing.id ? entry : item) : [entry, ...context.state.mistakes];
-    editingId = ""; lastSavedId = entry.id; context.clearQuickLogPrefill?.();
-    context.updateState({ ...context.state, mistakes, drafts: { ...context.state.drafts, mistake: {} } });
-    context.showToast(existing ? "Entry updated" : "Entry saved");
+    context.updateState({ ...context.state, mistakes, drafts: { ...context.state.drafts, mistake: {} } }, {
+      success: existing ? "Entry updated" : "Entry saved",
+      onSaved: () => { editingId = ""; lastSavedId = entry.id; context.clearQuickLogPrefill?.(); },
+    });
   });
   container.querySelector("[data-cancel-edit]")?.addEventListener("click", () => { editingId = ""; context.rerender(); });
   container.querySelector("[data-log-another]")?.addEventListener("click", () => { lastSavedId = ""; editingId = ""; context.rerender(); });
@@ -355,14 +356,13 @@ export function bindLog(container, context, route) {
       ...context.state,
       mistakes: context.state.mistakes.filter((item) => item.id !== entry.id),
       tombstones: { ...context.state.tombstones, mistakes: { ...context.state.tombstones.mistakes, [entry.id]: deletedAt } },
-    });
-    context.showToast("Entry deleted");
+    }, { success: "Entry deleted" });
   }));
   container.querySelectorAll("[data-retest-entry]").forEach((button) => button.addEventListener("click", () => openRetest(context, button.dataset.retestEntry)));
   container.querySelector("[data-schedule-retest]")?.addEventListener("click", (event) => {
     const id = event.currentTarget.dataset.scheduleRetest;
     const mistakes = context.state.mistakes.map((entry) => entry.id === id ? { ...entry, retestDate: entry.retestDate || addDays(todayISO(), 7), retestStatus: "Scheduled", updatedAt: new Date().toISOString() } : entry);
-    context.updateState({ ...context.state, mistakes }); context.showToast("Retest scheduled for seven days from today");
+    context.updateState({ ...context.state, mistakes }, { success: "Retest scheduled" });
   });
 
   // Any change to what is being filtered puts you back on the first page.
@@ -380,14 +380,12 @@ export function bindLog(container, context, route) {
   container.querySelectorAll("[data-confidence]").forEach((button) => button.addEventListener("click", () => {
     const id = button.dataset.topicId;
     const existing = context.state.mastery[id] || {};
-    context.updateState({ ...context.state, mastery: { ...context.state.mastery, [id]: { ...existing, confidence: Number(button.dataset.confidence), lastReviewed: existing.lastReviewed || todayISO(), updatedAt: new Date().toISOString() } } });
-    context.showToast("Mastery confidence updated");
+    context.updateState({ ...context.state, mastery: { ...context.state.mastery, [id]: { ...existing, confidence: Number(button.dataset.confidence), lastReviewed: existing.lastReviewed || todayISO(), updatedAt: new Date().toISOString() } } }, { success: "Mastery confidence updated" });
   }));
   container.querySelectorAll("[data-mastery-row]").forEach((row) => {
     row.querySelectorAll("[data-mastery-field]").forEach((field) => field.addEventListener("change", () => {
       const id = row.dataset.masteryRow;
-      context.updateState({ ...context.state, mastery: { ...context.state.mastery, [id]: { ...(context.state.mastery[id] || {}), [field.dataset.masteryField]: field.value, updatedAt: new Date().toISOString() } } });
-      context.showToast("Mastery review saved");
+      context.updateState({ ...context.state, mastery: { ...context.state.mastery, [id]: { ...(context.state.mastery[id] || {}), [field.dataset.masteryField]: field.value, updatedAt: new Date().toISOString() } } }, { success: "Mastery review saved" });
     }));
   });
 

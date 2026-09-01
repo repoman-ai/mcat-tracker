@@ -54,7 +54,7 @@ assert.equal(data.plan.question_targets.uworld_baseline, data.plan.weeks.reduce(
 assert.match(renderPlan(context, {}), /145 dated rows · 20 Tuesday-Monday weeks/);
 assert.match(renderToday(context), /September 5/);
 assert.match(renderToday(context), /PHY10/);
-assert.doesNotMatch(renderToday(context), /Two small carryovers/);
+assert.doesNotMatch(renderToday(context), /class="catchup-card"/);
 window.location.search = "?today=2026-09-05";
 assert.match(renderToday(context), /AAMC Unscored Sample/);
 window.location.search = "?today=2026-09-06";

@@ -32,6 +32,51 @@ risks remain explicit in the Plan UI. Unknown modes fail before special-day bran
 hashes replace wall-clock generatedAt; unchanged inputs regenerate byte-identically. Mode
 deduplication is display-only. Backup counts distinguish current schedule records and history.
 
+## Past-due work and completion — August 31, 2026
+
+Today now places a compact **Past due** list above the current assignment. It contains every
+unfinished study row from the active schedule, oldest first, with dates, age labels, and 44px
+check-off buttons. Its viewport stays 96px on short phones and grows to 180px when the screen has
+room. **View all** opens the matching weeks in Plan; neither route silently caps the backlog. Rest days, exam days, placeholder days, and the after-plan view
+continue to surface pending work. Rest/test-window rows themselves are not overdue tasks.
+
+**Today → Completed** (`#today/completed`) lists all checked-off daily records, newest scheduled
+date first, including read-only history outside the current schedule. Checked buttons reopen current-plan days;
+notes, question counts and other fields remain intact. Plan day summaries also have check-off
+buttons, and its **Past due** filter uses the same derivation. Completion offers a 10-second Undo
+(paused while hovered/focused) plus Ctrl/⌘Z outside text editing, guarded against newer edits.
+All normal save-success messages and cleanup are coupled to a successful local write. Failed writes
+preserve forms and show only the error. Focus timers survive completion/sync rerenders, pause when
+leaving Today, and resume on return instead of running invisibly.
+
+Design decisions: oldest-first ordering; a bounded scroll area instead of three cards or a hidden
+item cap; no age horizon; show unfinished work even on rest days without prescribing catch-up;
+keep all planned study days in the momentum denominator (exclude rest and placeholder windows);
+include Undo and reversible completion; scope to Today, Completed and Plan without extra global
+nav badges. `deferred` remains unfinished, and there is no new skipped status. Check-off records
+completion, not when studying actually happened, so no inferred `completedLate`/`completedOn`
+fields were added. A small due-retest link shares Log's derivation; missing exam scores are not
+treated as overdue tasks because the diagnostic is explicitly unscored.
+
+`pendingRows` and `completedRows` in `js/data.js` derive UI from existing records. Daily writes use
+real `updatedAt` timestamps and the existing per-day last-write-wins merge; date previews affect
+eligibility only. Generated site data, schema version, auth, sync configuration and Supabase were
+not changed. Regression coverage is in `tests/pending.test.mjs`.
+
+Date previews are identified once in the topbar; the redundant in-view preview pill was intentionally
+removed to keep the action above the phone navigation. Plan resolves the preview date once per render.
+View-state restoration is isolated in `js/view-state.js`, preserving disclosure state, named scroll
+areas, focus and window position rather than expanding an app-level list for each widget.
+
+Verification: the full Node test run passes (33 checks, including the existing Python workload suite),
+all modules pass syntax checks, and `git diff --check` is clean. A tracked-module-graph regression starts
+at each entry point and verifies every relative import will be present in a Pages deployment.
+Browser checks used an isolated synthetic account: 375×667, 1280×800 and 1440×900, longest
+assignment titles, completion/Undo/reopen/reload, preserved notes/counts, Plan filtering, focus
+timer continuity, rest days and 115 unfinished after-plan records. No horizontal overflow or
+browser warnings/errors were observed. Screenshots and the test log are under ignored
+`tests/output/`. Real multi-device Supabase sync was not exercised in this pass.
+
 ## Project
 
 `/Users/macbookpro/Documents/Claude/MCAT/mcat-tracker` is a static, no-build, local-first MCAT study
