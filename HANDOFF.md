@@ -3,6 +3,21 @@
 This file is a convenience snapshot, not a source of truth. Always inspect the working tree, Git
 index, live application, and Supabase project before continuing.
 
+## Granular daily checklists — September 1, 2026
+
+Every actionable schedule row now derives stable checklist steps from its assigned chapters and
+practice targets. Today shows those steps in the primary action card; expanded Plan days and
+assignment dialogs show the same state, while collapsed Plan rows show `done/total` progress.
+Checking the final step completes the day. The existing whole-day check-off marks or reopens every
+step at once, and Undo restores the full previous daily record, including partial progress. Notes and
+actual counts remain untouched. Legacy completed days display every derived step as complete.
+
+Checklist state is stored at `daily[date].completedTasks` inside the existing last-write-wins daily
+record, so local storage, cloud sync, merge and JSON backups need no schema migration. Excel exports
+include a Checklist Progress column. Daily source notes are now visible as guardrails on Today and in
+assignment details instead of being hidden for most of the schedule. Regression coverage is in
+`tests/checklist.test.mjs`.
+
 ## September restart — August 31, 2026
 
 The schedule now starts September 1: 145 days, 20 Tuesday–Monday weeks. Diagnostic September 5,

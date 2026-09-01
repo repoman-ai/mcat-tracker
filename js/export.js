@@ -1,4 +1,5 @@
 import { createBackup } from "./storage.js";
+import { assignmentTasks, taskProgress } from "./daily.js";
 import {
   countPracticeQuestions,
   csvCell,
@@ -75,10 +76,13 @@ function addSheet(workbook, name, headers, rows, widths, options = {}) {
 function dailyRows(data, state) {
   return data.schedule.map((row) => {
     const user = state.daily[row.id] || {};
+    const progress = taskProgress(row, state);
+    const finished = assignmentTasks(row).filter((task) => user.status === "complete" || user.completedTasks?.[task.id]).map((task) => task.label);
     return [
       makeDateFromISO(row.date), row.day, row.week, row.phase, row.weeklyFocus,
       row.resource, row.chapterIds.join("; "), row.assignment, row.mode,
       row.practiceTargetDisplay, row.carsPassages, row.weeklyMilestone,
+      progress.total ? `${progress.completed}/${progress.total}${finished.length ? ` · ${finished.join("; ")}` : ""}` : "",
       user.status || "not-started", user.actualQuestions ?? "", user.actualCars ?? "",
       user.notes || "", user.updatedAt || "",
     ];
@@ -191,9 +195,9 @@ export async function exportWorkbook(data, state) {
   workbook.description = "Generated locally in the browser. XLSX is a portable report, not automatic synchronization.";
 
   addSheet(workbook, "Daily Schedule",
-    ["Date", "Day", "Week", "Phase", "Weekly Focus", "Resource", "Chapter ID", "Assignment", "Mode", "Practice Target", "CARS Passages", "Weekly Milestone", "Completion Status", "Actual Questions", "Actual CARS", "User Notes", "Updated"],
-    dailyRows(data, state), [13, 8, 8, 18, 28, 24, 18, 52, 25, 42, 13, 46, 18, 15, 12, 38, 22],
-    { dateColumns: [1], highlightStatusColumn: 13, tabColor: "2B6F8A" });
+    ["Date", "Day", "Week", "Phase", "Weekly Focus", "Resource", "Chapter ID", "Assignment", "Mode", "Practice Target", "CARS Passages", "Weekly Milestone", "Checklist Progress", "Completion Status", "Actual Questions", "Actual CARS", "User Notes", "Updated"],
+    dailyRows(data, state), [13, 8, 8, 18, 28, 24, 18, 52, 25, 42, 13, 46, 42, 18, 15, 12, 38, 22],
+    { dateColumns: [1], highlightStatusColumn: 14, tabColor: "2B6F8A" });
 
   const progress = addSheet(workbook, `${data.plan.prep_weeks}-Week Progress`,
     ["Week", "Dates", "Phase", "Focus", "Planned Hours", "Study Days", "Completed Days", "Completion %", "Planned Questions", "Actual Questions", "CARS Target", "Actual CARS", "Milestone", "FL / Section Bank"],

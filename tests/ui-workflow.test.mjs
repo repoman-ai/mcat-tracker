@@ -115,3 +115,10 @@ test("view restoration preserves closed details, internal scroll and nearby Plan
   assert.equal(controls[0].focused, true);
   assert.equal(controls[0].getBoundingClientRect().top, 300);
 });
+
+test("route changes reset stale page position while same-view saves preserve it", async () => {
+  const app = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../js/app.js", import.meta.url), "utf8"));
+  assert.match(app, /if \(!sameRoute\) window\.scrollTo\(\{ left: 0, top: 0, behavior: "auto" \}\)/);
+  assert.match(app, /if \(!sameRoute\) root\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(app, /const restoreView = sameRoute && preserveView/);
+});

@@ -15,8 +15,8 @@ No build step, no framework. Plain HTML, CSS, and ES modules. It always saves lo
 ## Daily use
 
 1. Open the site. **Today** shows the next concrete action — assignment, chapter, mode, workload estimate, and practice target — without scrolling.
-2. Tap **Start block**, or open **Review assignment** for chapter subsections and the full study-mode instructions.
-3. Tap the prominent **Mark complete** checkbox when the block is done. Past-due blocks appear above today in a compact scrollable list, with one-tap check-off and a **View all** path into Plan. **Today → Completed** holds every checked-off day; tap a checked box to reopen it, or use **Undo** / Ctrl/⌘Z immediately after a change. Notes and actual counts are preserved.
+2. Work through the **Block checklist** on Today: each assigned chapter/read block, question set, and CARS target has its own check-off. Partial progress saves and syncs immediately; checking the final step completes the day. Open **Review assignment** for chapter subsections, guardrails, and the full study-mode instructions.
+3. Use the prominent **Mark complete** checkbox to finish every step at once. Past-due blocks appear above today in a compact scrollable list, with one-tap check-off and a **View all** path into Plan. **Today → Completed** holds every checked-off day; tap a checked box to reopen it, or use **Undo** / Ctrl/⌘Z immediately after a change. Notes and actual counts are preserved.
 4. Tap **Log** in the bottom bar to capture a missed, flagged, or guessed-correct question. Date, source, section, chapter, and topic are pre-filled from today's assignment, so only the error type and three short answers are left to type.
 5. Check **Log → Repair** for retests that are due and the repeated patterns worth one repair plan.
 
@@ -24,8 +24,8 @@ No build step, no framework. Plain HTML, CSS, and ES modules. It always saves lo
 
 | View | What it holds |
 | --- | --- |
-| **Today** | Past-due check-off list above today's action, Completed tab, workload, weekly momentum, due-retest link, exam countdown, optional 25-minute focus timer |
-| **Plan** | Phase map, all 20 weeks, filters including Past due, check-off in day summaries, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
+| **Today** | Past-due check-off list above today's action, per-chapter and per-practice checklist, Completed tab, workload, weekly momentum, due-retest link, exam countdown, optional 25-minute focus timer |
+| **Plan** | Phase map, all 20 weeks, filters including Past due, step progress and check-off in day summaries, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
 | **Exams** | Eight scheduled full-lengths, section and total trends, timing and review status, the plan's readiness rule, registered-date setting |
 | **Log** | Five panels — Capture, Repair, Entries, Mastery, Export |
 | **Guide** | The complete study guide with search, deep links, and accessible sections |
@@ -204,7 +204,7 @@ If the status reads **Sync paused**, open the sync panel for the reason. Local p
 
 Everything is under **Log → Export**. All three work offline and none of them change your data.
 
-**Excel workbook** — seven sheets (Daily Schedule, 20-Week Progress, Mistake Log, Weekly Pattern Review, High-Yield Mastery, Full-Length Scores, Lists), with frozen headers, autofilters, real date cells, wrapped long text, and no formulas to break. Generated locally with a vendored copy of ExcelJS.
+**Excel workbook** — seven sheets (Daily Schedule, 20-Week Progress, Mistake Log, Weekly Pattern Review, High-Yield Mastery, Full-Length Scores, Lists), with checklist progress, frozen headers, autofilters, real date cells, wrapped long text, and no formulas to break. Generated locally with a vendored copy of ExcelJS.
 
 **Mistake log CSV** — every field with stable headers, fully quoted, UTF-8 with BOM so Excel opens accents correctly. Commas, quotes, and newlines inside notes are escaped properly.
 

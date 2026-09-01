@@ -380,11 +380,16 @@ function renderCurrent({ preserveView = true } = {}) {
   renderBanner();
   topbarDate.innerHTML = `<span>${escapeHTML(formatDateLong(todayISO()))}</span>${new URLSearchParams(location.search).get("today") ? `<strong>Preview date</strong>` : ""}`;
   try {
+    // A bottom-nav change should land at the start of its new screen, not at
+    // the pixel offset left behind by a long checklist or form. Detail routes
+    // may then deliberately scroll to their own target in the view binder.
+    if (!sameRoute) window.scrollTo({ left: 0, top: 0, behavior: "auto" });
     if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute); bindToday(root, context, currentRoute); }
     else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute); bindPlan(root, context, { isRouteChange: !sameRoute }); }
     else if (currentRoute.view === "exams") { setDocumentTitle("Exams"); root.innerHTML = renderExams(context, currentRoute); bindExams(root, context, currentRoute); }
     else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute); bindLog(root, context, currentRoute); }
     else { setDocumentTitle("Guide"); root.innerHTML = renderGuide(context, currentRoute); bindGuide(root, context, currentRoute); }
+    if (!sameRoute) root.focus({ preventScroll: true });
     renderedRoute = routeKey;
     restoreView?.();
   } catch (error) {

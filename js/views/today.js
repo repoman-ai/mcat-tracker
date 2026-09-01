@@ -12,7 +12,7 @@ import {
   todayISO,
   uniqueId,
 } from "../utils.js";
-import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, emptyState, progressBar, statusLabel } from "./shared.js";
+import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, statusLabel, taskChecklist } from "./shared.js";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.
@@ -124,6 +124,9 @@ export function renderToday(context, route = {}) {
   const isScheduled = todayContext.state === "scheduled";
   const heading = isScheduled ? "Today" : "Your next block";
   const name = state.settings.displayName;
+  const guidance = row.week === 1 && data.plan.restart
+    ? `Fresh start · diagnostic Saturday, September 5. ${row.sourceNotes || data.plan.restart.note}`
+    : row.sourceNotes;
   return `
     <header class="view-header today-header">
       <div><span class="eyebrow">${escapeHTML(timingLine)}</span><h1>${escapeHTML(name ? `${heading}, ${name}` : heading)}</h1>${isScheduled ? "" : `<p>${escapeHTML(formatDateLong(row.date))}</p>`}</div>
@@ -143,7 +146,8 @@ export function renderToday(context, route = {}) {
             ${isActionable && status !== "complete" && isScheduled ? `<button class="button button--primary" type="button" data-start-day="${escapeAttr(row.id)}">${status === "in-progress" ? "Continue today" : "Start block"}</button>` : ""}
             <button class="button ${!isActionable || !isScheduled ? "button--primary action-buttons__lead" : "button--quiet action-buttons__trail"}" type="button" data-open-assignment="${escapeAttr(row.id)}">${escapeHTML(copy.button)}</button>
           </div>
-          ${row.week === 1 && data.plan.restart ? `<p class="gentle-copy">Fresh start · diagnostic Saturday, September 5. ${escapeHTML(row.sourceNotes || data.plan.restart.note)}</p>` : ""}
+          ${isActionable && isScheduled ? taskChecklist(row, state) : ""}
+          ${guidance ? `<aside class="assignment-guidance"><span class="eyebrow">Guardrails for today</span><p>${escapeHTML(guidance)}</p></aside>` : ""}
           ${row.chapters.length ? `<p class="chapter-line">${row.chapters.map((chapter) => `<span>${escapeHTML(chapter.id)}</span> ${escapeHTML(chapter.title)}`).join(" · ")}</p>` : ""}
           <dl class="today-facts">
             <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "None required")}</dd></div>
@@ -191,6 +195,7 @@ export function renderToday(context, route = {}) {
 export function bindToday(container, context) {
   focus.paint = () => {};
   bindCompletionButtons(container, context);
+  bindTaskChecklist(container, context);
   container.querySelectorAll("[data-open-assignment]").forEach((button) => {
     button.addEventListener("click", () => {
       const row = context.data.index.scheduleByDate.get(button.dataset.openAssignment);

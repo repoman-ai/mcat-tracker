@@ -1,5 +1,5 @@
 import { getModeDetails, modeLabel } from "../data.js";
-import { withDailyStatus } from "../daily.js";
+import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask } from "../daily.js";
 import { escapeAttr, escapeHTML, formatDateLong, countPracticeQuestions } from "../utils.js";
 
 export function statusLabel(status = "not-started") {
@@ -23,9 +23,11 @@ export function bindCompletionButtons(container, context) {
       // Plan checkboxes sit in the day summary; checking must not toggle details.
       event.preventDefault();
       const id = button.dataset.toggleComplete;
+      const row = context.data?.index?.scheduleByDate?.get(id);
       const previous = context.state.daily[id]?.status || "not-started";
       const status = previous === "complete" ? "not-started" : "complete";
-      const next = withDailyStatus(context.state, id, status);
+      const previousRecord = context.state.daily[id] ? structuredClone(context.state.daily[id]) : null;
+      const next = row ? withDailyCompletion(context.state, row, status === "complete") : withDailyStatus(context.state, id, status);
       // Don't report success (or offer undo) when local storage rejected the write.
       if (context.updateState(next) === false) return;
       const savedAt = next.daily[id].updatedAt;
@@ -38,7 +40,54 @@ export function bindCompletionButtons(container, context) {
             context.showToast("This day has changed since then. Open its record to edit it.", "error");
             return;
           }
-          context.updateState(withDailyStatus(context.state, id, previous), { success: "Completion change undone" });
+          const daily = { ...context.state.daily };
+          if (previousRecord) daily[id] = previousRecord;
+          else delete daily[id];
+          context.updateState({ ...context.state, daily }, { success: "Completion change undone" });
+        },
+      });
+    });
+  });
+}
+
+export function taskChecklist(row, state) {
+  const { tasks, completed, total } = taskProgress(row, state);
+  if (!total) return "";
+  const daily = state.daily[row.id] || {};
+  return `<section class="task-checklist" aria-label="Checklist for ${escapeAttr(row.assignment)}">
+    <header><div><span class="eyebrow">Block checklist</span><h3>${total} ${total === 1 ? "step" : "steps"}</h3></div><strong>${completed}/${total} done</strong></header>
+    <ul>${tasks.map((task) => {
+      const checked = daily.status === "complete" || daily.completedTasks?.[task.id] === true;
+      return `<li><button class="task-check ${checked ? "is-checked" : ""}" type="button" data-toggle-task="${escapeAttr(task.id)}" data-task-assignment="${escapeAttr(row.id)}" data-view-focus="task-${escapeAttr(row.id)}-${escapeAttr(task.id)}" aria-pressed="${checked}" aria-label="${checked ? "Reopen" : "Mark done"}: ${escapeAttr(task.label)}"><span class="task-check__box" aria-hidden="true">${checked ? "✓" : ""}</span><span><strong>${escapeHTML(task.label)}</strong><small>${escapeHTML(task.meta)}</small></span></button></li>`;
+    }).join("")}</ul>
+  </section>`;
+}
+
+export function bindTaskChecklist(container, context) {
+  container.querySelectorAll("[data-toggle-task]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const row = context.data.index.scheduleByDate.get(button.dataset.taskAssignment);
+      if (!row) return;
+      const task = assignmentTasks(row).find((item) => item.id === button.dataset.toggleTask);
+      if (!task) return;
+      const current = context.state.daily[row.id] || {};
+      const wasComplete = current.status === "complete" || current.completedTasks?.[task.id] === true;
+      const previousRecord = context.state.daily[row.id] ? structuredClone(context.state.daily[row.id]) : null;
+      const next = withDailyTask(context.state, row, task.id, !wasComplete);
+      if (context.updateState(next) === false) return;
+      const savedAt = next.daily[row.id].updatedAt;
+      context.showToast(`${wasComplete ? "Reopened" : "Completed"}: ${task.label}`, "success", {
+        label: "Undo",
+        onClick: () => {
+          if (context.state.daily[row.id]?.updatedAt !== savedAt) {
+            context.showToast("This day has changed since then. Open its record to edit it.", "error");
+            return;
+          }
+          const daily = { ...context.state.daily };
+          if (previousRecord) daily[row.id] = previousRecord;
+          else delete daily[row.id];
+          context.updateState({ ...context.state, daily }, { success: "Checklist change undone" });
         },
       });
     });
@@ -90,6 +139,8 @@ export function assignmentDetailHTML(row, data, state) {
         <div><dt>Milestone</dt><dd>${escapeHTML(row.weeklyMilestone)}</dd></div>
         <div><dt>Estimate</dt><dd>${escapeHTML(row.estimatedWorkload.label)} <span class="muted">(${escapeHTML(row.estimatedWorkload.basis)})</span></dd></div>
       </dl>
+      ${row.sourceNotes ? `<aside class="assignment-guidance"><span class="eyebrow">Guardrails for this block</span><p>${escapeHTML(row.sourceNotes)}</p></aside>` : ""}
+      ${taskChecklist(row, state)}
       ${chapterDetails(row.chapters)}
       ${modeDetails(data, row.mode)}
       <section class="inline-editor">
@@ -114,16 +165,25 @@ export function assignmentDetailHTML(row, data, state) {
 }
 
 export function bindAssignmentDetail(dialog, context) {
+  bindTaskChecklist(dialog, context);
   dialog.querySelector("[data-save-day]")?.addEventListener("click", (event) => {
     const id = event.currentTarget.dataset.saveDay;
     const existing = context.state.daily[id] || {};
+    const row = context.data.index.scheduleByDate.get(id);
+    const selectedStatus = dialog.querySelector(`[data-detail-status][data-assignment-id="${CSS.escape(id)}"]`)?.value || "not-started";
+    const completedTasks = selectedStatus === "complete"
+      ? Object.fromEntries(assignmentTasks(row).map((task) => [task.id, true]))
+      : selectedStatus === "not-started"
+        ? Object.fromEntries(assignmentTasks(row).map((task) => [task.id, false]))
+        : existing.completedTasks;
     context.updateState({
       ...context.state,
       daily: {
         ...context.state.daily,
         [id]: {
           ...existing,
-          status: dialog.querySelector(`[data-detail-status][data-assignment-id="${CSS.escape(id)}"]`)?.value || "not-started",
+          status: selectedStatus,
+          ...(completedTasks ? { completedTasks } : {}),
           actualQuestions: Number(dialog.querySelector(`[data-detail-questions][data-assignment-id="${CSS.escape(id)}"]`)?.value || 0),
           actualCars: Number(dialog.querySelector(`[data-detail-cars][data-assignment-id="${CSS.escape(id)}"]`)?.value || 0),
           notes: dialog.querySelector(`[data-detail-notes][data-assignment-id="${CSS.escape(id)}"]`)?.value || "",

@@ -117,6 +117,7 @@ for (const { handle, filename } of captured) {
     if (schedule.rowCount !== data.schedule.length + 1) throw new Error("Exported daily schedule has stale row count");
     if (!progress || progress.rowCount !== data.plan.prep_weeks + 1) throw new Error("Exported week progress is stale");
     if (schedule.getCell("A2").value.toISOString().slice(0, 10) !== data.plan.plan_start) throw new Error("Exported start date is stale");
+    if (schedule.getCell("M1").value !== "Checklist Progress") throw new Error("Exported schedule is missing checklist progress");
     if (exported.getWorksheet("Full-Length Scores").getCell("C2").value.toISOString().slice(0, 10) !== data.exams[0].plannedDate) throw new Error("Exported diagnostic date is stale");
   }
   await fs.writeFile(path.join(outputDir, filename), buffer);
