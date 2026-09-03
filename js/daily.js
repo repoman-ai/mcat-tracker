@@ -1,12 +1,24 @@
 /** Daily records sync last-write-wins per day, including completion and undo. */
 export function withDailyStatus(state, id, status) {
+  const record = { ...state.daily[id] };
+  if (status === "deferred" && record.status !== "deferred") {
+    record.statusBeforeDeferred = record.status || "not-started";
+  } else if (status !== "deferred") {
+    delete record.statusBeforeDeferred;
+  }
   return {
     ...state,
     daily: {
       ...state.daily,
-      [id]: { ...state.daily[id], status, updatedAt: new Date().toISOString() },
+      [id]: { ...record, status, updatedAt: new Date().toISOString() },
     },
   };
+}
+
+/** Old deferred records lack a prior status: infer only from recorded work. */
+export function resumedStatus(record = {}) {
+  if (["not-started", "in-progress", "complete"].includes(record.statusBeforeDeferred)) return record.statusBeforeDeferred;
+  return Object.values(record.completedTasks || {}).some((done) => done === true) ? "in-progress" : "not-started";
 }
 
 function taskVerb(mode = "") {

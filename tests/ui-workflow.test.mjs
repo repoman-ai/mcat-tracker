@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createStateUpdater } from "../js/state-actions.js";
 import { createToastController } from "../js/toast.js";
-import { captureViewState } from "../js/view-state.js";
+import { captureViewState, scrollInstantly, focusTarget } from "../js/view-state.js";
 import { bindExams } from "../js/views/exams.js";
 
 test("failed local saves preserve state and forms without success, cleanup, render or sync", () => {
@@ -116,9 +116,33 @@ test("view restoration preserves closed details, internal scroll and nearby Plan
   assert.equal(controls[0].getBoundingClientRect().top, 300);
 });
 
-test("route changes reset stale page position while same-view saves preserve it", async () => {
-  const app = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../js/app.js", import.meta.url), "utf8"));
-  assert.match(app, /if \(!sameRoute\) window\.scrollTo\(\{ left: 0, top: 0, behavior: "auto" \}\)/);
-  assert.match(app, /if \(!sameRoute\) root\.focus\(\{ preventScroll: true \}\)/);
-  assert.match(app, /const restoreView = sameRoute && preserveView/);
+test("route reset is instantaneous even when CSS requests smooth scroll", () => {
+  const style = { scrollBehavior: "smooth" };
+  const window = { document: { documentElement: { style } }, scrollTo(options) {
+    assert.equal(style.scrollBehavior, "auto");
+    assert.deepEqual(options, { left: 0, top: 0, behavior: "instant" });
+  } };
+  scrollInstantly(window);
+  assert.equal(style.scrollBehavior, "smooth");
+  const events = [];
+  focusTarget({ matches: () => false, focus: (options) => events.push(["focus", options]), scrollIntoView: (options) => events.push(["scroll", options]) });
+  assert.deepEqual(events, [["focus", { preventScroll: true }], ["scroll", { block: "start", behavior: "instant" }]]);
+});
+
+test("guide route binding focuses and scrolls the mounted target synchronously, only on navigation", async () => {
+  const { bindGuide } = await import("../js/views/guide.js");
+  const originalCSS = globalThis.CSS;
+  globalThis.CSS = { escape: (value) => value };
+  const events = [];
+  const summary = { focus: (options) => events.push(["focus", options]) };
+  const section = { open: false, matches: () => true, querySelector: () => summary, scrollIntoView: (options) => events.push(["scroll", options]) };
+  const container = { querySelector: (selector) => selector.startsWith("[data-guide-section=") ? section : null };
+  try {
+    bindGuide(container, {}, { detail: "phase-map" }, { isRouteChange: true });
+    assert.equal(section.open, true);
+    assert.deepEqual(events, [["focus", { preventScroll: true }], ["scroll", { block: "start", behavior: "instant" }]]);
+    events.length = 0;
+    bindGuide(container, {}, { detail: "phase-map" }, { isRouteChange: false });
+    assert.deepEqual(events, []);
+  } finally { globalThis.CSS = originalCSS; }
 });

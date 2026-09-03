@@ -1,3 +1,4 @@
+import { focusTarget } from "../view-state.js";
 import { debounce, escapeAttr, escapeHTML, safeExternalUrl } from "../utils.js";
 import { emptyState } from "./shared.js";
 
@@ -54,7 +55,8 @@ function matchingBlocks(section, query) {
   return matches.length ? matches : section.blocks;
 }
 
-export function renderGuide(context, route) {
+export function renderGuide(context, route, { isRouteChange = true } = {}) {
+  if (isRouteChange) guideQuery = "";
   const sections = context.data.guide.sections.filter((section) => sectionMatches(section, guideQuery));
   return `<header class="view-header"><div><span class="eyebrow">Complete meaningful content from the study guide</span><h1>Guide</h1><p>Search the operating rules, phases, time templates, exam guidance, decision rules, registration, and source links.</p></div><a class="button" href="#today">Back to Today</a></header>
     <section class="guide-search-panel"><label class="guide-search">Search guide<input type="search" data-guide-search value="${escapeAttr(guideQuery)}" placeholder="Try “CARS,” “March,” “full-length review”…"><span>${sections.length} matching section${sections.length === 1 ? "" : "s"}</span></label><nav class="guide-section-nav" aria-label="Guide sections">${context.data.guide.sections.map((section) => `<a href="#guide/${escapeAttr(section.id)}" class="${route.detail === section.id ? "is-active" : ""}">${escapeHTML(section.title.replace(/^\d+\.\s*/, ""))}</a>`).join("")}</nav></section>
@@ -63,13 +65,13 @@ export function renderGuide(context, route) {
     <section class="guide-source-note"><strong>Source fidelity</strong><p>Chapter names and subsections are generated from <code>kaplan-mcat-books.md</code> and appear contextually in Today, Plan, and Log. They are intentionally not dumped into one giant guide page.</p></section>`;
 }
 
-export function bindGuide(container, context, route) {
+export function bindGuide(container, context, route, { isRouteChange = true } = {}) {
   const search = container.querySelector("[data-guide-search]");
   search?.addEventListener("input", debounce(() => { guideQuery = search.value.trim(); context.rerender(); }, 250));
-  if (route.detail) {
-    requestAnimationFrame(() => {
-      const section = container.querySelector(`[data-guide-section="${CSS.escape(route.detail)}"]`);
-      if (section) { section.open = true; section.scrollIntoView({ block: "start" }); }
-    });
+  if (isRouteChange && route.detail) {
+    // The rendered section is already mounted. Scroll synchronously, as Plan
+    // does, so a delayed callback cannot race another render or route.
+    const section = container.querySelector(`[data-guide-section="${CSS.escape(route.detail)}"]`);
+    if (section) { section.open = true; focusTarget(section); }
   }
 }

@@ -5,14 +5,13 @@ import {
   daysBetween,
   escapeAttr,
   escapeHTML,
-  formatDate,
   formatDateLong,
   percent,
   plural,
   todayISO,
   uniqueId,
 } from "../utils.js";
-import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, statusLabel, taskChecklist } from "./shared.js";
+import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, statusLabel, taskChecklist } from "./shared.js";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.
@@ -43,22 +42,13 @@ function todayTabs(completedCount, completed = false) {
   return `<nav class="today-tabs" aria-label="Study work"><a href="#today" ${completed ? "" : 'aria-current="page"'}>Today</a><a href="#today/completed" ${completed ? 'aria-current="page"' : ""}>Completed <span>${completedCount}</span></a></nav>`;
 }
 
-function workRow(row, state, today, completed = false) {
-  const age = daysBetween(row.date, today);
-  const timing = completed ? "Completed" : `Past due · ${age === 1 ? "yesterday" : `${age} days ago`}`;
-  const text = `<span class="work-row__date">${escapeHTML(formatDate(row.date, { includeYear: completed }))} · ${escapeHTML(timing)}</span><strong>${escapeHTML(row.assignment)}</strong>`;
-  return `<li class="work-row" data-work-row="${escapeAttr(row.id)}">
-    ${completionButton(row, state, { compact: true })}
-    ${row.historical ? `<div class="work-row__detail">${text}<small>Saved history · outside the current plan</small></div>` : `<button class="work-row__detail" type="button" data-open-assignment="${escapeAttr(row.id)}" aria-label="${escapeAttr(`Open ${formatDateLong(row.date)} — ${row.assignment}`)}">${text}</button>`}
-  </li>`;
-}
-
 function catchUpSection(rows, state, today) {
   if (!rows.length) return "";
+  const deferred = rows.filter((row) => state.daily[row.id]?.status === "deferred").length;
   return `<section class="catchup-card" aria-labelledby="catchup-title">
-    <header><h2 id="catchup-title">Past due <span>${rows.length}</span></h2><a href="#plan/past-due">View all</a></header>
-    <ul class="catchup-list" data-view-scroll="catchup" tabindex="0" aria-label="Past-due assignments, oldest first" aria-describedby="catchup-hint">${rows.map((row) => workRow(row, state, today)).join("")}</ul>
-    <p id="catchup-hint">${rows.length > 1 ? `Oldest first · Scroll for all ${rows.length} items` : "One unfinished block · Tap its title for details"}</p>
+    <header><h2 id="catchup-title">Past due <span>${rows.length}</span></h2><a href="#plan/past-due">View all ${rows.length} in Plan</a></header>
+    <ul class="catchup-list" aria-label="Past-due assignments, oldest first">${rows.slice(0, 3).map((row) => workRow(row, state, today)).join("")}</ul>
+    <p>${rows.length > 3 ? `Showing oldest 3 of ${rows.length}` : "Oldest first"}${deferred ? ` · ${deferred} deferred (included)` : ""} · <a href="#plan">Full schedule</a></p>
   </section>`;
 }
 
@@ -76,6 +66,7 @@ function actionCopy(row, status, contextState) {
   if (row.isRest) return { eyebrow: "Recovery is on the plan", button: "Review rest guidance" };
   if (row.isTestWindow) return { eyebrow: "Unconfirmed test window", button: "Review date guidance" };
   if (status === "complete") return { eyebrow: "Today is complete", button: "Review what you logged" };
+  if (status === "deferred") return { eyebrow: "Set aside for later", button: "Review deferred block" };
   if (status === "in-progress") return { eyebrow: "Block in progress", button: "Review assignment" };
   if (row.isExam) return { eyebrow: "Full-length day", button: "Review exam plan" };
   if (row.isFullLengthReview) return { eyebrow: "Full-length review day", button: "Review assignment" };
@@ -132,10 +123,10 @@ export function renderToday(context, route = {}) {
       <div><span class="eyebrow">${escapeHTML(timingLine)}</span><h1>${escapeHTML(name ? `${heading}, ${name}` : heading)}</h1>${isScheduled ? "" : `<p>${escapeHTML(formatDateLong(row.date))}</p>`}</div>
     </header>
     ${todayTabs(completed.length)}
+    ${pending.length ? `<a class="today-backlog-link" href="#plan/past-due">${pending.length} past-due days · Review in Plan →</a>` : ""}
     <div class="today-grid">
       <div class="today-main">
-        ${catchup}
-        <article class="today-action today-action--${escapeAttr(row.dayType)} ${status === "complete" ? "is-complete" : ""}">
+        <article id="today-assignment" tabindex="-1" class="today-action today-action--${escapeAttr(row.dayType)} ${status === "complete" ? "is-complete" : ""}">
           <div class="today-action__top">
             <div><span class="eyebrow">${escapeHTML(copy.eyebrow)}</span><span class="status-badge status-badge--${escapeAttr(status)}">${escapeHTML(statusLabel(status))}</span></div>
             <span class="workload-pill">${escapeHTML(row.estimatedWorkload.label)}</span>
@@ -158,6 +149,7 @@ export function renderToday(context, route = {}) {
           <div class="milestone-line"><span aria-hidden="true">◇</span><div><strong>This week’s milestone</strong><p>${escapeHTML(row.weeklyMilestone)}</p></div></div>
           ${isActionable && isScheduled ? `<div class="button-row"><button class="button button--quiet" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button></div>` : ""}
         </article>
+        ${catchup}
         ${repairs}
 
         ${isActionable && todayContext.state === "scheduled" ? `
@@ -196,16 +188,7 @@ export function bindToday(container, context) {
   focus.paint = () => {};
   bindCompletionButtons(container, context);
   bindTaskChecklist(container, context);
-  container.querySelectorAll("[data-open-assignment]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const row = context.data.index.scheduleByDate.get(button.dataset.openAssignment);
-      context.openDialog({
-        title: "Assignment details",
-        body: assignmentDetailHTML(row, context.data, context.state),
-        onMount: (dialog) => bindAssignmentDetail(dialog, context),
-      });
-    });
-  });
+  bindWorkRows(container, context);
 
   container.querySelector("[data-start-day]")?.addEventListener("click", (event) => {
     const id = event.currentTarget.dataset.startDay;

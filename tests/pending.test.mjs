@@ -24,16 +24,17 @@ test("before/first plan day has no pending work, including superseded August his
   }
 });
 
-test("all past unfinished study days are oldest first, ahead of today, regardless of input order", () => {
+test("backlog is oldest first without displacing today’s primary action", () => {
   preview("2026-09-10");
   const state = empty();
   const rows = pendingRows({ ...data, schedule: [...data.schedule].reverse() }, state);
   assert.deepEqual(rows.map((row) => row.date), data.schedule.filter((row) => isStudyRow(row) && row.date < "2026-09-10").map((row) => row.date));
   const html = renderToday({ data, state });
-  assert.ok(html.indexOf('class="catchup-card"') < html.indexOf('class="today-action '));
-  assert.ok(html.indexOf('data-work-row="2026-09-09"') < html.indexOf('class="today-action '));
-  assert.match(html, /Past due · yesterday/);
-  assert.match(html, new RegExp(`Scroll for all ${rows.length} items`));
+  assert.ok(html.indexOf('data-start-day=') < html.indexOf('class="catchup-card"'));
+  assert.ok(html.indexOf('class="today-backlog-link"') < html.indexOf('class="today-action '));
+  assert.deepEqual([...html.matchAll(/data-work-row="([^"]+)"/g)].map((m) => m[1]), rows.slice(0, 3).map((row) => row.id));
+  assert.match(html, new RegExp(`Showing oldest 3 of ${rows.length}`));
+  assert.match(html, new RegExp(`View all ${rows.length} in Plan`));
 });
 
 test("rest, test-window, today and future rows are excluded; exam and review days count", () => {
@@ -58,7 +59,9 @@ test("no horizon or item cap silently drops old work", () => {
   const rows = pendingRows(data, state);
   assert.equal(rows.length, data.schedule.filter(isStudyRow).length);
   const html = renderToday({ data, state });
-  assert.equal((html.match(/data-work-row=/g) || []).length, rows.length);
+  assert.equal((html.match(/data-work-row=/g) || []).length, 3);
+  const plan = renderPlan({ data, state }, { detail: "past-due" });
+  assert.equal((plan.match(/data-work-row=/g) || []).length, rows.length);
   assert.match(html, /data-work-row="2026-09-01"/);
   assert.match(html, /End of the dated plan/);
   assert.doesNotMatch(html, /<h1>Plan complete/);
@@ -185,29 +188,56 @@ test("Plan's past-due filter uses the same queue and keeps check-off in collapse
   };
   bindPlan(container, context);
   change();
-  const html = renderPlan(context, {});
+  const html = renderPlan(context, {}, { isRouteChange: false });
   const ids = [...html.matchAll(/data-assignment-details="([^"]+)"/g)].map((match) => match[1]);
   assert.deepEqual(ids, pendingRows(data, context.state).map((row) => row.id));
   assert.match(html, /class="past-due-label">Past due/);
   assert.ok(html.indexOf('data-toggle-complete="2026-09-01"') < html.indexOf('class="plan-day__detail"'));
 });
 
-test("View all opens only matching weeks and Plan resolves the preview date once", () => {
+test("View all keeps the entire schedule, resolves today once, and opens the backlog", () => {
   preview("2026-10-26");
   const state = empty();
-  data.schedule.filter((row) => row.week === 1).forEach((row) => { state.daily[row.id] = { status: "complete" }; });
   let reads = 0;
   const search = window.location.search;
   Object.defineProperty(window.location, "search", { configurable: true, get() { reads += 1; return search; } });
   try {
     const html = renderPlan({ data, state }, { detail: "past-due" });
     assert.equal(reads, 1);
-    const weeks = [...html.matchAll(/class="week-card" open id="week-(\d+)"/g)].map((match) => Number(match[1]));
-    assert.deepEqual(weeks, [...new Set(pendingRows(data, state, "2026-10-26").map((row) => row.week))]);
-    assert.ok(!weeks.includes(1));
-    assert.ok(!weeks.includes(9));
+    assert.equal((html.match(/class="week-card"/g) || []).length, 20);
+    assert.equal((html.match(/data-assignment-details=/g) || []).length, 145);
+    assert.match(html, /id="backlog-list" open/);
+    assert.match(html, /class="today-label">Today/);
+    assert.equal((html.match(/data-work-row=/g) || []).length, pendingRows(data, state, "2026-10-26").length);
   } finally { Object.defineProperty(window.location, "search", { configurable: true, writable: true, value: search }); }
 });
+
+test("every Plan navigation resets manual filters; same-view saves keep them", () => {
+  preview("2026-09-20");
+  const context = { data, state: normalizeState({ daily: { "2026-09-01": { status: "deferred" } } }), rerender() {} };
+  const ids = (html) => [...html.matchAll(/data-assignment-details="([^"]+)"/g)].map((m) => m[1]);
+  for (const detail of ["", "past-due", "2026-09-20"]) {
+    let change;
+    bindPlan({ querySelector: () => null, querySelectorAll: (selector) => selector === "[data-plan-filter]" ? [{ dataset: { planFilter: "status" }, value: "deferred", addEventListener: (_, handler) => { change = handler; } }] : [] }, context, { isRouteChange: false });
+    change();
+    const filtered = renderPlan(context, {}, { isRouteChange: false });
+    assert.deepEqual(ids(filtered), ["2026-09-01"]);
+    assert.match(filtered, /Showing 1 of 145 scheduled days/);
+    const full = renderPlan(context, { detail });
+    assert.equal(ids(full).length, 145);
+    assert.match(full, /data-assignment-details="2026-09-20"/);
+    assert.match(full, /class="deferred-label">Deferred/);
+  }
+});
+
+test("zero past-due days never hides the schedule", () => {
+  preview("2026-08-25");
+  const html = renderPlan({ data, state: empty() }, { detail: "past-due" });
+  assert.match(html, /No past-due days/);
+  assert.equal((html.match(/data-assignment-details=/g) || []).length, 145);
+  assert.doesNotMatch(html, /No days match/);
+});
+
 
 test("checking off work and rerendering keeps one focus timer and its original assignment", () => {
   preview("2026-09-10");
@@ -258,4 +288,18 @@ test("checking off work and rerendering keeps one focus timer and its original a
     globalThis.setInterval = originalSet;
     globalThis.clearInterval = originalClear;
   }
+});
+
+test("Complete filter does not expand the entire completed plan", () => {
+  preview("2026-09-20");
+  const state = empty();
+  for (const row of data.schedule) state.daily[row.id] = { status: "complete" };
+  const context = { data, state, rerender() {} };
+  renderPlan(context, {});
+  let change;
+  bindPlan({ querySelector: () => null, querySelectorAll: (selector) => selector === "[data-plan-filter]" ? [{ dataset: { planFilter: "status" }, value: "complete", addEventListener: (_, handler) => { change = handler; } }] : [] }, context, { isRouteChange: false });
+  change();
+  const html = renderPlan(context, {}, { isRouteChange: false });
+  assert.equal((html.match(/class="week-card"/g) || []).length, 20);
+  assert.deepEqual([...html.matchAll(/class="week-card" open id="week-(\d+)"/g)].map((m) => m[1]), ["3"]);
 });

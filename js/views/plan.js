@@ -1,15 +1,18 @@
-import { isPastDue, isStudyRow, scheduledWeekForDate } from "../data.js";
+import { focusTarget } from "../view-state.js";
+import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js";
 import { taskProgress } from "../daily.js";
 import { escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js";
-import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel } from "./shared.js";
+import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js";
 
-const filters = {
+const defaultFilters = {
   phase: "all",
   resource: "all",
   status: "all",
   dayType: "all",
   currentWeekOnly: false,
 };
+
+const filters = { ...defaultFilters };
 
 function option(value, label, selected) {
   return `<option value="${escapeAttr(value)}" ${selected === value ? "selected" : ""}>${escapeHTML(label)}</option>`;
@@ -29,6 +32,7 @@ function rowMatches(row, state, currentWeek, today) {
   if (filters.resource !== "all" && !row.resource.includes(filters.resource)) return false;
   if (filters.status === "complete" && status !== "complete") return false;
   if (filters.status === "incomplete" && status === "complete") return false;
+  if (filters.status === "deferred" && status !== "deferred") return false;
   if (filters.status === "past-due" && !isPastDue(row, state, today)) return false;
   if (filters.dayType !== "all" && row.dayType !== filters.dayType) return false;
   return true;
@@ -39,10 +43,10 @@ function dayCard(row, context, forceOpen, today) {
   const status = daily.status || "not-started";
   const steps = taskProgress(row, context.state);
   return `
-    <details class="plan-day plan-day--${escapeAttr(row.dayType)}" data-assignment-details="${escapeAttr(row.id)}" data-view-key="day-${escapeAttr(row.id)}" ${forceOpen ? "open" : ""}>
+    <details class="plan-day plan-day--${escapeAttr(row.dayType)} ${row.date === today ? "is-today" : ""}" data-assignment-details="${escapeAttr(row.id)}" data-view-key="day-${escapeAttr(row.id)}" ${forceOpen ? "open" : ""}>
       <summary>
         <div class="date-tile"><span>${escapeHTML(row.day)}</span><strong>${escapeHTML(formatDate(row.date, { weekday: undefined, month: "short" }).replace(/^\w+,\s*/, ""))}</strong></div>
-        <div class="plan-day__main"><div class="plan-day__meta">${isPastDue(row, context.state, today) ? '<span class="past-due-label">Past due</span>' : ""}<span>${escapeHTML(row.resource || row.dayType.replaceAll("-", " "))}</span>${row.chapterIds.length ? `<span>${escapeHTML(row.chapterIds.join(" · "))}</span>` : ""}</div><h4>${escapeHTML(row.assignment)}</h4><p>${steps.total ? `<strong class="plan-day__progress">${steps.completed}/${steps.total} steps</strong> · ` : ""}${escapeHTML(row.practiceTargetDisplay || (row.isRest ? "Protected rest" : "No practice quota"))}</p></div>
+        <div class="plan-day__main"><div class="plan-day__meta">${row.date === today ? '<span class="today-label">Today</span>' : ""}${status === "deferred" ? '<span class="deferred-label">Deferred</span>' : ""}${isPastDue(row, context.state, today) ? '<span class="past-due-label">Past due</span>' : ""}<span>${escapeHTML(row.resource || row.dayType.replaceAll("-", " "))}</span>${row.chapterIds.length ? `<span>${escapeHTML(row.chapterIds.join(" · "))}</span>` : ""}</div><h4>${escapeHTML(row.assignment)}</h4><p>${steps.total ? `<strong class="plan-day__progress">${steps.completed}/${steps.total} steps</strong> · ` : ""}${escapeHTML(row.practiceTargetDisplay || (row.isRest ? "Protected rest" : "No practice quota"))}</p></div>
         ${isStudyRow(row) ? completionButton(row, context.state, { compact: true }) : `<span class="status-badge status-badge--${escapeAttr(status)}">${escapeHTML(statusLabel(status))}</span>`}
         <span class="disclosure-icon" aria-hidden="true">⌄</span>
       </summary>
@@ -58,7 +62,7 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
   if (!matching.length) return "";
   const completed = rows.filter((row) => isStudyRow(row) && context.state.daily[row.id]?.status === "complete").length;
   const studyDays = rows.filter(isStudyRow).length;
-  const open = filters.status === "past-due" || week.week === currentWeek || matching.some((row) => row.date === detail);
+  const open = week.week === currentWeek || matching.some((row) => row.date === detail);
   const workload = context.data.validation.weeklyChecks.find((check) => check.week === week.week);
   const estimate = workload ? `${(workload.estimatedLowMinutes / 60).toFixed(1)}–${(workload.estimatedHighMinutes / 60).toFixed(1)} hr` : "Not available";
   const warning = workload?.capacityRisk === "midpoint-over-budget"
@@ -81,63 +85,76 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
     </details>`;
 }
 
-export function renderPlan(context, route) {
+function pastDueSection(context, today, detail) {
+  const rows = pendingRows(context.data, context.state, today);
+  if (!rows.length && detail !== "past-due") return "";
+  const deferred = rows.filter((row) => context.state.daily[row.id]?.status === "deferred").length;
+  return `<section class="plan-backlog" id="plan-past-due" tabindex="-1" aria-labelledby="backlog-heading">
+    <div class="section-heading"><div><span class="eyebrow">Unfinished work</span><h2 id="backlog-heading">${rows.length ? `Past due · ${rows.length}` : "No past-due days"}</h2></div><button class="button button--small" type="button" data-plan-jump>Jump to current week</button></div>
+    <p>${rows.length ? `Oldest first${deferred ? ` · ${deferred} deferred (included)` : ""}. The full schedule continues below.` : "You’re caught up. Your full schedule is below."}</p>
+    ${rows.length ? `<details class="backlog-disclosure" id="backlog-list" ${detail === "past-due" ? "open" : ""}><summary>Review ${rows.length} unfinished days<span class="disclosure-icon" aria-hidden="true">⌄</span></summary><ul class="catchup-list">${rows.map((row) => workRow(row, context.state, today)).join("")}</ul><p class="muted">Deferred means set aside, still unfinished. It does not change the scheduled date.</p></details>` : ""}
+  </section>`;
+}
+
+export function renderPlan(context, route, { isRouteChange = true } = {}) {
   const today = todayISO();
-  if (route.detail === "past-due") Object.assign(filters, { phase: "all", resource: "all", status: "past-due", dayType: "all", currentWeekOnly: false });
+  if (isRouteChange) Object.assign(filters, defaultFilters);
   const currentWeek = scheduledWeekForDate(context.data, today) || 1;
   const phases = [...new Set(context.data.schedule.map((row) => row.phase))];
   const resources = [...new Set(context.data.schedule.flatMap((row) => row.resource.split(";").map((item) => item.trim())).filter(Boolean))].sort();
   const weeksHTML = context.data.plan.weeks.map((week) => weekCard(week, context.data.schedule.filter((row) => row.week === week.week), context, currentWeek, route.detail, today)).join("");
   const testRows = context.data.schedule.filter((row) => row.week === "TEST").filter((row) => rowMatches(row, context.state, currentWeek, today));
 
+  const matchedCount = context.data.schedule.filter((row) => rowMatches(row, context.state, currentWeek, today)).length;
+  const filtered = Object.keys(defaultFilters).some((key) => filters[key] !== defaultFilters[key]);
   return `
-    <header class="view-header"><div><span class="eyebrow">${context.data.schedule.length} dated rows · ${context.data.plan.prep_weeks} ${escapeHTML(context.data.plan.week_boundary)} weeks</span><h1>Plan</h1><p>Fresh start September 1. August work is superseded, not overdue. Expand the week or day you need.</p></div>
+    <header class="view-header"><div><span class="eyebrow">${context.data.schedule.length} dated rows · ${context.data.plan.prep_weeks} ${escapeHTML(context.data.plan.week_boundary)} weeks</span><h1>Plan</h1><p>Your full schedule, with unfinished work kept in view. Expand a week or day for details.</p></div>
       <div class="button-row"><button class="button button--primary" type="button" data-plan-jump>Jump to week ${currentWeek}</button><a class="button" href="#guide/week-by-week-plan">Plan guidance</a></div></header>
+    ${filtered ? `<div class="plan-filter-notice" role="status">Showing ${matchedCount} of ${context.data.schedule.length} scheduled days · Filters active <button class="button button--small" type="button" data-plan-reset>Show full schedule</button></div>` : ""}
+    ${pastDueSection(context, today, route.detail)}
     ${phaseMap(context.data, currentWeek)}
-    <section class="filter-panel" aria-labelledby="plan-filter-heading">
-      <div><span class="eyebrow">Narrow the calendar</span><h2 id="plan-filter-heading">Filters</h2></div>
+    <section class="filter-panel" tabindex="-1" aria-labelledby="plan-filter-heading">
+      <div><span class="eyebrow">Narrow the calendar</span><h2 id="plan-filter-heading">Schedule filters</h2><p class="filter-count">${matchedCount} of ${context.data.schedule.length} days</p></div>
       <div class="filter-grid">
         <label>Phase<select data-plan-filter="phase">${option("all", "All phases", filters.phase)}${phases.map((phase) => option(phase, phase, filters.phase)).join("")}</select></label>
         <label>Resource<select data-plan-filter="resource">${option("all", "All resources", filters.resource)}${resources.map((resource) => option(resource, resource, filters.resource)).join("")}</select></label>
-        <label>Status<select data-plan-filter="status">${option("all", "Complete + incomplete", filters.status)}${option("past-due", "Past due", filters.status)}${option("complete", "Complete", filters.status)}${option("incomplete", "Incomplete", filters.status)}</select></label>
+        <label>Status<select data-plan-filter="status">${option("all", "All statuses", filters.status)}${option("past-due", "Past due", filters.status)}${option("deferred", "Deferred", filters.status)}${option("complete", "Complete", filters.status)}${option("incomplete", "Incomplete", filters.status)}</select></label>
         <label>Day type<select data-plan-filter="dayType">${option("all", "All day types", filters.dayType)}${option("study", "Study days", filters.dayType)}${option("exam", "Full-length days", filters.dayType)}${option("full-length-review", "FL review days", filters.dayType)}${option("section-bank", "Section Bank days", filters.dayType)}${option("rest", "Rest days", filters.dayType)}${option("logistics", "Logistics tasks", filters.dayType)}${option("test-window", "Placeholder window", filters.dayType)}</select></label>
         <label class="check-control"><input type="checkbox" data-plan-current ${filters.currentWeekOnly ? "checked" : ""}><span>Current week only</span></label>
         <button class="button button--quiet" type="button" data-plan-reset>Reset filters</button>
       </div>
     </section>
-    <section class="week-list" aria-label="${context.data.plan.prep_weeks}-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p></div>`}</section>
+    <section class="week-list" aria-label="${context.data.plan.prep_weeks}-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p><button class="button" type="button" data-plan-reset>Show full schedule</button></div>`}</section>
     ${testRows.length ? `<section class="test-window-section"><div class="section-heading"><div><span class="eyebrow">Not a confirmed exam date</span><h2>Placeholder test window</h2></div><a href="#exams">Set registered date</a></div><p>January 22-23 are planning placeholders. The registered date setting controls the live countdown.</p><div class="plan-days">${testRows.map((row) => dayCard(row, context, row.date === route.detail, today)).join("")}</div></section>` : ""}`;
 }
 
 export function bindPlan(container, context, { isRouteChange = true } = {}) {
   bindCompletionButtons(container, context);
+  bindWorkRows(container, context);
   const filterChanged = () => {
-    if (window.location.hash === "#plan/past-due") context.navigate("plan");
-    else context.rerender({ preserveView: false });
+    context.rerender({ preserveView: false });
+    focusTarget(container.querySelector(".filter-panel"));
   };
-  container.querySelector("[data-plan-jump]")?.addEventListener("click", () => {
-    // The current week is already expanded; this just saves a long scroll past
-    // the phase map and filters on a phone.
+  container.querySelectorAll("[data-plan-jump]").forEach((button) => button.addEventListener("click", () => {
     const currentWeek = scheduledWeekForDate(context.data, todayISO()) || 1;
+    Object.assign(filters, defaultFilters);
+    context.rerender({ preserveView: false });
     const target = container.querySelector(`#week-${currentWeek}`);
-    if (!target) return;
-    target.open = true;
-    target.scrollIntoView({ block: "start" });
-    target.querySelector("summary")?.focus();
-  });
+    if (target) { target.open = true; focusTarget(target); }
+  }));
   container.querySelectorAll("[data-plan-filter]").forEach((select) => {
     select.addEventListener("change", () => { filters[select.dataset.planFilter] = select.value; filterChanged(); });
   });
   container.querySelector("[data-plan-current]")?.addEventListener("change", (event) => { filters.currentWeekOnly = event.currentTarget.checked; filterChanged(); });
-  container.querySelector("[data-plan-reset]")?.addEventListener("click", () => { Object.assign(filters, { phase: "all", resource: "all", status: "all", dayType: "all", currentWeekOnly: false }); filterChanged(); });
+  container.querySelectorAll("[data-plan-reset]").forEach((button) => button.addEventListener("click", () => { Object.assign(filters, defaultFilters); filterChanged(); }));
 
   container.querySelectorAll("[data-assignment-details]").forEach((details) => bindAssignmentDetail(details, context));
   container.querySelectorAll("[data-log-from-plan]").forEach((button) => button.addEventListener("click", () => context.openQuickLog(context.data.index.scheduleByDate.get(button.dataset.logFromPlan))));
 
   if (isRouteChange && window.location.hash === "#plan/past-due") {
-    container.querySelector(".filter-panel")?.scrollIntoView({ block: "start" });
+    focusTarget(container.querySelector("#plan-past-due"));
   } else if (isRouteChange && window.location.hash.includes("/")) {
     const target = container.querySelector(`[data-assignment-details="${CSS.escape(decodeURIComponent(window.location.hash.split("/").slice(1).join("/")))}"]`);
-    target?.scrollIntoView({ block: "center" });
+    if (target) focusTarget(target);
   }
 }

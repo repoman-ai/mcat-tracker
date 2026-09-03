@@ -87,3 +87,22 @@ test("checklist controls save safely and Undo restores the complete prior record
   messages.at(-1)[2].onClick();
   assert.deepEqual(context.state.daily[row.id], { status: "in-progress", notes: "preserve" });
 });
+
+test("Defer/Resume restores prior status across normalization without changing saved work", async () => {
+  const { withDailyStatus, resumedStatus } = await import("../js/daily.js");
+  for (const status of ["not-started", "in-progress", "complete"]) {
+    const original = normalizeState({ daily: { [row.id]: { status, notes: "keep", actualQuestions: 7, completedTasks: { "chapter:PHY10": true } } } });
+    const deferred = normalizeState(withDailyStatus(original, row.id, "deferred"));
+    assert.equal(deferred.daily[row.id].statusBeforeDeferred, status);
+    const savedAgain = withDailyStatus(deferred, row.id, "deferred");
+    assert.equal(savedAgain.daily[row.id].statusBeforeDeferred, status);
+    const resumed = withDailyStatus(savedAgain, row.id, resumedStatus(savedAgain.daily[row.id]));
+    assert.equal(resumed.daily[row.id].status, status);
+    assert.equal(resumed.daily[row.id].notes, "keep");
+    assert.equal(resumed.daily[row.id].actualQuestions, 7);
+    assert.deepEqual(resumed.daily[row.id].completedTasks, original.daily[row.id].completedTasks);
+    assert.equal(resumed.daily[row.id].statusBeforeDeferred, undefined);
+  }
+  assert.equal(resumedStatus({ status: "deferred" }), "not-started");
+  assert.equal(resumedStatus({ status: "deferred", completedTasks: { step: true } }), "in-progress");
+});

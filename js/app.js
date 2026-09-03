@@ -12,7 +12,7 @@ import { renderLog, bindLog } from "./views/log.js";
 import { renderGuide, bindGuide } from "./views/guide.js";
 import { createStateUpdater } from "./state-actions.js";
 import { createToastController } from "./toast.js";
-import { captureViewState } from "./view-state.js";
+import { captureViewState, scrollInstantly } from "./view-state.js";
 
 const root = document.querySelector("#view-root");
 const dialog = document.querySelector("#app-dialog");
@@ -367,10 +367,10 @@ function updateNav(view) {
   });
 }
 
-function renderCurrent({ preserveView = true } = {}) {
+function renderCurrent({ preserveView = true, routeChange = false } = {}) {
   if (!data || !state) return;
   const routeKey = `${currentRoute.view}/${currentRoute.detail}`;
-  const sameRoute = renderedRoute === routeKey;
+  const sameRoute = !routeChange && renderedRoute === routeKey;
   const restoreView = sameRoute && preserveView ? captureViewState(root, window) : null;
   if (renderedRoute === "today/" && routeKey !== "today/") leaveToday();
   context.data = data;
@@ -383,13 +383,17 @@ function renderCurrent({ preserveView = true } = {}) {
     // A bottom-nav change should land at the start of its new screen, not at
     // the pixel offset left behind by a long checklist or form. Detail routes
     // may then deliberately scroll to their own target in the view binder.
-    if (!sameRoute) window.scrollTo({ left: 0, top: 0, behavior: "auto" });
+    if (!sameRoute) {
+      if (dialog.open) dialog.close();
+      scrollInstantly(window);
+      // Give every route a focus destination; specific binders may refine it.
+      root.focus({ preventScroll: true });
+    }
     if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute); bindToday(root, context, currentRoute); }
-    else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute); bindPlan(root, context, { isRouteChange: !sameRoute }); }
+    else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute, { isRouteChange: !sameRoute }); bindPlan(root, context, { isRouteChange: !sameRoute }); }
     else if (currentRoute.view === "exams") { setDocumentTitle("Exams"); root.innerHTML = renderExams(context, currentRoute); bindExams(root, context, currentRoute); }
     else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute); bindLog(root, context, currentRoute); }
-    else { setDocumentTitle("Guide"); root.innerHTML = renderGuide(context, currentRoute); bindGuide(root, context, currentRoute); }
-    if (!sameRoute) root.focus({ preventScroll: true });
+    else { setDocumentTitle("Guide"); root.innerHTML = renderGuide(context, currentRoute, { isRouteChange: !sameRoute }); bindGuide(root, context, currentRoute, { isRouteChange: !sameRoute }); }
     renderedRoute = routeKey;
     restoreView?.();
   } catch (error) {
@@ -408,6 +412,13 @@ dialog.addEventListener("keydown", (event) => {
   }
 });
 dialog.addEventListener("close", () => { dialogBody.innerHTML = ""; if (previousFocus?.isConnected) previousFocus.focus(); previousFocus = null; });
+// Re-selecting Plan is an explicit request for the full schedule, even when
+// its hash is already #plan and the browser would emit no hashchange.
+document.querySelectorAll('[data-nav="plan"]').forEach((link) => link.addEventListener("click", (event) => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  navigate("plan");
+}));
 document.querySelectorAll("[data-global-log]").forEach((button) => button.addEventListener("click", () => openQuickLog()));
 document.querySelectorAll("[data-sync-open]").forEach((button) => button.addEventListener("click", openSyncDialog));
 window.addEventListener("storage", (event) => { if (event.key?.startsWith("mcatMomentum.state")) { state = loadState(); renderCurrent(); } });
@@ -417,7 +428,7 @@ async function initialize() {
     [data, state] = await Promise.all([loadSiteData(), Promise.resolve(loadState())]);
     context.data = data;
     context.state = state;
-    startRouter((route) => { currentRoute = route; renderCurrent(); });
+    startRouter((route) => { currentRoute = route; renderCurrent({ routeChange: true }); });
     renderSyncChrome();
     initializeSync({
       getState: () => state,

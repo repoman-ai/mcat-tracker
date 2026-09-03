@@ -1,3 +1,19 @@
+/** Route changes must not inherit CSS smooth scrolling and race their target. */
+export function scrollInstantly(window, { left = 0, top = 0 } = {}) {
+  const element = window.document?.documentElement;
+  const previous = element?.style.scrollBehavior;
+  if (element) element.style.scrollBehavior = "auto";
+  window.scrollTo({ left, top, behavior: "instant" });
+  if (element) element.style.scrollBehavior = previous;
+}
+
+export function focusTarget(element) {
+  if (!element) return;
+  const focus = element.matches("details") ? element.querySelector("summary") : element;
+  focus?.focus({ preventScroll: true });
+  element.scrollIntoView({ block: "start", behavior: "instant" });
+}
+
 /** Preserve a mounted view during data updates; route/filter changes opt out. */
 export function captureViewState(root, window) {
   const key = (element) => element.id || element.dataset.viewKey;

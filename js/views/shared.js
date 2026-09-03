@@ -1,6 +1,7 @@
-import { getModeDetails, modeLabel } from "../data.js";
-import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask } from "../daily.js";
-import { escapeAttr, escapeHTML, formatDateLong, countPracticeQuestions } from "../utils.js";
+import { captureViewState } from "../view-state.js";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js";
+import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus } from "../daily.js";
+import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js";
 
 export function statusLabel(status = "not-started") {
   return {
@@ -11,10 +12,10 @@ export function statusLabel(status = "not-started") {
   }[status] || "Not started";
 }
 
-export function completionButton(row, state, { compact = false } = {}) {
+export function completionButton(row, state, { compact = false, focusPrefix = "complete" } = {}) {
   const complete = state.daily[row.id]?.status === "complete";
   const label = `${row.historical ? "Completed — saved history (read-only):" : complete ? "Completed — reopen" : "Mark complete:"} ${formatDateLong(row.date)} — ${row.assignment}`;
-  return `<button class="completion-check ${complete ? "is-checked" : ""} ${compact ? "completion-check--compact" : ""}" type="button" ${row.historical ? "disabled" : `data-toggle-complete="${escapeAttr(row.id)}" data-view-focus="complete-${escapeAttr(row.id)}"`} aria-pressed="${complete}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="completion-check__box" aria-hidden="true">${complete ? "✓" : ""}</span><span>${complete ? "Completed" : "Mark complete"}</span></button>`;
+  return `<button class="completion-check ${complete ? "is-checked" : ""} ${compact ? "completion-check--compact" : ""}" type="button" ${row.historical ? "disabled" : `data-toggle-complete="${escapeAttr(row.id)}" data-view-focus="${focusPrefix}-${escapeAttr(row.id)}"`} aria-pressed="${complete}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="completion-check__box" aria-hidden="true">${complete ? "✓" : ""}</span><span>${complete ? "Completed" : "Mark complete"}</span></button>`;
 }
 
 export function bindCompletionButtons(container, context) {
@@ -48,6 +49,63 @@ export function bindCompletionButtons(container, context) {
       });
     });
   });
+}
+
+export function workRow(row, state, today, completed = false) {
+  const age = daysBetween(row.date, today);
+  const deferred = state.daily[row.id]?.status === "deferred";
+  const timing = completed ? "Completed" : `${deferred ? "Deferred" : "Past due"} · ${age === 1 ? "yesterday" : `${age} days ago`}`;
+  const text = `<span class="work-row__date ${deferred ? "is-deferred" : ""}">${escapeHTML(formatDate(row.date, { includeYear: completed }))} · ${escapeHTML(timing)}</span><strong>${escapeHTML(row.assignment)}</strong>`;
+  return `<li class="work-row" data-work-row="${escapeAttr(row.id)}">
+    ${completionButton(row, state, { compact: true, focusPrefix: "work-complete" })}
+    ${row.historical ? `<div class="work-row__detail">${text}<small>Saved history · outside the current plan</small></div>` : `<button class="work-row__detail" type="button" data-open-assignment="${escapeAttr(row.id)}" data-view-focus="open-${escapeAttr(row.id)}" aria-label="${escapeAttr(`Open ${formatDateLong(row.date)} — ${row.assignment}`)}">${text}<small>View details</small></button>`}
+    ${!completed && !row.historical ? `<button class="button button--quiet work-row__defer" type="button" data-defer-day="${escapeAttr(row.id)}" data-view-focus="defer-${escapeAttr(row.id)}" aria-label="${escapeAttr(`${deferred ? "Resume" : "Defer"} ${formatDateLong(row.date)}`)}">${deferred ? "Resume" : "Defer"}</button>` : ""}
+  </li>`;
+}
+
+export function bindWorkRows(container, context) {
+  container.querySelectorAll("[data-defer-day]").forEach((button) => button.addEventListener("click", () => {
+    const id = button.dataset.deferDay;
+    const status = context.state.daily[id]?.status === "deferred" ? resumedStatus(context.state.daily[id]) : "deferred";
+    context.updateState(withDailyStatus(context.state, id, status), {
+      success: status === "deferred" ? "Deferred — still in your unfinished work" : "Assignment resumed",
+    });
+  }));
+  container.querySelectorAll("[data-open-assignment]").forEach((button) => button.addEventListener("click", () => {
+    const row = context.data.index.scheduleByDate.get(button.dataset.openAssignment);
+    context.openDialog({
+      title: "Assignment details",
+      body: assignmentDetailHTML(row, context.data, context.state),
+      onMount: (dialog) => {
+        const mount = () => {
+          bindAssignmentDetail(dialog, modalContext);
+          bindCompletionButtons(dialog, modalContext);
+        };
+        const modalContext = { ...context, get state() { return context.state; }, updateState(next, options) {
+          // Checklist feedback must not erase unsaved notes or count edits.
+          const drafts = [...dialog.querySelectorAll("[data-detail-notes], [data-detail-questions], [data-detail-cars]")].map((field) => [
+            field.hasAttribute("data-detail-notes") ? "[data-detail-notes]" : field.hasAttribute("data-detail-questions") ? "[data-detail-questions]" : "[data-detail-cars]",
+            field.value,
+          ]);
+          const statusDraft = dialog.querySelector("[data-detail-status]")?.value;
+          const statusEdited = statusDraft !== (context.state.daily[row.id]?.status || "not-started");
+          const restore = captureViewState(dialog, window);
+          const top = dialog.scrollTop;
+          const saved = context.updateState(next, options);
+          if (saved !== false && dialog.open) {
+            dialog.querySelector("[data-dialog-body]").innerHTML = assignmentDetailHTML(row, context.data, context.state);
+            for (const [selector, value] of drafts) dialog.querySelector(selector).value = value;
+            if (statusEdited) dialog.querySelector("[data-detail-status]").value = statusDraft;
+            mount();
+            restore();
+            dialog.scrollTop = top;
+          }
+          return saved;
+        } };
+        mount();
+      },
+    });
+  }));
 }
 
 export function taskChecklist(row, state) {
@@ -131,6 +189,7 @@ export function assignmentDetailHTML(row, data, state) {
           <span class="chip chip--soft">${escapeHTML(row.estimatedWorkload.label)}</span>
         </div>
       </section>
+      ${isStudyRow(row) ? `<div class="button-row">${completionButton(row, state, { focusPrefix: "detail-complete" })}<span class="status-badge status-badge--${escapeAttr(daily.status || "not-started")}">${escapeHTML(statusLabel(daily.status))}</span></div>` : ""}
       <dl class="detail-list detail-list--grid">
         <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "No resource required")}</dd></div>
         <div><dt>Mode</dt><dd>${escapeHTML(modeLabel(row.mode))}</dd></div>
@@ -145,6 +204,7 @@ export function assignmentDetailHTML(row, data, state) {
       ${modeDetails(data, row.mode)}
       <section class="inline-editor">
         <h4>Your record for this day</h4>
+        <p class="muted">Deferred keeps this day unfinished, with its original date. Resume it whenever you are ready.</p>
         <div class="form-grid form-grid--three">
           <label>Status<select data-detail-status data-assignment-id="${escapeAttr(row.id)}">
             ${["not-started", "in-progress", "complete", "deferred"].map((value) => `<option value="${value}" ${daily.status === value ? "selected" : ""}>${statusLabel(value)}</option>`).join("")}
@@ -181,8 +241,7 @@ export function bindAssignmentDetail(dialog, context) {
       daily: {
         ...context.state.daily,
         [id]: {
-          ...existing,
-          status: selectedStatus,
+          ...withDailyStatus(context.state, id, selectedStatus).daily[id],
           ...(completedTasks ? { completedTasks } : {}),
           actualQuestions: Number(dialog.querySelector(`[data-detail-questions][data-assignment-id="${CSS.escape(id)}"]`)?.value || 0),
           actualCars: Number(dialog.querySelector(`[data-detail-cars][data-assignment-id="${CSS.escape(id)}"]`)?.value || 0),
