@@ -209,9 +209,9 @@ input:user-invalid, textarea:user-invalid, select:user-invalid { border-color: #
 .today-tabs a { display: inline-flex; align-items: center; gap: .5rem; min-height: var(--touch); padding: .45rem .85rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--paper); color: var(--muted); font-size: .85rem; font-weight: 750; text-decoration: none; }
 .today-tabs a[aria-current] { background: var(--ink-strong); border-color: var(--ink-strong); color: #fff; }
 .today-tabs span { min-width: 1.5rem; text-align: center; border-radius: 1rem; background: var(--teal-soft); color: #285f47; font-size: .75rem; }
-.catchup-card { overflow: hidden; border: 1px solid #d8cfbf; border-radius: var(--radius); background: var(--paper); }
-.catchup-card > header { display: flex; align-items: center; justify-content: space-between; gap: .4rem; padding: 0 .65rem; background: var(--gold-soft); }
-.catchup-card h2 { display: flex; align-items: center; gap: .4rem; margin: 0; font-family: inherit; font-size: .85rem; letter-spacing: 0; }
+.catchup-card { margin-bottom: 1rem; overflow: hidden; border: 1px solid #d8cfbf; border-radius: var(--radius); background: var(--paper); }
+.catchup-card > header { display: flex; align-items: center; justify-content: space-between; gap: .4rem; padding: .35rem .65rem; background: var(--gold-soft); }
+.catchup-card h2 { display: flex; align-items: center; gap: .4rem; margin: 0; font-family: inherit; font-size: 1.1rem; letter-spacing: 0; }
 .catchup-card h2 span { color: #77582e; }
 .catchup-card > header > a { display: inline-flex; align-items: center; min-height: var(--touch); padding-inline: .4rem; color: #77582e; font-size: .75rem; font-weight: 750; }
 .catchup-list, .completed-list { margin: 0; padding: 0; list-style: none; }
@@ -745,8 +745,8 @@ body.is-locked .app-shell { display: none; }
 .tomorrow-preview span, .tomorrow-preview strong { display: block; }
 .tomorrow-preview span { font-size: .78rem; color: var(--muted); }
 .tomorrow-preview strong { margin-top: .3rem; font-size: .95rem; }
-.today-backlog, .plan-filters, .plan-guidance, .registered-date-control, .entry-filters { margin: 0 0 1rem; }
-.today-backlog > summary, .plan-filters > summary, .plan-guidance > summary, .registered-date-control > summary, .entry-filters > summary { min-height: 44px; padding: .65rem; cursor: pointer; font-size: .85rem; font-weight: 650; }
+.plan-filters, .plan-guidance, .registered-date-control, .entry-filters { margin: 0 0 1rem; }
+.plan-filters > summary, .plan-guidance > summary, .registered-date-control > summary, .entry-filters > summary { min-height: 44px; padding: .65rem; cursor: pointer; font-size: .85rem; font-weight: 650; }
 .recorded-counts { margin: 1rem 0 .5rem; display: grid; gap: .8rem; }
 .recorded-counts dt { font-size: .78rem; color: var(--muted); }
 .recorded-counts dd { margin: .15rem 0 0; font-size: .85rem; font-weight: 600; }

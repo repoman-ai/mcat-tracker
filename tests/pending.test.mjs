@@ -24,14 +24,17 @@ test("before/first plan day has no pending work, including superseded August his
   }
 });
 
-test("backlog is oldest first without displacing today’s primary action", () => {
+test("Past due is visible first, above all Today cards, with the oldest assignments first", () => {
   preview("2026-09-10");
   const state = empty();
   const rows = pendingRows({ ...data, schedule: [...data.schedule].reverse() }, state);
   assert.deepEqual(rows.map((row) => row.date), data.schedule.filter((row) => isStudyRow(row) && row.date < "2026-09-10").map((row) => row.date));
   const html = renderToday({ data, state });
-  assert.ok(html.indexOf('data-start-day=') < html.indexOf('class="catchup-card"'));
-  assert.ok(html.indexOf('class="today-backlog-link"') < html.indexOf('class="today-action '));
+  const pastDue = html.indexOf('<section class="catchup-card"');
+  const todayGrid = html.indexOf('<div class="today-grid"');
+  assert.ok(pastDue >= 0);
+  assert.ok(todayGrid > pastDue);
+  assert.doesNotMatch(html, /class="today-backlog"/);
   assert.deepEqual([...html.matchAll(/data-work-row="([^"]+)"/g)].map((m) => m[1]), rows.slice(0, 3).map((row) => row.id));
   assert.match(html, new RegExp(`Showing oldest 3 of ${rows.length}`));
   assert.match(html, new RegExp(`View all ${rows.length} in Plan`));
@@ -70,7 +73,10 @@ test("no horizon or item cap silently drops old work", () => {
 test("catch-up stays present on rest, exam, placeholder and after-plan days", () => {
   for (const date of ["2026-09-05", "2026-11-26", "2027-01-22", "2027-01-24"]) {
     preview(date);
-    assert.match(renderToday({ data, state: empty() }), /class="catchup-card"/);
+    const html = renderToday({ data, state: empty() });
+    assert.match(html, /class="catchup-card"/);
+    assert.equal(html.match(/<(?:section|article)\b[^>]*>/)?.[0], '<section class="catchup-card" aria-labelledby="catchup-title">');
+    assert.doesNotMatch(html, /class="today-backlog"/);
   }
 });
 

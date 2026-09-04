@@ -99,7 +99,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
   const row = todayContext.row;
   const due = dueEntries(state, today).filter((entry) => entry.dueState !== "upcoming");
   const repairs = due.length ? `<p class="pending-repairs"><a href="#log/repair">${plural(due.length, "retest")} due</a></p>` : "";
-  if (!row) return `<header class="view-header today-header"><div><h1>End of the dated plan</h1><p>Choose your next block using your registered exam date and readiness evidence.</p></div></header>${todayTabs(completed.length)}<section class="card"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><a class="button" href="#log/repair">Open repair queue</a> <a href="#exams">Review exams</a></section>${repairs}${catchUpSection(pending, state, today)}${countdown(data, state, today)}`;
+  if (!row) return `<header class="view-header today-header"><div><h1>End of the dated plan</h1><p>Choose your next block using your registered exam date and readiness evidence.</p></div></header>${todayTabs(completed.length)}${catchUpSection(pending, state, today)}<section class="card"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><a class="button" href="#log/repair">Open repair queue</a> <a href="#exams">Review exams</a></section>${repairs}${countdown(data, state, today)}`;
   const daily = state.daily[row.id] || {};
   const status = daily.status || "not-started";
   const done = status === "complete";
@@ -117,6 +117,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
   const timing = todayContext.state === "before-plan" ? `The plan begins ${formatDateLong(row.date)}. No catch-up is needed.` : todayContext.state === "gap" ? `No row is assigned today. Next block: ${formatDateLong(row.date)}.` : `${typeof row.week === "number" ? `Week ${row.week}` : "Test window"} · ${row.phase}`;
   return `<header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(timing)}</span><h1>${escapeHTML(state.settings.displayName ? `${heading}, ${state.settings.displayName}` : heading)}</h1></div></header>
     ${todayTabs(completed.length)}
+    ${catchUpSection(pending, state, today)}
     <div class="today-grid"><div class="today-main">
     <article id="today-assignment" tabindex="-1" class="today-action today-action--${escapeAttr(row.dayType)} ${done ? "is-complete" : ""}">
       <div class="today-action__top"><span class="eyebrow">${done ? "Today is complete" : row.isRest ? "Rest is today's plan" : escapeHTML(actionCopy(row, status, todayContext.state).eyebrow)}</span>${!done && !row.isRest ? `<span class="workload-pill" title="Advisory workload estimate">${escapeHTML(row.estimatedWorkload.label)}</span>` : ""}</div>
@@ -130,7 +131,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
       ${done ? next : ""}
     </article>
     ${actionable && (!done || focus.startedAt) ? `<section class="focus-card" aria-labelledby="focus-title"><div><h3 id="focus-title">One calm block</h3><p>Optional 25-minute timer. Leaving Today pauses it; return to resume.</p></div><div class="focus-controls"><output data-focus-clock aria-live="off">25:00</output><button class="button" type="button" data-focus-toggle>Start</button><button class="button button--quiet" type="button" data-focus-finish disabled>Finish block</button></div></section>` : ""}
-    ${pending.length ? `<details class="today-backlog" data-view-key="today-backlog"><summary>${pending.length} unfinished days · review when useful</summary>${catchUpSection(pending, state, today)}</details>` : ""}${repairs}
+    ${repairs}
     ${!done ? next : ""}
     </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${progressBar(completedDays, studyRows.length, "Study days complete")}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details data-view-key="today-milestone"><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
 }

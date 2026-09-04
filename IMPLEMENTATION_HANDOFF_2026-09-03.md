@@ -118,7 +118,7 @@ The feedback was checked against the implementation; the accepted corrections ar
 
 **Lazy details/search/print:** lightweight summaries for every day remain mounted; editor/reference bodies are mounted when opened. Browser find and whole-page assistive-technology browsing cannot search unmounted reference text, and printing the current page is not a complete-plan export. This is an intentional performance tradeoff. Use Guide for reference search and the XLSX report for a complete dated schedule/records export; open a day to read its detailed reference. No claim of full-plan printing or screen-reader speech verification is made.
 
-**Earlier UI removals:** the shorter subject heading, removed At-a-glance panel, secondary backlog/phase disclosures, and removal of the whole-main live region remain intentional. Full chapter tasks are still visible in the checklist. `in-progress` is reached by partial checklist completion as well as the status select; the review's claim that the select is the only path was incorrect. Keep route focus and targeted feedback rather than announcing the entire replaced page.
+**Earlier UI removals:** the shorter subject heading, removed At-a-glance panel, secondary phase disclosures, and removal of the whole-main live region remain intentional. Full chapter tasks are still visible in the checklist. `in-progress` is reached by partial checklist completion as well as the status select; the review's claim that the select is the only path was incorrect. Keep route focus and targeted feedback rather than announcing the entire replaced page.
 
 **Documentation/process:** retain the existing audit and handoff in the repository because they record requested decisions and verification limits. Do not rewrite the already-pushed implementation history. Future feature changes should remain separate from this corrective review.
 
@@ -129,3 +129,11 @@ New regression coverage exercises mastery reminder filtering, saved-field confli
 Interactive checks used synthetic data only at `127.0.0.1:8935`, with an empty sync-config response from a temporary loopback server. Two independent browser tabs confirmed the incoming saved-note conflict, blocked Save, both resolution choices, and preservation of the chosen note. An open Plan reference section survived a checkbox rerender. A blank retest outcome remained invalid with the dialog open; explicit Resolved saved successfully. No captured warning/error logs in those checks. This is a same-origin cross-tab test, not a claim of live cloud/two-device verification.
 
 Final follow-up validation: **67/67 Node tests passed**, including the nested Python suite (**10/10**). All deployed JavaScript modules passed `node --check`; `git diff --check` passed. Authentication/Supabase configuration has no diff.
+
+## Past due visibility correction
+
+The user explicitly requires overdue work to come first. Past due is now an always-expanded, full-width box above every Today content card, including after the dated plan ends. It retains the oldest three assignments, completion controls, total count, and link to the full past-due list. Its heading is larger and the gold header remains prominent. This supersedes the earlier collapsed/secondary backlog design. Personal records, cloud state, and authentication are unchanged.
+
+Regression coverage now asserts that the box exists before the Today grid and is the first content card on rest, exam, test-window, and after-plan days; it also rejects the removed collapsed wrapper.
+
+Validation: 25/25 targeted pending/checklist tests passed; `git diff --check` passed. A synthetic-only browser check at `127.0.0.1:8935` confirmed the expanded Past due box spans the page above the assignment and weekly summary. The temporary server supplied empty sync configuration; no personal/cloud data or authentication was accessed.
