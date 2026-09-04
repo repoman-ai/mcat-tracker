@@ -57,11 +57,14 @@ export function bindCompletionButtons(container, context) {
   });
 }
 
-export function workRow(row, state, today, completed = false) {
+export function workRow(row, state, today, completed = false, { chapterLines = false } = {}) {
   const age = daysBetween(row.date, today);
   const deferred = state.daily[row.id]?.status === "deferred";
   const timing = completed ? "Completed" : `${deferred ? "Deferred" : "Past due"} · ${age === 1 ? "yesterday" : `${age} days ago`}`;
-  const text = `<span class="work-row__date ${deferred ? "is-deferred" : ""}">${escapeHTML(formatDate(row.date, { includeYear: completed }))} · ${escapeHTML(timing)}</span><strong>${escapeHTML(row.assignment)}</strong>`;
+  const assignment = chapterLines && row.chapters?.length
+    ? `<span class="work-row__chapters">${row.chapters.map((chapter) => `<span><span class="work-row__chapter-code">${escapeHTML(chapter.id)}</span> ${escapeHTML(chapter.title)}</span>`).join("")}</span>`
+    : `<strong>${escapeHTML(row.assignment)}</strong>`;
+  const text = `<span class="work-row__date ${deferred ? "is-deferred" : ""}">${escapeHTML(formatDate(row.date, { includeYear: completed }))} · ${escapeHTML(timing)}</span>${assignment}`;
   return `<li class="work-row" data-work-row="${escapeAttr(row.id)}">
     ${completionButton(row, state, { compact: true, focusPrefix: "work-complete" })}
     ${row.historical ? `<div class="work-row__detail">${text}<small>Saved history · outside the current plan</small></div>` : `<button class="work-row__detail" type="button" data-open-assignment="${escapeAttr(row.id)}" data-view-focus="open-${escapeAttr(row.id)}" aria-label="${escapeAttr(`Open ${formatDateLong(row.date)} — ${row.assignment}`)}">${text}<small>View details</small></button>`}

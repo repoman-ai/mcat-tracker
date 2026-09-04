@@ -137,3 +137,9 @@ The user explicitly requires overdue work to come first. Past due is now an alwa
 Regression coverage now asserts that the box exists before the Today grid and is the first content card on rest, exam, test-window, and after-plan days; it also rejects the removed collapsed wrapper.
 
 Validation: 25/25 targeted pending/checklist tests passed; `git diff --check` passed. A synthetic-only browser check at `127.0.0.1:8935` confirmed the expanded Past due box spans the page above the assignment and weekly summary. The temporary server supplied empty sync configuration; no personal/cloud data or authentication was accessed.
+
+## Past due visual polish
+
+Reviewed the restored box with a synthetic nine-day backlog on desktop and at 390×844 and 320×667. Repeated full subject names made phone rows dense, so the Today preview now gives each chapter its own line using the existing chapter code and full title. Complete assignment names remain in accessible labels and the detail dialog. Non-chapter assignments retain their original text. Desktop completion, details, and Defer controls align in three columns; phones retain the roomy stacked controls. Added a restrained count badge, improved header/footer spacing and wrapping, and removed the redundant Full schedule link while retaining View all in Plan. Past due remains the first expanded content card. Also corrected the single-chapter subtitle.
+
+Validation: 25/25 pending/checklist tests passed, JavaScript syntax and diff checks passed. Browser checks confirmed no horizontal overflow at 320px, readable chapter wrapping, working assignment details, and the full nine-row Plan queue through View all. No captured browser warnings/errors. Testing used only the existing synthetic loopback origin with empty sync configuration; personal data and authentication were untouched.

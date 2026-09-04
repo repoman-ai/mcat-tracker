@@ -49,8 +49,8 @@ function catchUpSection(rows, state, today) {
   const deferred = rows.filter((row) => state.daily[row.id]?.status === "deferred").length;
   return `<section class="catchup-card" aria-labelledby="catchup-title">
     <header><h2 id="catchup-title">Past due <span>${rows.length}</span></h2><a href="#plan/past-due">View all ${rows.length} in Plan</a></header>
-    <ul class="catchup-list" aria-label="Past-due assignments, oldest first">${rows.slice(0, 3).map((row) => workRow(row, state, today)).join("")}</ul>
-    <p>${rows.length > 3 ? `Showing oldest 3 of ${rows.length}` : "Oldest first"}${deferred ? ` · ${deferred} deferred (included)` : ""} · <a href="#plan">Full schedule</a></p>
+    <ul class="catchup-list" aria-label="Past-due assignments, oldest first">${rows.slice(0, 3).map((row) => workRow(row, state, today, false, { chapterLines: true })).join("")}</ul>
+    <p>${rows.length > 3 ? `Showing oldest 3 of ${rows.length}` : "Oldest first"}${deferred ? ` · ${deferred} deferred (included)` : ""}</p>
   </section>`;
 }
 
@@ -122,7 +122,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
     <article id="today-assignment" tabindex="-1" class="today-action today-action--${escapeAttr(row.dayType)} ${done ? "is-complete" : ""}">
       <div class="today-action__top"><span class="eyebrow">${done ? "Today is complete" : row.isRest ? "Rest is today's plan" : escapeHTML(actionCopy(row, status, todayContext.state).eyebrow)}</span>${!done && !row.isRest ? `<span class="workload-pill" title="Advisory workload estimate">${escapeHTML(row.estimatedWorkload.label)}</span>` : ""}</div>
       ${done ? `<div class="day-success"><span aria-hidden="true">✓</span><div><h2>${isScheduled ? "Today's plan is complete" : "Block complete"}</h2><p>${escapeHTML(dayTitle(row))} · ${completedDays}/${studyRows.length} study days this week</p></div></div>` : `<h2>${escapeHTML(dayTitle(row))}</h2>`}
-      ${!done && row.chapters.length ? `<p class="assignment-subtitle">${row.chapters.length} chapters · ${escapeHTML(modeLabel(row.mode))} · ${escapeHTML(row.resource)}</p>` : ""}
+      ${!done && row.chapters.length ? `<p class="assignment-subtitle">${plural(row.chapters.length, "chapter")} · ${escapeHTML(modeLabel(row.mode))} · ${escapeHTML(row.resource)}</p>` : ""}
       ${!done && stopRule ? `<p class="stop-rule">${escapeHTML(stopRule)}</p>` : ""}
       ${actionable ? (done ? `<details class="completed-checklist" data-view-key="completed-${escapeAttr(row.id)}" ${!isRouteChange ? "open" : ""}><summary>Review completed steps</summary>${taskChecklist(row, state)}</details>` : taskChecklist(row, state)) : ""}
       <div class="button-row today-tools">${actionable ? `<button class="button" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button>` : ""}<button class="button button--quiet" type="button" data-open-assignment="${escapeAttr(row.id)}">${done ? "Review day" : row.isRest ? "Review rest guidance" : "Details & counts"}</button></div>
