@@ -88,6 +88,13 @@ export function dueEntries(state, today = todayISO()) {
     .map((entry) => ({ ...entry, dueState: entry.retestDate < today ? "overdue" : entry.retestDate === today ? "today" : "upcoming" }));
 }
 
+/** Unreviewed captures are reminders, not evidence of a reviewed mistake. */
+export function isMasteryEvidence(entry, topic) {
+  return entry.captureStatus !== "needs-review" && (entry.masteryTopicId
+    ? entry.masteryTopicId === topic.id
+    : entry.topic === topic.topic || entry.tags?.includes(topic.topic));
+}
+
 export function scheduledWeekForDate(data, iso = todayISO()) {
   const row = data.index.scheduleByDate.get(iso);
   if (row && typeof row.week === "number") return row.week;

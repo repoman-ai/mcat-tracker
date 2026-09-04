@@ -123,14 +123,14 @@ function drawChart(canvas, data, state, sections = false) {
   ctx.font = "12px system-ui";
   ctx.strokeStyle = "#d7e2e8";
   ctx.fillStyle = "#607381";
-  (sections ? [118, 122, 126, 130, 132] : [472, 486, 500, 514, 528]).forEach((tick) => {
+  (sections ? [118, 120, 122, 124, 126, 128, 130, 132] : [472, 486, 500, 514, 528]).forEach((tick) => {
     const y = sections ? sectionY(tick) : totalY(tick);
     ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(width - pad.right, y); ctx.stroke();
     ctx.fillText(String(tick), 8, y + 4);
   });
-  const targetY = totalY(data.plan.target_score);
   if (!sections) {
-  ctx.strokeStyle = "#d9902f"; ctx.setLineDash([6, 5]); ctx.beginPath(); ctx.moveTo(pad.left, targetY); ctx.lineTo(width - pad.right, targetY); ctx.stroke(); ctx.setLineDash([]);
+    const targetY = totalY(data.plan.target_score);
+    ctx.strokeStyle = "#d9902f"; ctx.setLineDash([6, 5]); ctx.beginPath(); ctx.moveTo(pad.left, targetY); ctx.lineTo(width - pad.right, targetY); ctx.stroke(); ctx.setLineDash([]);
   }
   const series = [
     { key: "total", color: "#0e2a47", map: totalY, width: 3 },

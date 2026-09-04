@@ -1,4 +1,5 @@
 import { parseActualCount } from "./daily.js";
+import { focusMinutes } from "./focus-timer.js";
 import { APP_VERSION, uniqueId } from "./utils.js";
 
 export const STORAGE_KEY = "mcatMomentum.state.v2";
@@ -182,6 +183,13 @@ export function validateBackup(payload, schedule = null) {
   }
   for (const record of Object.values(payload.state.exams || {})) {
     for (const value of Object.values(record.diagnosticPercent || {})) if (value !== "" && (!Number.isFinite(Number(value)) || Number(value) < 0 || Number(value) > 100)) throw new Error("Diagnostic percentages must be between 0 and 100. No data was changed.");
+  }
+  if (payload.state.focusSessions !== undefined && !Array.isArray(payload.state.focusSessions)) throw new Error("Focus sessions must be an array. No data was changed.");
+  for (const session of payload.state.focusSessions || []) {
+    focusMinutes(session);
+    for (const key of ["startedAt", "endedAt"]) {
+      if (session[key] != null && (typeof session[key] !== "string" || !Number.isFinite(Date.parse(session[key])))) throw new Error("Focus session dates must be valid timestamps. No data was changed.");
+    }
   }
   const state = normalizeState(payload.state);
   const activeIds = schedule ? new Set(schedule.map((row) => row.id)) : null;

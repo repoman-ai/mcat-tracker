@@ -2659,6 +2659,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "stopRule": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
       "estimatedWorkload": {
         "lowMinutes": 122,
         "highMinutes": 198,
@@ -2778,6 +2779,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "stopRule": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
       "estimatedWorkload": {
         "lowMinutes": 152,
         "highMinutes": 243,
@@ -2897,6 +2899,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "stopRule": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
       "estimatedWorkload": {
         "lowMinutes": 152,
         "highMinutes": 243,
@@ -2933,6 +2936,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "stopRule": "Cap today at 60-90 minutes including one CARS passage.",
       "estimatedWorkload": {
         "lowMinutes": 50,
         "highMinutes": 92,

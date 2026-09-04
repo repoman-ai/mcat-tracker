@@ -1,7 +1,7 @@
 import { focusTarget } from "../view-state.js";
 import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js";
 import { taskProgress } from "../daily.js";
-import { escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js";
+import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js";
 import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js";
 
 const defaultFilters = {
@@ -78,7 +78,7 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
       </summary>
       <div class="week-card__body">
         <p class="muted">${escapeHTML(warning)} <a href="#guide/honest-time-templates">Budget and estimate rules</a></p>
-        <div class="week-targets"><span><strong>${week.uworld_questions}</strong> UWorld</span><span><strong>${week.cars_passages}</strong> CARS passages</span>${week.exam_or_section_bank ? `<span><strong>${escapeHTML(week.exam_or_section_bank)}</strong> event</span>` : ""}</div>
+        <div class="week-targets"><span><strong>${rows.reduce((sum, row) => sum + countPracticeQuestions(row.practiceTarget), 0)}</strong> QBank questions</span><span><strong>${week.cars_passages}</strong> CARS passages</span>${week.exam_or_section_bank ? `<span><strong>${escapeHTML(week.exam_or_section_bank)}</strong> event</span>` : ""}</div>
         <div class="plan-days">${matching.map((row) => dayCard(row, context, row.date === detail, today)).join("")}</div>
       </div>
     </details>`;
@@ -103,7 +103,7 @@ export function renderPlan(context, route, { isRouteChange = true } = {}) {
   const resources = [...new Set(context.data.schedule.flatMap((row) => row.resource.split(";").map((item) => item.trim())).filter(Boolean))].sort();
   const rowsByWeek = new Map(context.data.plan.weeks.map((week) => [week.week, []]));
   context.data.schedule.forEach((row) => rowsByWeek.get(row.week)?.push(row));
-  const orderedWeeks = [...context.data.plan.weeks].sort((a, b) => (a.week === currentWeek ? -1 : b.week === currentWeek ? 1 : a.week - b.week));
+  const orderedWeeks = [...context.data.plan.weeks].sort((a, b) => Number(b.week === currentWeek) - Number(a.week === currentWeek) || a.week - b.week);
   const weeksHTML = orderedWeeks.map((week) => weekCard(week, rowsByWeek.get(week.week), context, currentWeek, route.detail, today)).join("");
   const testRows = context.data.schedule.filter((row) => row.week === "TEST").filter((row) => rowMatches(row, context.state, currentWeek, today));
 
@@ -165,16 +165,6 @@ export function bindPlan(container, context, { isRouteChange = true } = {}) {
   };
   const days = [...container.querySelectorAll("[data-assignment-details]")];
   days.forEach((details) => { details.addEventListener("toggle", () => hydrate(details)); hydrate(details); });
-  // captureViewState restores disclosure flags before requesting synchronous hydration.
-  const oldRestore = container._restorePlan;
-  if (oldRestore) container.removeEventListener?.("restore-disclosures", oldRestore);
-  container._restorePlan = () => days.forEach(hydrate);
-  container.addEventListener?.("restore-disclosures", container._restorePlan);
-  const restorePlan = container._restorePlan;
-  context.registerViewCleanup?.(() => {
-    container.removeEventListener("restore-disclosures", restorePlan);
-    if (container._restorePlan === restorePlan) delete container._restorePlan;
-  });
 
   if (isRouteChange && window.location.hash === "#plan/past-due") {
     focusTarget(container.querySelector("#plan-past-due"));
@@ -182,4 +172,6 @@ export function bindPlan(container, context, { isRouteChange = true } = {}) {
     const target = container.querySelector(`[data-assignment-details="${CSS.escape(decodeURIComponent(window.location.hash.split("/").slice(1).join("/")))}"]`);
     if (target) focusTarget(target);
   }
+  // The renderer calls this after restoring outer disclosures, before focus.
+  return () => days.forEach(hydrate);
 }

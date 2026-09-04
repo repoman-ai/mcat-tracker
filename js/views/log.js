@@ -1,6 +1,6 @@
 import { clearEditorDraft, clearEditorDrafts } from "../editor-drafts.js";
 import { exportJSON, exportMistakeCSV, exportWorkbook } from "../export.js";
-import { dueEntries } from "../data.js";
+import { dueEntries, isMasteryEvidence } from "../data.js";
 import { mergeStates, validateBackup } from "../storage.js";
 import {
   debounce,
@@ -26,11 +26,11 @@ let lastSavedId = "";
 // topics, and the export centre as one column — about 12,000px on a phone before
 // a single entry existed. Each section is now its own deep-linkable panel.
 const LOG_TABS = [
-  { id: "capture", label: "Capture", hint: "Log a question" },
-  { id: "repair", label: "Repair", hint: "Retests and patterns" },
-  { id: "entries", label: "Entries", hint: "Full mistake log" },
-  { id: "mastery", label: "Mastery", hint: "40 high-yield topics" },
-  { id: "export", label: "Export", hint: "Backups and workbooks" },
+  { id: "capture", label: "Capture" },
+  { id: "repair", label: "Repair" },
+  { id: "entries", label: "Entries" },
+  { id: "mastery", label: "Mastery" },
+  { id: "export", label: "Export" },
 ];
 const TAB_IDS = new Set(LOG_TABS.map((tab) => tab.id));
 const PAGE_SIZE = 25;
@@ -46,7 +46,7 @@ export function resolveLogTab(detail = "") {
   return activeTab;
 }
 
-function tabStrip(context, overdue) {
+function tabStrip(context) {
   const counts = { entries: context.state.mistakes.length, repair: dueEntries(context.state).filter((entry) => entry.dueState !== "upcoming").length + context.state.mistakes.filter((entry) => entry.captureStatus === "needs-review").length };
   return `<nav class="log-tabs" aria-label="Log sections">${LOG_TABS.map((tab) => {
     const count = counts[tab.id];
@@ -205,7 +205,7 @@ function masterySection(context) {
   const today = todayISO();
   const filtered = context.data.workbook.mastery.topics.filter((topic) => {
     const user = context.state.mastery[topic.id] || {};
-    const relatedCount = context.state.mistakes.filter((entry) => (entry.masteryTopicId ? entry.masteryTopicId === topic.id : (entry.topic === topic.topic || entry.tags?.includes(topic.topic)))).length;
+    const relatedCount = context.state.mistakes.filter((entry) => isMasteryEvidence(entry, topic)).length;
     if (masteryFilters.section !== "all" && topic.section !== masteryFilters.section) return false;
     if (masteryFilters.confidence !== "all" && String(user.confidence ?? "never") !== masteryFilters.confidence) return false;
     if (masteryFilters.review === "never" && user.lastReviewed) return false;
@@ -217,7 +217,7 @@ function masterySection(context) {
     <div class="mastery-filters"><label>Section<select data-mastery-filter="section"><option value="all">All sections</option>${["CP", "BB", "PS", "CARS"].map((value) => `<option ${masteryFilters.section === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Confidence<select data-mastery-filter="confidence"><option value="all">All confidence</option><option value="never" ${masteryFilters.confidence === "never" ? "selected" : ""}>Not rated</option>${[0, 1, 2, 3].map((value) => `<option value="${value}" ${masteryFilters.confidence === String(value) ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Review need<select data-mastery-filter="review"><option value="all">All review states</option><option value="never" ${masteryFilters.review === "never" ? "selected" : ""}>Never reviewed</option><option value="due" ${masteryFilters.review === "due" ? "selected" : ""}>Due for review</option><option value="repeated" ${masteryFilters.review === "repeated" ? "selected" : ""}>Repeated mistakes</option></select></label></div>
     <div class="mastery-list">${filtered.map((topic) => {
       const user = context.state.mastery[topic.id] || {};
-      const relatedMistakes = context.state.mistakes.filter((entry) => (entry.masteryTopicId ? entry.masteryTopicId === topic.id : (entry.topic === topic.topic || entry.tags?.includes(topic.topic))));
+      const relatedMistakes = context.state.mistakes.filter((entry) => isMasteryEvidence(entry, topic));
       const chapters = relatedChapters(topic.topic, context.data);
       const due = user.nextReview && user.nextReview <= today;
       return `<article class="mastery-row ${due ? "is-due" : ""}" data-mastery-row="${escapeAttr(topic.id)}"><div class="mastery-row__lead"><span class="section-token section-token--${topic.section.toLowerCase()}">${escapeHTML(topic.section)}</span><div><h3>${escapeHTML(topic.topic)}</h3>${relatedMistakes.length || user.lastReviewed ? `<p>${relatedMistakes.length ? `${plural(relatedMistakes.length, "related mistake")}` : "No exact related mistakes"}${user.lastReviewed ? ` · reviewed ${formatDate(user.lastReviewed)}` : ""}</p>` : ""}</div></div><div class="confidence-control" role="group" aria-label="Confidence for ${escapeAttr(topic.topic)}">${[0, 1, 2, 3].map((value) => `<button type="button" data-confidence="${value}" data-topic-id="${escapeAttr(topic.id)}" data-view-focus="confidence-${escapeAttr(topic.id)}-${value}" aria-label="${value} — ${["Unfamiliar", "Recognize", "Explain", "Apply"][value]}" class="${user.confidence != null && user.confidence !== "" && Number(user.confidence) === value ? "is-selected" : ""}" aria-pressed="${user.confidence != null && user.confidence !== "" && Number(user.confidence) === value}">${value}</button>`).join("")}</div><details data-view-key="mastery-${escapeAttr(topic.id)}"><summary>Review details</summary><div class="mastery-detail"><div class="form-grid form-grid--two"><label>Last reviewed<input data-mastery-field="lastReviewed" type="date" value="${escapeAttr(user.lastReviewed || "")}"></label><label>Next review<input data-mastery-field="nextReview" type="date" value="${escapeAttr(user.nextReview || "")}"></label></div><label>Notes<textarea data-mastery-field="notes" rows="2">${escapeHTML(user.notes || "")}</textarea></label>${chapters.length ? `<div class="context-links"><span>Related chapters</span>${chapters.map((chapter) => `<a href="#plan/${escapeAttr(context.data.schedule.find((row) => row.chapterIds.includes(chapter.id))?.date || "")}">${escapeHTML(chapter.id)} ${escapeHTML(chapter.title)}</a>`).join("")}</div>` : ""}</div></details></article>`;
@@ -234,8 +234,9 @@ function entryDialog(entry, data) {
   return `<article class="entry-detail"><div class="entry-detail__top"><span class="result-chip">${escapeHTML(entry.result)}</span><span>${escapeHTML(formatDateLong(entry.date))}</span></div><h3>${escapeHTML(entry.topic)}</h3><dl class="detail-list detail-list--grid"><div><dt>Source</dt><dd>${escapeHTML(entry.source)}</dd></div><div><dt>Section</dt><dd>${escapeHTML(entry.section)}</dd></div><div><dt>Chapter</dt><dd>${escapeHTML(chapter ? `${chapter.id} · ${chapter.title}` : entry.chapterId || "—")}</dd></div><div><dt>Question ref</dt><dd>${escapeHTML(entry.questionRef || "—")}</dd></div><div><dt>Error type</dt><dd>${escapeHTML(entry.errorType)}</dd></div><div><dt>Confidence</dt><dd>${entry.confidence === "" ? "—" : entry.confidence}</dd></div></dl><section><h4>Why it was missed</h4><p>${escapeHTML(entry.whyMissed)}</p></section><section><h4>Correct reasoning</h4><p>${escapeHTML(entry.takeaway)}</p></section><section><h4>Concrete fix</h4><p>${escapeHTML(entry.fix)}</p></section><section><h4>Retest</h4><p>${entry.retestDate ? `${escapeHTML(formatDateLong(entry.retestDate))} · ${escapeHTML(entry.retestStatus)}` : "Not scheduled"}</p>${entry.retestResult ? `<p>${escapeHTML(entry.retestResult)}</p>` : ""}</section>${entry.notes ? `<section><h4>Notes</h4><p>${escapeHTML(entry.notes)}</p></section>` : ""}<div class="button-row"><button class="button button--primary" type="button" data-dialog-edit="${escapeAttr(entry.id)}">Edit entry</button>${entry.assignmentId ? `<a class="button button--quiet" href="#plan/${escapeAttr(entry.assignmentId)}">Open assignment</a>` : ""}</div></article>`;
 }
 
-export function renderLog(context, route = {}) {
+export function renderLog(context, route = {}, { isRouteChange = false } = {}) {
   const tab = resolveLogTab(route.detail || "");
+  if (isRouteChange || tab !== "repair") showAllRetests = false;
   const overdue = dueEntries(context.state).filter((entry) => entry.dueState === "overdue").length;
 
   const panels = {
@@ -243,11 +244,11 @@ export function renderLog(context, route = {}) {
     repair: () => `${needsReview(context)}${retestQueue(context)}${patternSummary(context)}`,
     entries: () => logTable(context),
     mastery: () => masterySection(context),
-    export: () => exportCenter(context),
+    export: () => exportCenter(),
   };
 
   return `<header class="view-header"><div><span class="eyebrow">${plural(context.state.mistakes.length, "saved entry", "saved entries")} · ${plural(overdue, "overdue retest")}</span><h1>Log + repair</h1></div></header>
-    ${tabStrip(context, overdue)}
+    ${tabStrip(context)}
     <div class="log-panel">${(panels[tab] || panels.capture)()}</div>`;
 }
 
@@ -279,10 +280,11 @@ function openEntry(context, id) {
 function openRetest(context, id) {
   const entry = context.state.mistakes.find((item) => item.id === id);
   if (!entry) return;
-  context.openDialog({ title: "Record retest", body: `<form data-retest-form><p class="dialog-lead"><strong>${escapeHTML(entry.topic)}</strong><br>${escapeHTML(entry.fix)}</p><label>Retest result<textarea required name="retestResult" rows="4" placeholder="What happened when you tried it again?">${escapeHTML(entry.retestResult || "")}</textarea></label><label>Status<select name="retestStatus"><option value="Resolved">Resolved</option><option value="Scheduled">Needs another retest</option><option value="Retested">Retested — no next date</option></select></label><label>Next retest date<input name="nextRetestDate" type="date" min="${todayISO()}" value=""></label><p class="form-error" data-retest-error role="alert"></p><button class="button button--primary" type="submit">Save retest</button></form>`, onMount: (dialog) => {
+  context.openDialog({ title: "Record retest", body: `<form data-retest-form><p class="dialog-lead"><strong>${escapeHTML(entry.topic)}</strong><br>${escapeHTML(entry.fix)}</p><label>Retest result<textarea required name="retestResult" rows="4" placeholder="What happened when you tried it again?">${escapeHTML(entry.retestResult || "")}</textarea></label><label>Status<select name="retestStatus" required><option value="">Choose an outcome</option><option value="Resolved">Resolved</option><option value="Scheduled">Needs another retest</option><option value="Retested">Retested — no next date</option></select></label><label>Next retest date<input name="nextRetestDate" type="date" min="${todayISO()}" value=""></label><p class="form-error" data-retest-error role="alert"></p><button class="button button--primary" type="submit">Save retest</button></form>`, onMount: (dialog) => {
     dialog.querySelector("[data-retest-form]").addEventListener("submit", (event) => {
       event.preventDefault();
       const values = formToObject(event.currentTarget);
+      if (!["Resolved", "Scheduled", "Retested"].includes(values.retestStatus)) { dialog.querySelector("[data-retest-error]").textContent = "Choose a retest outcome."; return; }
       if (values.retestStatus === "Scheduled" && !values.nextRetestDate) { dialog.querySelector("[data-retest-error]").textContent = "Choose the next retest date."; return; }
       const mistakes = context.state.mistakes.map((item) => item.id === id ? { ...item, ...(values.retestStatus === "Scheduled" ? { retestDate: values.nextRetestDate } : {}), retestResult: values.retestResult, retestStatus: values.retestStatus, updatedAt: new Date().toISOString() } : item);
       context.updateState({ ...context.state, mistakes }, { success: "Retest saved", onSaved: () => dialog.close() });
@@ -315,7 +317,7 @@ export function bindLog(container, context, route) {
   container.querySelector("[data-show-all-retests]")?.addEventListener("click", () => { showAllRetests = true; context.rerender(); });
   const form = container.querySelector("[data-mistake-form]");
   const draftSave = debounce(() => {
-    if (editingId || !form?.isConnected) return;
+    if (editingId || !form?.isConnected || form.querySelector(".draft-conflict")) return;
     const values = { ...formToObject(form), _updatedAt: new Date().toISOString() };
     context.updateState({ ...context.state, drafts: { ...context.state.drafts, mistake: values } }, {
       notify: false,
@@ -326,6 +328,7 @@ export function bindLog(container, context, route) {
     });
   }, 300);
   form?.addEventListener("input", draftSave);
+  form?.addEventListener("draft-resolved", draftSave);
   form?.addEventListener("change", (event) => {
     if (event.target.name === "chapterId") {
       const chapter = context.data.index.chapterById.get(event.target.value);

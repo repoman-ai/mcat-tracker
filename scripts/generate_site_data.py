@@ -556,6 +556,23 @@ def guide_links_for(row: dict[str, Any]) -> list[str]:
     return list(dict.fromkeys(links))
 
 
+# Reviewed display excerpts, checked against source notes during regeneration.
+# Rewording a source guardrail must update this mapping explicitly.
+TODAY_STOP_RULES = {
+    "2026-09-01": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
+    "2026-09-02": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
+    "2026-09-03": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
+    "2026-09-04": "Cap today at 60-90 minutes including one CARS passage.",
+}
+
+
+def stop_rule_for(raw: dict[str, Any]) -> str:
+    rule = TODAY_STOP_RULES.get(raw["date"], "")
+    if rule and rule not in raw["notes"]:
+        fail(f"Review the Today stop-rule excerpt for {raw['date']}: source notes changed")
+    return rule
+
+
 def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     with SCHEDULE_PATH.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
@@ -639,6 +656,8 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             "isSectionBank": is_section_bank,
             "isTestWindow": is_test_window,
         }
+        if rule := stop_rule_for(raw):
+            row["stopRule"] = rule
         extra_questions = re.search(r"\d+\s+(?:UWorld|[^;]*Section Bank)", row["practiceTarget"], re.I)
         if ((is_rest or is_review) and row["carsPassages"]) or ((is_rest or is_review or is_exam) and extra_questions):
             fail(f"Protected rest/review day {row['date']} has an extra practice quota")
@@ -864,8 +883,9 @@ This map shows where every authoritative source component appears. `data/site-da
 | Authoritative source | Source component | Website location | Treatment |
 |---|---|---|---|
 | `schedule.csv` | All {validation['dailyRows']} dated rows | Today; Plan; Daily Schedule export | Today prioritizes the current/next action; Plan exposes every row and complete details. |
+| `schedule.csv` + saved daily records | Pending and completed study days | Today Past due disclosure; Today → Completed; Plan | Unfinished work stays secondary to today. Completed includes saved historical records. No inferred completion dates. |
 | `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text and per-chapter mode multiplicity are preserved; repeated modes are displayed once. |
-| `plan.json` | Metadata, {validation['numericWeeks']} weeks, targets, phases | Today; Plan; Guide | Weekly progress uses the exact planned hours, UWorld, CARS, focus, and milestone values. |
+| `plan.json` | Metadata, {validation['numericWeeks']} weeks, targets, phases | Today; Plan; Guide | Planned hours, CARS, focus, and milestones use source values; QBank totals sum scheduled UWorld and Section Bank quantities. |
 | `plan.json` | Preferred/fallback windows, placeholders, registration, readiness rules | Today countdown; Exams; Guide | January 22-23 remain clearly labeled placeholders until a registered date is saved. |
 | `plan.json` + guide | Study modes and complete instructions | Today/Plan detail drawer; Guide | The plan summary is merged with the guide’s when-to-use and required-output rules. |
 | `kaplan-mcat-books.md` | 83 chapter IDs, titles, and every subsection | Today/Plan chapter details; Log chapter selector | Generated directly; no second editable chapter-title list is maintained. |

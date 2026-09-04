@@ -18,6 +18,13 @@ def row(**changes):
 
 
 class WorkloadTests(unittest.TestCase):
+    def test_stop_rule_is_explicit_and_source_rewording_requires_review(self):
+        rule = g.TODAY_STOP_RULES["2026-09-03"]
+        self.assertEqual(g.stop_rule_for(dict(date="2026-09-03", notes=rule)), rule)
+        with self.assertRaisesRegex(g.ValidationError, "source notes changed"):
+            g.stop_rule_for(dict(date="2026-09-03", notes="Reworded guardrail"))
+        self.assertEqual(g.stop_rule_for(dict(date="2026-09-08", notes="")), "")
+
     def test_unknown_modes_rejected_even_before_special_day_returns(self):
         for flags in ({}, {"isRest": True}, {"isExam": True}, {"isFullLengthReview": True}):
             with self.subTest(flags=flags), self.assertRaisesRegex(g.ValidationError, "Unknown workload modes"):

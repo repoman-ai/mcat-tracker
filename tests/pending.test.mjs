@@ -262,6 +262,9 @@ test("checking off work and rerendering keeps one focus timer and its original a
   try {
     const first = mount(context);
     first.toggle.click();
+    first.finish.click(); // An accidental sub-second Finish must not pause.
+    assert.equal(cleared, 0);
+    assert.equal(first.toggle.textContent, "Pause");
     now += 1000; ticks();
     assert.equal(first.clock.textContent, "24:59");
     context.state = withDailyStatus(context.state, "2026-09-01", "complete");

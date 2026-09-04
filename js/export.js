@@ -1,3 +1,4 @@
+import { isMasteryEvidence } from "./data.js";
 import { createBackup } from "./storage.js";
 import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js";
 import {
@@ -141,7 +142,7 @@ function weeklyPatternRows(data, state) {
 function masteryRows(data, state) {
   return data.workbook.mastery.topics.map((topic) => {
     const user = state.mastery[topic.id] || {};
-    const related = state.mistakes.filter((entry) => (entry.masteryTopicId ? entry.masteryTopicId === topic.id : (entry.topic === topic.topic || entry.tags?.includes(topic.topic)))).length;
+    const related = state.mistakes.filter((entry) => isMasteryEvidence(entry, topic)).length;
     return [topic.section, topic.category, topic.topic, user.confidence ?? "", user.lastReviewed ? makeDateFromISO(user.lastReviewed) : "", user.nextReview ? makeDateFromISO(user.nextReview) : "", user.notes || "", related];
   });
 }
@@ -215,7 +216,7 @@ export async function exportWorkbook(data, state) {
     { dateColumns: [1], highlightStatusColumn: 14, tabColor: "2B6F8A" });
 
   const progress = addSheet(workbook, `${data.plan.prep_weeks}-Week Progress`,
-    ["Week", "Dates", "Phase", "Focus", "Planned Hours", "Study Days", "Completed Days", "Completion %", "Planned Questions", "Recorded QBank Questions", "CARS Target", "Recorded CARS Passages", "Milestone", "FL / Section Bank", "Days with QBank Counts", "Days with CARS Counts"],
+    ["Week", "Dates", "Phase", "Focus", "Planned Hours", "Study Days", "Completed Days", "Completion %", "Planned QBank Questions", "Recorded QBank Questions", "CARS Target", "Recorded CARS Passages", "Milestone", "FL / Section Bank", "Days with QBank Counts", "Days with CARS Counts"],
     progressRows(data, state), [8, 24, 19, 32, 14, 12, 15, 14, 17, 20, 13, 20, 48, 22, 20, 20],
     { tabColor: "5C8D79" });
   progress.getColumn(8).numFmt = "0%";

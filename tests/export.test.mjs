@@ -98,6 +98,9 @@ const state = normalizeState({
   settings: { registeredExamDate: "2027-01-23", updatedAt: now },
 });
 
+state.mistakes[0].captureStatus = "needs-review";
+state.mistakes[0].masteryTopicId = data.workbook.mastery.topics[0].id;
+state.mistakes[1].tags.push(data.workbook.mastery.topics[0].topic);
 const snapshot = JSON.stringify(state);
 
 exportJSON(state);
@@ -121,6 +124,7 @@ for (const { handle, filename } of captured) {
     if (![null, ""].includes(progress.getCell("L2").value) || progress.getCell("P2").value !== 0) throw new Error("Missing CARS counts must remain unrecorded");
     if (schedule.getCell("A2").value.toISOString().slice(0, 10) !== data.plan.plan_start) throw new Error("Exported start date is stale");
     if (schedule.getCell("M1").value !== "Checklist Progress") throw new Error("Exported schedule is missing checklist progress");
+    if (exported.getWorksheet("High-Yield Mastery").getCell("H2").value !== 1) throw new Error("Mastery report must count reviewed legacy tags, excluding reminders");
     if (exported.getWorksheet("Full-Length Scores").getCell("C2").value.toISOString().slice(0, 10) !== data.exams[0].plannedDate) throw new Error("Exported diagnostic date is stale");
   }
   await fs.writeFile(path.join(outputDir, filename), buffer);

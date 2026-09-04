@@ -28,13 +28,13 @@ export function captureViewState(root, window) {
   const anchorWindow = index >= 0 && !focused.closest("[data-view-scroll]");
   const scrollX = window.scrollX;
   const scrollY = window.scrollY;
-  return () => {
+  return ({ afterRestore } = {}) => {
     const restoreDetails = () => {
       const detailMap = new Map([...root.querySelectorAll("details")].filter(key).map((element) => [key(element), element]));
       for (const [id, open] of details) { const element = detailMap.get(id); if (element) element.open = open; }
     };
     restoreDetails();
-    root.dispatchEvent?.(new Event("restore-disclosures"));
+    afterRestore?.();
     // Lazy editors now exist, including their nested reference disclosures.
     restoreDetails();
     const scrollMap = new Map([...root.querySelectorAll("[data-view-scroll]")].map((element) => [element.dataset.viewScroll, element]));

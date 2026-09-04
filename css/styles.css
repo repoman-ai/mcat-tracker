@@ -789,3 +789,6 @@ html[data-reduce-motion="on"] *, html[data-reduce-motion="on"] *::before, html[d
   .today-tools { gap: .3rem; }
   .today-tools .button { padding-inline: .55rem; }
 }
+
+.draft-conflict { margin-bottom: 1rem; overflow-wrap: anywhere; }
+.draft-conflict dd { margin: .25rem 0 .75rem; white-space: pre-wrap; font-size: .85rem; }

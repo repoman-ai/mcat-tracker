@@ -97,3 +97,35 @@ Reviewed the complete working-tree diff against `1154712`, the audit plan, and t
 ### Remaining limits
 
 Actual iPhone screen-lock/background timing, OS reduced-motion behavior, screen-reader speech, actual browser zoom, controlled CPU-throttled latency, and authenticated two-device sync remain unverified. These require hardware/browser capabilities or a separately authorized production-account session. The deterministic timer/motion/merge regressions passed. The optional weekly celebration remains deferred. No further architecture change is warranted by this review.
+
+## Follow-up on external review of `d461639`
+
+The feedback was checked against the implementation; the accepted corrections are:
+
+- Unreviewed reminders no longer count as mastery evidence on screen or in XLSX. A shared predicate retains reviewed legacy topic/tag matches and explicit topic-ID precedence.
+- Retest outcomes now start with a required **Choose an outcome** placeholder. Both native validation and the submit handler reject an unspecified outcome; neither Resolved nor Retested is inferred.
+- Draft recovery stores each dirty field's original saved value. If that field has since changed, the form shows both values and requires **Use saved values** or **Keep my edits** before submission. Unrelated saved field changes do not trigger a conflict. Older drafts with unknown baselines are preserved but require a choice when they differ. The existing synced new-mistake autosave remains for compatibility; tab recovery covers editing and debounce gaps. Autosave pauses while that form has an unresolved conflict.
+- Plan hydration is an explicit callback returned by its binder and called during view restoration. The `_restorePlan` DOM property/custom restoration event were removed. Current-week ordering now uses a consistent comparator. The current-week jump is retained because it also clears filters and provides recovery after scrolling.
+- Missing skip-link markup no longer throws during startup; one failing cleanup cannot prevent other cleanups or the next render. The weekly milestone disclosure retains its open state. A sub-second Finish tap no longer pauses the running focus timer.
+- Backup validation accepts fractional focus minutes and rejects nonnumeric, nonfinite, negative, over-25-minute values and malformed supplied timestamps. Legacy invalid records are retained in existing state but excluded from displayed focus totals, consistent with the daily-count policy.
+- Today uses explicit generated `stopRule` display fields for the first four preparation days. The generator checks the reviewed excerpts against source notes, so source rewording requires an explicit update. Regeneration added four display fields only; source files, dates, assignments, and workloads are unchanged. Generated content-map copy was also brought into alignment.
+- Plan and XLSX consistently show planned **QBank questions**, including Section Bank quantities. The review's week-1 example was not reproducible: it is 24 in both source totals. Actual differences start in week 8 because the former Plan label was UWorld-only.
+- Removed unused imports, tab hints, and unused arguments; made section-chart ticks evenly spaced; cleaned chart branching. The expanded retest queue resets on route entry while preserving same-route saves.
+
+### Decisions retained
+
+**Clock skew:** the risk is real, but clamping only `dailyTimestamp` would make a new edit older than the existing future-dated cloud record. Last-write-wins would then discard the edit or resurrect an undone completion. Leave the monotonic guarantee intact; a future clock-skew fix must coordinate merge/version rules across clients rather than silently rewrite record timestamps. No personal record timestamps were changed by this review.
+
+**Lazy details/search/print:** lightweight summaries for every day remain mounted; editor/reference bodies are mounted when opened. Browser find and whole-page assistive-technology browsing cannot search unmounted reference text, and printing the current page is not a complete-plan export. This is an intentional performance tradeoff. Use Guide for reference search and the XLSX report for a complete dated schedule/records export; open a day to read its detailed reference. No claim of full-plan printing or screen-reader speech verification is made.
+
+**Earlier UI removals:** the shorter subject heading, removed At-a-glance panel, secondary backlog/phase disclosures, and removal of the whole-main live region remain intentional. Full chapter tasks are still visible in the checklist. `in-progress` is reached by partial checklist completion as well as the status select; the review's claim that the select is the only path was incorrect. Keep route focus and targeted feedback rather than announcing the entire replaced page.
+
+**Documentation/process:** retain the existing audit and handoff in the repository because they record requested decisions and verification limits. Do not rewrite the already-pushed implementation history. Future feature changes should remain separate from this corrective review.
+
+### Verification for this follow-up
+
+New regression coverage exercises mastery reminder filtering, saved-field conflict detection and submission blocking, fractional focus backup validation, current-week ordering, exam submit mismatch/diagnostic semantics, capture-only versus reviewed requirements, explicit retest outcomes, and queue reset behavior. Existing tests additionally cover nested disclosure restoration via callback, accidental early timer finish, generator guardrail validation, and XLSX mastery readback.
+
+Interactive checks used synthetic data only at `127.0.0.1:8935`, with an empty sync-config response from a temporary loopback server. Two independent browser tabs confirmed the incoming saved-note conflict, blocked Save, both resolution choices, and preservation of the chosen note. An open Plan reference section survived a checkbox rerender. A blank retest outcome remained invalid with the dialog open; explicit Resolved saved successfully. No captured warning/error logs in those checks. This is a same-origin cross-tab test, not a claim of live cloud/two-device verification.
+
+Final follow-up validation: **67/67 Node tests passed**, including the nested Python suite (**10/10**). All deployed JavaScript modules passed `node --check`; `git diff --check` passed. Authentication/Supabase configuration has no diff.

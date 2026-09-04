@@ -1,18 +1,16 @@
-import { createFocusTimer } from "../focus-timer.js";
+import { createFocusTimer, focusMinutes } from "../focus-timer.js";
 import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js";
 import { recordedCounts } from "../daily.js";
 import {
-  countPracticeQuestions,
   daysBetween,
   escapeAttr,
   escapeHTML,
   formatDateLong,
-  percent,
   plural,
   todayISO,
   uniqueId,
 } from "../utils.js";
-import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, statusLabel, taskChecklist } from "./shared.js";
+import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.
@@ -57,7 +55,9 @@ function catchUpSection(rows, state, today) {
 }
 
 function renderCompleted(context, rows, today) {
-  const sessions = context.state.focusSessions || [];
+  const sessions = (context.state.focusSessions || []).filter((session) => {
+    try { focusMinutes(session); return true; } catch { return false; }
+  });
   const minutes = sessions.reduce((total, session) => total + Number(session.minutes || 0), 0);
   const currentWeek = getTodayContext(context.data, today).row?.week;
   const weekIds = new Set(weekRows(context.data, currentWeek).map((row) => row.id));
@@ -112,7 +112,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
   const next = tomorrow ? `<p class="tomorrow-preview"><span>Next · ${escapeHTML(formatDateLong(tomorrow.date))}</span><strong>${escapeHTML(dayTitle(tomorrow))}</strong></p>` : '<p class="tomorrow-preview">You reached the end of the dated plan.</p>';
   const questions = recordedCounts(rows, state, "actualQuestions"), cars = recordedCounts(rows, state, "actualCars");
   const recorded = ({ total, days }) => days ? `${total} · ${plural(days, "day")} recorded` : "Not recorded yet";
-  const stopRule = row.sourceNotes?.match(/Stop after [^.]+(?:\.[0-9]+)?[^.]*\./i)?.[0] || "";
+  const stopRule = row.stopRule || "";
   const heading = isScheduled ? "Today" : "Your next block";
   const timing = todayContext.state === "before-plan" ? `The plan begins ${formatDateLong(row.date)}. No catch-up is needed.` : todayContext.state === "gap" ? `No row is assigned today. Next block: ${formatDateLong(row.date)}.` : `${typeof row.week === "number" ? `Week ${row.week}` : "Test window"} · ${row.phase}`;
   return `<header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(timing)}</span><h1>${escapeHTML(state.settings.displayName ? `${heading}, ${state.settings.displayName}` : heading)}</h1></div></header>
@@ -132,7 +132,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
     ${actionable && (!done || focus.startedAt) ? `<section class="focus-card" aria-labelledby="focus-title"><div><h3 id="focus-title">One calm block</h3><p>Optional 25-minute timer. Leaving Today pauses it; return to resume.</p></div><div class="focus-controls"><output data-focus-clock aria-live="off">25:00</output><button class="button" type="button" data-focus-toggle>Start</button><button class="button button--quiet" type="button" data-focus-finish disabled>Finish block</button></div></section>` : ""}
     ${pending.length ? `<details class="today-backlog" data-view-key="today-backlog"><summary>${pending.length} unfinished days · review when useful</summary>${catchUpSection(pending, state, today)}</details>` : ""}${repairs}
     ${!done ? next : ""}
-    </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${progressBar(completedDays, studyRows.length, "Study days complete")}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
+    </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${progressBar(completedDays, studyRows.length, "Study days complete")}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details data-view-key="today-milestone"><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
 }
 
 export function bindToday(container, context) {
@@ -173,8 +173,8 @@ export function bindToday(container, context) {
       focus.paint();
     });
     finish.addEventListener("click", () => {
-      stop();
       if (elapsedClock.elapsed < 1000) { context.showToast("No focus time to save yet."); return; }
+      stop();
       const session = { id: uniqueId("focus"), assignmentId: focus.assignmentId, startedAt: focus.startedAt, endedAt: new Date().toISOString(), minutes: Math.round(elapsedClock.elapsed / 600) / 100 };
       context.updateState({ ...context.state, focusSessions: [...context.state.focusSessions, session] }, {
         success: "Focus session saved",

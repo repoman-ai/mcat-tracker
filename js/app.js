@@ -386,7 +386,11 @@ function updateNav(view) {
 
 function renderCurrent({ preserveView = true, routeChange = false } = {}) {
   if (!data || !state) return;
-  viewCleanups.forEach((cleanup) => cleanup()); viewCleanups = [];
+  const cleanups = viewCleanups;
+  viewCleanups = [];
+  for (const cleanup of cleanups) {
+    try { cleanup(); } catch (error) { console.error("View cleanup failed", error); }
+  }
   const routeKey = `${currentRoute.view}/${currentRoute.detail}`;
   const sameRoute = !routeChange && renderedRoute === routeKey;
   const restoreView = sameRoute && preserveView ? captureViewState(root, window) : null;
@@ -398,6 +402,7 @@ function renderCurrent({ preserveView = true, routeChange = false } = {}) {
   renderBanner();
   topbarDate.innerHTML = `<span>${escapeHTML(formatDateLong(todayISO()))}</span>${new URLSearchParams(location.search).get("today") ? `<strong>Preview date</strong>` : ""}`;
   try {
+    let afterRestore;
     // A bottom-nav change should land at the start of its new screen, not at
     // the pixel offset left behind by a long checklist or form. Detail routes
     // may then deliberately scroll to their own target in the view binder.
@@ -409,14 +414,14 @@ function renderCurrent({ preserveView = true, routeChange = false } = {}) {
       root.focus({ preventScroll: true });
     }
     if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute, { isRouteChange: !sameRoute }); bindToday(root, context, currentRoute); }
-    else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute, { isRouteChange: !sameRoute }); bindPlan(root, context, { isRouteChange: !sameRoute }); }
+    else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute, { isRouteChange: !sameRoute }); afterRestore = bindPlan(root, context, { isRouteChange: !sameRoute }); }
     else if (currentRoute.view === "exams") { setDocumentTitle("Exams"); root.innerHTML = renderExams(context, currentRoute); bindExams(root, context, currentRoute); }
-    else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute); bindLog(root, context, currentRoute); }
+    else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute, { isRouteChange: !sameRoute }); bindLog(root, context, currentRoute); }
     else { setDocumentTitle("Guide"); root.innerHTML = renderGuide(context, currentRoute, { isRouteChange: !sameRoute }); bindGuide(root, context, currentRoute, { isRouteChange: !sameRoute }); }
     bindEditorDrafts(root);
     celebration.applyPreference(state.settings.reducedMotionOverride);
     renderedRoute = routeKey;
-    restoreView?.();
+    restoreView?.({ afterRestore });
   } catch (error) {
     console.error(error);
     root.innerHTML = `<section class="fatal-state"><span class="eyebrow">The view could not be rendered</span><h1>Something went wrong</h1><p>${escapeHTML(error.message)}</p><button class="button button--primary" type="button" data-retry-view>Try again</button></section>`;
@@ -475,7 +480,7 @@ async function initialize() {
 initialize();
 
 // Document anchors must not be mistaken for application routes.
-document.querySelector(".skip-link").addEventListener("click", (event) => {
+document.querySelector(".skip-link")?.addEventListener("click", (event) => {
   event.preventDefault(); root.focus({ preventScroll: true }); root.scrollIntoView({ block: "start", behavior: "instant" });
 });
 let displayedDate = todayISO();

@@ -137,10 +137,10 @@ test('nested disclosures restore after lazy Plan hydration', async () => {
   const day={id:'',dataset:{viewKey:'day-a'},open:true};
   const reference={id:'',dataset:{viewKey:'reference-a'},open:true};
   let details=[day,reference];
-  const root={ownerDocument:{activeElement:null,documentElement:{style:{}}},querySelectorAll(selector){return selector==='details'?details:[];},dispatchEvent(){details.push(reference);}};
+  const root={ownerDocument:{activeElement:null,documentElement:{style:{}}},querySelectorAll(selector){return selector==='details'?details:[];},};
   const restore=captureViewState(root,{scrollX:0,scrollY:0,scrollTo(){}});
   day.open=false;reference.open=false;details=[day];
-  restore();
+  restore({afterRestore(){details.push(reference);}});
   assert.equal(day.open,true);assert.equal(reference.open,true);
 });
 
