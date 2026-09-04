@@ -3,6 +3,14 @@
 This file is a convenience snapshot, not a source of truth. Always inspect the working tree, Git
 index, live application, and Supabase project before continuing.
 
+## UI/UX audit implementation — September 3, 2026
+
+Read [IMPLEMENTATION_HANDOFF_2026-09-03.md](IMPLEMENTATION_HANDOFF_2026-09-03.md) first for the current
+local changes, verification, limits, and continuation prompt. The core revised audit plan is implemented
+in the working tree, not published. It supersedes older descriptions below of Today’s layout, eager
+Plan editors, timer behavior, and Undo restoring old timestamps. Current Undo preserves prior values
+with a fresh timestamp; actual counts remain independent of checklist completion.
+
 ## Granular daily checklists — September 1, 2026
 
 Every actionable schedule row now derives stable checklist steps from its assigned chapters and
@@ -205,3 +213,5 @@ the same.
 - The `mm2.…` derived value is still a replayable password. TLS, strict CORS, no-store responses,
   generic failures, server throttles, and Auth limits reduce exposure but do not make it
   phishing-resistant.
+
+Independent September 3 review: 58/58 tests passed; Guide whitespace, lazy nested disclosure restoration, legacy mastery tags, and optional weekly export counts corrected. Repair/Entries now omit redundant overview cards. See IMPLEMENTATION_HANDOFF_2026-09-03.md for synthetic browser evidence and remaining hardware checks.

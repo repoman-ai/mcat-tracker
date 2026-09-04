@@ -83,7 +83,7 @@ export function completedRows(data, state) {
 }
 
 export function dueEntries(state, today = todayISO()) {
-  return state.mistakes.filter((entry) => entry.retestDate && !["Retested", "Resolved"].includes(entry.retestStatus))
+  return state.mistakes.filter((entry) => entry.captureStatus !== "needs-review" && entry.retestDate && !["Retested", "Resolved"].includes(entry.retestStatus))
     .sort((a, b) => a.retestDate.localeCompare(b.retestDate))
     .map((entry) => ({ ...entry, dueState: entry.retestDate < today ? "overdue" : entry.retestDate === today ? "today" : "upcoming" }));
 }

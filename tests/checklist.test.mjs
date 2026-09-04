@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { assignmentTasks, taskProgress, withDailyCompletion, withDailyTask } from "../js/daily.js";
 import { loadSiteData } from "../js/data.js";
 import { normalizeState } from "../js/storage.js";
-import { bindTaskChecklist, taskChecklist } from "../js/views/shared.js";
+import { bindTaskChecklist, taskChecklist, assignmentDetailHTML } from "../js/views/shared.js";
 import { renderPlan } from "../js/views/plan.js";
 import { renderToday } from "../js/views/today.js";
 
@@ -66,7 +66,8 @@ test("Today, assignment details, and Plan all expose the same progress", () => {
   assert.match(renderToday({ data, state }), /Block checklist/);
   assert.match(renderToday({ data, state }), /Guardrails for today/);
   assert.match(renderPlan({ data, state }, {}), /class="plan-day__progress">1\/4 steps/);
-  assert.match(renderPlan({ data, state }, {}), /Guardrails for this block/);
+  assert.doesNotMatch(renderPlan({ data, state }, {}), /<textarea/);
+  assert.match(assignmentDetailHTML(row, data, state), /Guardrails for this block/);
 });
 
 test("checklist controls save safely and Undo restores the complete prior record", () => {
@@ -85,7 +86,9 @@ test("checklist controls save safely and Undo restores the complete prior record
   buttons[0].click({ preventDefault() {} });
   assert.equal(context.state.daily[row.id].completedTasks["chapter:PHY10"], true);
   messages.at(-1)[2].onClick();
-  assert.deepEqual(context.state.daily[row.id], { status: "in-progress", notes: "preserve" });
+  assert.equal(context.state.daily[row.id].status, "in-progress");
+  assert.equal(context.state.daily[row.id].notes, "preserve");
+  assert.ok(Date.parse(context.state.daily[row.id].updatedAt));
 });
 
 test("Defer/Resume restores prior status across normalization without changing saved work", async () => {

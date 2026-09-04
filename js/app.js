@@ -1,3 +1,5 @@
+import { bindEditorDrafts } from "./editor-drafts.js";
+import { createCelebrationController } from "./celebrate.js";
 import { loadSiteData } from "./data.js";
 import { exportCorruptRecovery } from "./export.js";
 import { navigate, startRouter } from "./router.js";
@@ -30,6 +32,7 @@ let quickLogPrefill = null;
 let syncStatus = getSyncStatus();
 let lockEmailOverride = false;
 let renderedRoute = "";
+let viewCleanups = [];
 
 const lockScreen = document.querySelector("[data-lock-screen]");
 const lockForm = lockScreen.querySelector("[data-lock-form]");
@@ -39,6 +42,7 @@ const lockAccount = lockScreen.querySelector("[data-lock-account]");
 const lockEmailField = lockScreen.querySelector("[data-lock-email-field]");
 
 const showToast = createToastController(toast, document);
+const celebration = createCelebrationController(document, window);
 
 function openDialog({ title, body, onMount }) {
   if (dialog.open) dialog.close();
@@ -47,6 +51,7 @@ function openDialog({ title, body, onMount }) {
   dialogBody.innerHTML = body;
   dialog.showModal();
   onMount?.(dialog);
+  bindEditorDrafts(dialog);
   dialog.querySelector("button, a, input, select, textarea")?.focus();
 }
 
@@ -85,6 +90,10 @@ function renderSyncChrome() {
 }
 
 /** Cosmetic tracker state; deliberately separate from the private account alias. */
+function motionSettingsHTML() {
+  return `<form data-motion-form class="sync-name-form"><h4>Appearance</h4><label>Reduce motion<select name="reducedMotionOverride">${[["system", "Use device setting"], ["on", "On — static feedback"], ["off", "Off — animate, overriding device setting"]].map(([value, label]) => `<option value="${value}" ${state.settings.reducedMotionOverride === value ? "selected" : ""}>${label}</option>`).join("")}</select></label><p class="form-hint">Completion summaries and Undo are always available.</p><button class="button button--small" type="submit">Save appearance</button></form>`;
+}
+
 function displayNameFieldHTML() {
   const name = state?.settings.displayName || "";
   return `<form class="sync-name-form" data-display-name-form>
@@ -177,18 +186,23 @@ async function loadLoginUsernameEditor(scope) {
 
 function syncDialogBody() {
   if (!syncStatus.configured) {
-    return `<div class="sync-panel"><span class="sync-hero sync-hero--setup" aria-hidden="true">↔</span><h3>Working locally on this device</h3><p>Every change is already saved in this browser, and JSON backups work normally. To see the same progress on your phone and computer, finish the one-time Supabase setup in the README and add the project URL and publishable key to <code>js/sync-config.js</code>.</p><div class="notice-card"><strong>Security boundary</strong><p>Only a publishable key belongs in browser code. A secret or service-role key must never appear in this project.</p></div>${displayNameFieldHTML()}<a class="button" href="./setup.html">Open the account key calculator</a></div>`;
+    return `<div class="sync-panel"><span class="sync-hero sync-hero--setup" aria-hidden="true">↔</span><h3>Working locally on this device</h3><p>Every change is already saved in this browser, and JSON backups work normally. To see the same progress on your phone and computer, finish the one-time Supabase setup in the README and add the project URL and publishable key to <code>js/sync-config.js</code>.</p><div class="notice-card"><strong>Security boundary</strong><p>Only a publishable key belongs in browser code. A secret or service-role key must never appear in this project.</p></div>${displayNameFieldHTML()}${motionSettingsHTML()}<a class="button" href="./setup.html">Open the account key calculator</a></div>`;
   }
   if (!syncStatus.signedIn) {
     return `<div class="sync-panel"><span class="sync-hero sync-hero--setup" aria-hidden="true">⌘</span><h3>This device is locked</h3><p>${escapeHTML(syncStatus.message)} Local progress on this device is untouched and will merge with your cloud copy once you unlock.</p><div class="button-row"><button class="button button--primary" type="button" data-sync-unlock>Enter PIN</button></div></div>`;
   }
   const lastSync = syncStatus.lastSyncedAt ? new Date(syncStatus.lastSyncedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "Waiting for first sync";
-  return `<div class="sync-panel"><span class="sync-hero sync-hero--ready" aria-hidden="true">✓</span><h3>${escapeHTML(syncStatus.message)}</h3><dl class="sync-facts"><div><dt>Account email</dt><dd>${escapeHTML(syncStatus.email)}</dd></div><div><dt>Last sync</dt><dd>${escapeHTML(lastSync)}</dd></div></dl>${displayNameFieldHTML()}<div data-login-username-editor><p class="form-hint">Loading private sign-in username…</p></div><p>Changes save locally first, then sync automatically. If you study offline, they stay safe here and upload when this device reconnects.</p><p class="form-error" data-sync-error role="alert"></p><div class="button-row"><button class="button button--primary" type="button" data-sync-now>Sync now</button><button class="button" type="button" data-sync-lock>Lock this device</button></div><p class="form-hint">Locking asks for your PIN again next time. It never deletes local progress.</p></div>`;
+  return `<div class="sync-panel"><span class="sync-hero sync-hero--ready" aria-hidden="true">✓</span><h3>${escapeHTML(syncStatus.message)}</h3><dl class="sync-facts"><div><dt>Account email</dt><dd>${escapeHTML(syncStatus.email)}</dd></div><div><dt>Last sync</dt><dd>${escapeHTML(lastSync)}</dd></div></dl>${displayNameFieldHTML()}${motionSettingsHTML()}<div data-login-username-editor><p class="form-hint">Loading private sign-in username…</p></div><p>Changes save locally first, then sync automatically. If you study offline, they stay safe here and upload when this device reconnects.</p><p class="form-error" data-sync-error role="alert"></p><div class="button-row"><button class="button button--primary" type="button" data-sync-now>Sync now</button><button class="button" type="button" data-sync-lock>Lock this device</button></div><p class="form-hint">Locking asks for your PIN again next time. It never deletes local progress.</p></div>`;
 }
 
 function openSyncDialog() {
   openDialog({ title: "Your account and sync", body: syncDialogBody(), onMount: (scope) => {
     bindDisplayNameField(scope);
+    scope.querySelector("[data-motion-form]")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const reducedMotionOverride = event.currentTarget.elements.reducedMotionOverride.value;
+      updateState({ ...state, settings: { ...state.settings, reducedMotionOverride, updatedAt: new Date().toISOString() } }, { success: "Appearance saved", onSaved: () => dialog.close() });
+    });
     loadLoginUsernameEditor(scope);
     scope.querySelector("[data-sync-unlock]")?.addEventListener("click", () => { dialog.close(); renderLockScreen({ focus: true }); });
     scope.querySelector("[data-sync-now]")?.addEventListener("click", async (event) => {
@@ -207,6 +221,7 @@ function openSyncDialog() {
 
 function renderLockScreen({ focus = false } = {}) {
   const locked = syncStatus.configured && !syncStatus.unlocked;
+  if (locked) celebration.stop();
   lockScreen.hidden = !locked;
   document.body.classList.toggle("is-locked", locked);
   if (!locked) return;
@@ -324,8 +339,10 @@ const context = {
   navigate,
   openDialog,
   showToast,
+  celebrate: (event) => { try { return celebration.celebrate(event, state, data); } catch { return ""; } },
   openQuickLog,
   clearQuickLogPrefill,
+  registerViewCleanup: (cleanup) => viewCleanups.push(cleanup),
   rerender: (options) => renderCurrent(options),
 };
 
@@ -369,6 +386,7 @@ function updateNav(view) {
 
 function renderCurrent({ preserveView = true, routeChange = false } = {}) {
   if (!data || !state) return;
+  viewCleanups.forEach((cleanup) => cleanup()); viewCleanups = [];
   const routeKey = `${currentRoute.view}/${currentRoute.detail}`;
   const sameRoute = !routeChange && renderedRoute === routeKey;
   const restoreView = sameRoute && preserveView ? captureViewState(root, window) : null;
@@ -384,16 +402,19 @@ function renderCurrent({ preserveView = true, routeChange = false } = {}) {
     // the pixel offset left behind by a long checklist or form. Detail routes
     // may then deliberately scroll to their own target in the view binder.
     if (!sameRoute) {
+      celebration.stop();
       if (dialog.open) dialog.close();
       scrollInstantly(window);
       // Give every route a focus destination; specific binders may refine it.
       root.focus({ preventScroll: true });
     }
-    if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute); bindToday(root, context, currentRoute); }
+    if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute, { isRouteChange: !sameRoute }); bindToday(root, context, currentRoute); }
     else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute, { isRouteChange: !sameRoute }); bindPlan(root, context, { isRouteChange: !sameRoute }); }
     else if (currentRoute.view === "exams") { setDocumentTitle("Exams"); root.innerHTML = renderExams(context, currentRoute); bindExams(root, context, currentRoute); }
     else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute); bindLog(root, context, currentRoute); }
     else { setDocumentTitle("Guide"); root.innerHTML = renderGuide(context, currentRoute, { isRouteChange: !sameRoute }); bindGuide(root, context, currentRoute, { isRouteChange: !sameRoute }); }
+    bindEditorDrafts(root);
+    celebration.applyPreference(state.settings.reducedMotionOverride);
     renderedRoute = routeKey;
     restoreView?.();
   } catch (error) {
@@ -452,3 +473,14 @@ async function initialize() {
 }
 
 initialize();
+
+// Document anchors must not be mistaken for application routes.
+document.querySelector(".skip-link").addEventListener("click", (event) => {
+  event.preventDefault(); root.focus({ preventScroll: true }); root.scrollIntoView({ block: "start", behavior: "instant" });
+});
+let displayedDate = todayISO();
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && data && state && displayedDate !== todayISO()) {
+    displayedDate = todayISO(); renderCurrent();
+  }
+});

@@ -1,3 +1,4 @@
+import { clearEditorDraft, clearEditorDrafts } from "../editor-drafts.js";
 import { exportJSON, exportMistakeCSV, exportWorkbook } from "../export.js";
 import { dueEntries } from "../data.js";
 import { mergeStates, validateBackup } from "../storage.js";
@@ -34,6 +35,7 @@ const LOG_TABS = [
 const TAB_IDS = new Set(LOG_TABS.map((tab) => tab.id));
 const PAGE_SIZE = 25;
 let activeTab = "capture";
+let showAllRetests = false;
 let logPage = 0;
 
 /** Resolves the panel to show. Entry IDs in the route open a dialog instead. */
@@ -45,11 +47,11 @@ export function resolveLogTab(detail = "") {
 }
 
 function tabStrip(context, overdue) {
-  const counts = { entries: context.state.mistakes.length, repair: overdue };
+  const counts = { entries: context.state.mistakes.length, repair: dueEntries(context.state).filter((entry) => entry.dueState !== "upcoming").length + context.state.mistakes.filter((entry) => entry.captureStatus === "needs-review").length };
   return `<nav class="log-tabs" aria-label="Log sections">${LOG_TABS.map((tab) => {
     const count = counts[tab.id];
     const current = tab.id === activeTab;
-    return `<a href="#log/${tab.id}" data-log-tab="${escapeAttr(tab.id)}" class="${current ? "is-active" : ""}" ${current ? 'aria-current="page"' : ""}><strong>${escapeHTML(tab.label)}</strong>${count ? `<span class="log-tabs__count">${count}</span>` : ""}<small>${escapeHTML(tab.hint)}</small></a>`;
+    return `<a href="#log/${tab.id}" data-log-tab="${escapeAttr(tab.id)}" class="${current ? "is-active" : ""}" ${current ? 'aria-current="page"' : ""}><strong>${escapeHTML(tab.label)}</strong>${count ? `<span class="log-tabs__count">${count}</span>` : ""}</a>`;
   }).join("")}</nav>`;
 }
 
@@ -76,6 +78,7 @@ function selectOptions(values, selected, placeholder = "Select") {
 function quickForm(context) {
   const existing = editingId ? context.state.mistakes.find((entry) => entry.id === editingId) : null;
   const draft = existing || context.state.drafts.mistake || {};
+  const savedReminder = context.state.mistakes.find((entry) => entry.id === lastSavedId)?.captureStatus === "needs-review";
   const prefill = context.quickLogPrefill || {};
   const value = (key, fallback = "") => draft[key] ?? prefill[key] ?? fallback;
   const sources = context.data.workbook.allowedValues.Sources || [];
@@ -85,9 +88,9 @@ function quickForm(context) {
   const section = value("section", inferSection(chapterId));
   const topic = value("topic", chapterId ? context.data.index.chapterById.get(chapterId)?.title || "" : "");
   return `<section class="quick-capture" id="quick-capture" aria-labelledby="quick-title">
-    <div class="quick-capture__intro"><div><h2 id="quick-title">${existing ? "Edit mistake entry" : "Quick capture"}</h2><p>Cause, correct reasoning, one concrete repair. <a href="#guide/operating-rules">What belongs here</a></p></div>${existing ? `<button class="button button--quiet" type="button" data-cancel-edit>Cancel edit</button>` : `<span class="autosave-state" data-autosave-state>Draft autosaves</span>`}</div>
-    ${lastSavedId ? `<div class="save-success" role="status"><div><strong>Entry saved.</strong><span>Repair captured without losing your place.</span></div><div class="button-row"><button class="button button--quiet" type="button" data-log-another>Log another</button><button class="button button--quiet" type="button" data-view-entry="${escapeAttr(lastSavedId)}">View entry</button><button class="button button--quiet" type="button" data-schedule-retest="${escapeAttr(lastSavedId)}">Schedule retest</button><a class="button button--quiet" href="#today">Return to Today</a></div></div>` : ""}
-    <form data-mistake-form novalidate>
+    <div class="quick-capture__intro"><div><h2 id="quick-title">${existing ? "Edit mistake entry" : "Quick capture"}</h2><p>Save a reminder now; finish its review when you have time. <a href="#guide/operating-rules">What belongs here</a></p></div>${existing ? `<button class="button button--quiet" type="button" data-cancel-edit>Close editor</button>` : `<span class="autosave-state" data-autosave-state>Draft autosaves</span>`}</div>
+    ${lastSavedId ? `<div class="save-success" role="status"><div><strong>Entry saved.</strong><span>${savedReminder ? "Saved for review. Finish it from the Repair tab." : "Review saved."}</span></div><div class="button-row"><button class="button button--quiet" type="button" data-log-another>Log another</button><button class="button button--quiet" type="button" data-view-entry="${escapeAttr(lastSavedId)}">View entry</button>${savedReminder ? `<a class="button button--quiet" href="#log/repair">Finish review</a>` : `<button class="button button--quiet" type="button" data-schedule-retest="${escapeAttr(lastSavedId)}">Schedule retest</button>`}<a class="button button--quiet" href="#today">Return to Today</a></div></div>` : ""}
+    <form data-mistake-form data-draft-form="mistake-${escapeAttr(editingId || "new")}" novalidate>
       <input type="hidden" name="id" value="${escapeAttr(existing?.id || "")}">
       <input type="hidden" name="assignmentId" value="${escapeAttr(value("assignmentId"))}">
       <div class="form-grid form-grid--four">
@@ -101,6 +104,8 @@ function quickForm(context) {
         <label>Topic<input required name="topic" value="${escapeAttr(topic)}" placeholder="e.g. enzyme kinetics"></label>
         <label>Question or passage ref<input name="questionRef" value="${escapeAttr(value("questionRef"))}" placeholder="Q12, Passage 4, etc."></label>
       </div>
+      <label>Link mastery topic <span class="optional">optional</span><select name="masteryTopicId">${`<option value="">No linked topic</option>${context.data.workbook.mastery.topics.map((item) => `<option value="${escapeAttr(item.id)}" ${value("masteryTopicId") === item.id ? "selected" : ""}>${escapeHTML(item.topic)}</option>`).join("")}`}</select></label>
+      <details class="capture-review" data-view-key="capture-review" ${existing ? "open" : ""}><summary>Finish review · cause, reasoning, and fix</summary>
       <label>Error type<select required name="errorType">${selectOptions(errors, value("errorType"), "Choose the primary cause")}</select></label>
       <div class="repair-grid">
         <label>Why was it missed?<textarea required name="whyMissed" rows="3" placeholder="Name the actual cause, not just ‘content gap.’">${escapeHTML(value("whyMissed"))}</textarea></label>
@@ -111,22 +116,27 @@ function quickForm(context) {
         <label>Retest date <span class="optional">optional</span><input name="retestDate" type="date" value="${escapeAttr(value("retestDate"))}"></label>
         <label>Retest status<select name="retestStatus">${selectOptions(["Not scheduled", "Scheduled", "Due", "Retested", "Resolved"], value("retestStatus", value("retestDate") ? "Scheduled" : "Not scheduled"))}</select></label>
       </div>
-      <details class="more-details" ${value("description") || value("tags") || value("notes") ? "open" : ""}><summary>More details</summary><div class="more-details__body">
+      <details class="more-details" ${value("description") || value("tags").length || value("notes") ? "open" : ""}><summary>More details</summary><div class="more-details__body">
         <label>Short question description<textarea name="description" rows="2" placeholder="Avoid reproducing copyrighted question text; a short reminder is enough.">${escapeHTML(value("description"))}</textarea></label>
         <div class="form-grid form-grid--two"><label>Confidence 0-3<select name="confidence">${selectOptions([0, 1, 2, 3], value("confidence"), "Not rated")}</select></label><label>Tags<input name="tags" value="${escapeAttr(Array.isArray(value("tags")) ? value("tags").join(", ") : value("tags"))}" placeholder="timing, units, passage map"></label></div>
         <label>Additional notes<textarea name="notes" rows="3">${escapeHTML(value("notes"))}</textarea></label>
         ${existing ? `<label>Retest result<textarea name="retestResult" rows="2">${escapeHTML(value("retestResult"))}</textarea></label>` : ""}
       </div></details>
-      <div class="form-actions"><button class="button button--primary button--large" type="submit">${existing ? "Save changes" : "Save entry"}</button><span class="form-hint">Required: date, result, source, section, topic, error type, cause, reasoning, and fix.</span></div>
+      </details><p class="form-error" data-capture-error role="alert"></p>
+      <div class="form-actions"><button class="button button--primary" type="submit" data-capture-only>Save for review</button><button class="button" type="submit">${existing ? "Save completed review" : "Save entry"}</button></div><p class="form-hint">A reminder needs a source and topic or question reference. A completed review also needs section, error type, cause, reasoning, and fix.</p>
     </form>
   </section>`;
 }
 
+function needsReview(context) {
+  const entries = context.state.mistakes.filter((entry) => entry.captureStatus === "needs-review");
+  return entries.length ? `<section class="needs-review"><h2>Needs review · ${entries.length}</h2><ul>${entries.map((entry) => `<li><div><strong>${escapeHTML(entry.topic || entry.questionRef)}</strong><small>${escapeHTML(entry.source)} · ${escapeHTML(entry.date)}</small></div><button class="button" data-edit-entry="${escapeAttr(entry.id)}">Finish review</button></li>`).join("")}</ul></section>` : "";
+}
 function retestQueue(context) {
   const due = dueEntries(context.state);
   const priority = due.filter((entry) => entry.dueState !== "upcoming");
   if (!priority.length) return `<section class="queue-card queue-card--clear"><div><span class="eyebrow">Repair queue</span><h2>No retests due today</h2><p>${due.length ? `${plural(due.length, "retest")} scheduled ahead.` : "Schedule a retest when a mistake needs delayed retrieval."}</p></div>${due.length ? `<a href="#log/entries" class="button button--quiet">View upcoming</a>` : ""}</section>`;
-  return `<section class="retest-section" aria-labelledby="retest-title"><div class="section-heading"><div><span class="eyebrow">Gentle repair queue</span><h2 id="retest-title">Retests due</h2></div><span>${priority.filter((entry) => entry.dueState === "overdue").length} overdue · ${priority.filter((entry) => entry.dueState === "today").length} today</span></div><div class="retest-grid">${priority.slice(0, 6).map((entry) => `<article class="retest-card retest-card--${entry.dueState}"><div><span class="status-badge">${entry.dueState === "overdue" ? `Due ${formatDate(entry.retestDate)}` : "Due today"}</span><h3>${escapeHTML(entry.topic)}</h3><p>${escapeHTML(entry.fix)}</p></div><div class="retest-card__meta"><span>${escapeHTML(entry.section)}</span><span>${escapeHTML(entry.source)}</span></div><div class="button-row"><button class="button button--primary" type="button" data-retest-entry="${escapeAttr(entry.id)}">Record retest</button><button class="button button--quiet" type="button" data-view-entry="${escapeAttr(entry.id)}">View</button></div></article>`).join("")}</div></section>`;
+  return `<section class="retest-section" aria-labelledby="retest-title"><div class="section-heading"><div><span class="eyebrow">Gentle repair queue</span><h2 id="retest-title">Retests due</h2></div><span>${priority.filter((entry) => entry.dueState === "overdue").length} overdue · ${priority.filter((entry) => entry.dueState === "today").length} today</span></div><div class="retest-grid">${(showAllRetests ? priority : priority.slice(0, 6)).map((entry) => `<article class="retest-card retest-card--${entry.dueState}"><div><span class="status-badge">${entry.dueState === "overdue" ? `Due ${formatDate(entry.retestDate)}` : "Due today"}</span><h3>${escapeHTML(entry.topic)}</h3><p>${escapeHTML(entry.fix)}</p></div><div class="retest-card__meta"><span>${escapeHTML(entry.section)}</span><span>${escapeHTML(entry.source)}</span></div><div class="button-row"><button class="button button--primary" type="button" data-retest-entry="${escapeAttr(entry.id)}">Record retest</button><button class="button button--quiet" type="button" data-view-entry="${escapeAttr(entry.id)}">View</button></div></article>`).join("")}</div>${priority.length > 6 && !showAllRetests ? `<p>Showing 6 of ${priority.length} due <button class="button button--small" data-show-all-retests>View all due retests</button></p>` : ""}</section>`;
 }
 
 function summaryBars(title, counts) {
@@ -137,7 +147,8 @@ function summaryBars(title, counts) {
 function patternSummary(context) {
   const thisWeek = context.data.index.scheduleByDate.get(todayISO())?.week;
   const weekDates = new Set(context.data.schedule.filter((row) => row.week === thisWeek).map((row) => row.date));
-  const entries = context.state.mistakes.filter((entry) => weekDates.has(entry.date));
+  const entries = context.state.mistakes.filter((entry) => entry.captureStatus !== "needs-review" && weekDates.has(entry.date));
+  if (!entries.length) return "";
   const repeated = topCounts(entries.map((entry) => entry.topic), 5).filter(([, count]) => count > 1);
   return `<section class="pattern-summary" aria-labelledby="pattern-title"><div class="section-heading"><div><span class="eyebrow">Workbook concept, made live</span><h2 id="pattern-title">Weekly pattern review</h2></div><span>${entries.length} entries this week</span></div><div class="summary-grid">${summaryBars("Error types", topCounts(entries.map((entry) => entry.errorType), 4))}${summaryBars("Topics", topCounts(entries.map((entry) => entry.topic), 4))}${summaryBars("Sections", topCounts(entries.map((entry) => entry.section), 4))}${summaryBars("Sources", topCounts(entries.map((entry) => entry.source), 4))}</div><div class="pattern-action"><strong>${repeated.length ? "Repeated issues worth one repair plan" : "No repeated topic yet this week"}</strong><p>${repeated.length ? repeated.map(([topic, count]) => `${topic} (${count})`).join(" · ") : "Keep logging only meaningful misses, flags, and guessed-correct items."}</p></div></section>`;
 }
@@ -179,7 +190,7 @@ function logTable(context) {
     : "";
   const values = context.data.workbook.allowedValues;
   return `<section class="complete-log" aria-labelledby="complete-log-title"><div class="section-heading"><div><span class="eyebrow">Searchable complete record</span><h2 id="complete-log-title">Mistake log</h2></div><span>${all.length} of ${context.state.mistakes.length} entries</span></div>
-    <div class="log-filter-grid"><label class="search-control">Search<input type="search" data-log-search value="${escapeAttr(logFilters.search)}" placeholder="Topic, chapter, cause, fix, tag…"></label><label>Section<select data-log-filter="section"><option value="all">All sections</option>${(values.Sections || []).map((value) => `<option ${logFilters.section === value ? "selected" : ""}>${escapeHTML(value)}</option>`).join("")}</select></label><label>Source<select data-log-filter="source"><option value="all">All sources</option>${(values.Sources || []).map((value) => `<option ${logFilters.source === value ? "selected" : ""}>${escapeHTML(value)}</option>`).join("")}</select></label><label>Result<select data-log-filter="result"><option value="all">All results</option>${["Incorrect", "Flagged", "Guessed-correct"].map((value) => `<option ${logFilters.result === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Error type<select data-log-filter="errorType"><option value="all">All error types</option>${(values["Error Types"] || []).map((value) => `<option ${logFilters.errorType === value ? "selected" : ""}>${escapeHTML(value)}</option>`).join("")}</select></label><label>Retest<select data-log-filter="retest"><option value="all">All retest states</option><option value="overdue" ${logFilters.retest === "overdue" ? "selected" : ""}>Overdue</option>${["Not scheduled", "Scheduled", "Due", "Retested", "Resolved"].map((value) => `<option ${logFilters.retest === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>From date<input type="date" data-log-filter="dateFrom" value="${escapeAttr(logFilters.dateFrom)}"></label><label>Through date<input type="date" data-log-filter="dateTo" value="${escapeAttr(logFilters.dateTo)}"></label><label>Sort<select data-log-filter="sort"><option value="updated-desc" ${logFilters.sort === "updated-desc" ? "selected" : ""}>Recently updated</option><option value="date-asc" ${logFilters.sort === "date-asc" ? "selected" : ""}>Oldest date</option><option value="topic" ${logFilters.sort === "topic" ? "selected" : ""}>Topic A-Z</option><option value="retest" ${logFilters.sort === "retest" ? "selected" : ""}>Retest date</option></select></label><button class="button button--quiet" type="button" data-log-reset>Reset</button></div>
+    <details class="entry-filters" id="entry-filters"><summary>Search and filter entries</summary><div class="log-filter-grid"><label class="search-control">Search<input type="search" data-log-search data-view-focus="log-search" value="${escapeAttr(logFilters.search)}" placeholder="Topic, chapter, cause, fix, tag…"></label><label>Section<select data-log-filter="section"><option value="all">All sections</option>${(values.Sections || []).map((value) => `<option ${logFilters.section === value ? "selected" : ""}>${escapeHTML(value)}</option>`).join("")}</select></label><label>Source<select data-log-filter="source"><option value="all">All sources</option>${(values.Sources || []).map((value) => `<option ${logFilters.source === value ? "selected" : ""}>${escapeHTML(value)}</option>`).join("")}</select></label><label>Result<select data-log-filter="result"><option value="all">All results</option>${["Incorrect", "Flagged", "Guessed-correct"].map((value) => `<option ${logFilters.result === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Error type<select data-log-filter="errorType"><option value="all">All error types</option>${(values["Error Types"] || []).map((value) => `<option ${logFilters.errorType === value ? "selected" : ""}>${escapeHTML(value)}</option>`).join("")}</select></label><label>Retest<select data-log-filter="retest"><option value="all">All retest states</option><option value="overdue" ${logFilters.retest === "overdue" ? "selected" : ""}>Overdue</option>${["Not scheduled", "Scheduled", "Due", "Retested", "Resolved"].map((value) => `<option ${logFilters.retest === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>From date<input type="date" data-log-filter="dateFrom" value="${escapeAttr(logFilters.dateFrom)}"></label><label>Through date<input type="date" data-log-filter="dateTo" value="${escapeAttr(logFilters.dateTo)}"></label><label>Sort<select data-log-filter="sort"><option value="updated-desc" ${logFilters.sort === "updated-desc" ? "selected" : ""}>Recently updated</option><option value="date-asc" ${logFilters.sort === "date-asc" ? "selected" : ""}>Oldest date</option><option value="topic" ${logFilters.sort === "topic" ? "selected" : ""}>Topic A-Z</option><option value="retest" ${logFilters.sort === "retest" ? "selected" : ""}>Retest date</option></select></label><button class="button button--quiet" type="button" data-log-reset>Reset</button></div></details>
     ${entries.length ? `<div class="table-wrap"><table class="data-table"><thead><tr><th>Date</th><th>Result</th><th>Section</th><th>Topic / cause</th><th>Source</th><th>Retest</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody>${entries.map((entry) => `<tr><td data-label="Date">${escapeHTML(formatDate(entry.date))}</td><td data-label="Result"><span class="result-chip result-chip--${escapeAttr(entry.result.toLowerCase().replaceAll(/[^a-z]+/g, "-"))}">${escapeHTML(entry.result)}</span></td><td data-label="Section">${escapeHTML(entry.section)}</td><td data-label="Topic / cause"><strong>${escapeHTML(entry.topic)}</strong><span>${escapeHTML(entry.errorType)} · ${escapeHTML(entry.whyMissed)}</span></td><td data-label="Source">${escapeHTML(entry.source)}</td><td data-label="Retest">${entry.retestDate ? `${escapeHTML(formatDate(entry.retestDate))}<span>${escapeHTML(entry.retestStatus)}</span>` : "Not scheduled"}</td><td class="row-actions"><button class="icon-button" type="button" data-view-entry="${escapeAttr(entry.id)}" aria-label="View ${escapeAttr(entry.topic)}">View</button><button class="icon-button" type="button" data-edit-entry="${escapeAttr(entry.id)}" aria-label="Edit ${escapeAttr(entry.topic)}">Edit</button><button class="icon-button icon-button--danger" type="button" data-delete-entry="${escapeAttr(entry.id)}" aria-label="Delete ${escapeAttr(entry.topic)}">Delete</button></td></tr>`).join("")}</tbody></table></div>${pager}` : emptyState("No entries match", "Try clearing a filter, or capture the next meaningful miss above.")}
   </section>`;
 }
@@ -194,7 +205,7 @@ function masterySection(context) {
   const today = todayISO();
   const filtered = context.data.workbook.mastery.topics.filter((topic) => {
     const user = context.state.mastery[topic.id] || {};
-    const relatedCount = context.state.mistakes.filter((entry) => entry.topic === topic.topic).length;
+    const relatedCount = context.state.mistakes.filter((entry) => (entry.masteryTopicId ? entry.masteryTopicId === topic.id : (entry.topic === topic.topic || entry.tags?.includes(topic.topic)))).length;
     if (masteryFilters.section !== "all" && topic.section !== masteryFilters.section) return false;
     if (masteryFilters.confidence !== "all" && String(user.confidence ?? "never") !== masteryFilters.confidence) return false;
     if (masteryFilters.review === "never" && user.lastReviewed) return false;
@@ -206,16 +217,16 @@ function masterySection(context) {
     <div class="mastery-filters"><label>Section<select data-mastery-filter="section"><option value="all">All sections</option>${["CP", "BB", "PS", "CARS"].map((value) => `<option ${masteryFilters.section === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Confidence<select data-mastery-filter="confidence"><option value="all">All confidence</option><option value="never" ${masteryFilters.confidence === "never" ? "selected" : ""}>Not rated</option>${[0, 1, 2, 3].map((value) => `<option value="${value}" ${masteryFilters.confidence === String(value) ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Review need<select data-mastery-filter="review"><option value="all">All review states</option><option value="never" ${masteryFilters.review === "never" ? "selected" : ""}>Never reviewed</option><option value="due" ${masteryFilters.review === "due" ? "selected" : ""}>Due for review</option><option value="repeated" ${masteryFilters.review === "repeated" ? "selected" : ""}>Repeated mistakes</option></select></label></div>
     <div class="mastery-list">${filtered.map((topic) => {
       const user = context.state.mastery[topic.id] || {};
-      const relatedMistakes = context.state.mistakes.filter((entry) => entry.topic === topic.topic);
+      const relatedMistakes = context.state.mistakes.filter((entry) => (entry.masteryTopicId ? entry.masteryTopicId === topic.id : (entry.topic === topic.topic || entry.tags?.includes(topic.topic))));
       const chapters = relatedChapters(topic.topic, context.data);
       const due = user.nextReview && user.nextReview <= today;
-      return `<article class="mastery-row ${due ? "is-due" : ""}" data-mastery-row="${escapeAttr(topic.id)}"><div class="mastery-row__lead"><span class="section-token section-token--${topic.section.toLowerCase()}">${escapeHTML(topic.section)}</span><div><h3>${escapeHTML(topic.topic)}</h3><p>${relatedMistakes.length ? `${plural(relatedMistakes.length, "related mistake")}` : "No exact related mistakes"}${user.lastReviewed ? ` · reviewed ${formatDate(user.lastReviewed)}` : " · never reviewed"}</p></div></div><div class="confidence-control" role="group" aria-label="Confidence for ${escapeAttr(topic.topic)}">${[0, 1, 2, 3].map((value) => `<button type="button" data-confidence="${value}" data-topic-id="${escapeAttr(topic.id)}" class="${Number(user.confidence) === value ? "is-selected" : ""}" aria-pressed="${Number(user.confidence) === value}">${value}</button>`).join("")}</div><details><summary>Review details</summary><div class="mastery-detail"><div class="form-grid form-grid--two"><label>Last reviewed<input data-mastery-field="lastReviewed" type="date" value="${escapeAttr(user.lastReviewed || "")}"></label><label>Next review<input data-mastery-field="nextReview" type="date" value="${escapeAttr(user.nextReview || "")}"></label></div><label>Notes<textarea data-mastery-field="notes" rows="2">${escapeHTML(user.notes || "")}</textarea></label>${chapters.length ? `<div class="context-links"><span>Related chapters</span>${chapters.map((chapter) => `<a href="#plan/${escapeAttr(context.data.schedule.find((row) => row.chapterIds.includes(chapter.id))?.date || "")}">${escapeHTML(chapter.id)} ${escapeHTML(chapter.title)}</a>`).join("")}</div>` : ""}</div></details></article>`;
+      return `<article class="mastery-row ${due ? "is-due" : ""}" data-mastery-row="${escapeAttr(topic.id)}"><div class="mastery-row__lead"><span class="section-token section-token--${topic.section.toLowerCase()}">${escapeHTML(topic.section)}</span><div><h3>${escapeHTML(topic.topic)}</h3>${relatedMistakes.length || user.lastReviewed ? `<p>${relatedMistakes.length ? `${plural(relatedMistakes.length, "related mistake")}` : "No exact related mistakes"}${user.lastReviewed ? ` · reviewed ${formatDate(user.lastReviewed)}` : ""}</p>` : ""}</div></div><div class="confidence-control" role="group" aria-label="Confidence for ${escapeAttr(topic.topic)}">${[0, 1, 2, 3].map((value) => `<button type="button" data-confidence="${value}" data-topic-id="${escapeAttr(topic.id)}" data-view-focus="confidence-${escapeAttr(topic.id)}-${value}" aria-label="${value} — ${["Unfamiliar", "Recognize", "Explain", "Apply"][value]}" class="${user.confidence != null && user.confidence !== "" && Number(user.confidence) === value ? "is-selected" : ""}" aria-pressed="${user.confidence != null && user.confidence !== "" && Number(user.confidence) === value}">${value}</button>`).join("")}</div><details data-view-key="mastery-${escapeAttr(topic.id)}"><summary>Review details</summary><div class="mastery-detail"><div class="form-grid form-grid--two"><label>Last reviewed<input data-mastery-field="lastReviewed" type="date" value="${escapeAttr(user.lastReviewed || "")}"></label><label>Next review<input data-mastery-field="nextReview" type="date" value="${escapeAttr(user.nextReview || "")}"></label></div><label>Notes<textarea data-mastery-field="notes" rows="2">${escapeHTML(user.notes || "")}</textarea></label>${chapters.length ? `<div class="context-links"><span>Related chapters</span>${chapters.map((chapter) => `<a href="#plan/${escapeAttr(context.data.schedule.find((row) => row.chapterIds.includes(chapter.id))?.date || "")}">${escapeHTML(chapter.id)} ${escapeHTML(chapter.title)}</a>`).join("")}</div>` : ""}</div></details></article>`;
     }).join("") || emptyState("No mastery topics match", "Adjust the confidence or review filters.")}</div>
   </section>`;
 }
 
-function exportCenter(context) {
-  return `<section class="export-center" aria-labelledby="export-title"><div class="section-heading"><div><span class="eyebrow">Portable reports + full round trip</span><h2 id="export-title">Export center</h2></div><span>Generated from current tracker state</span></div><div class="storage-notice"><strong>Local first, privately synchronized after sign-in</strong><p>Each device saves immediately in its browser, then merges with your authenticated cloud copy. JSON remains an independent full backup; XLSX and CSV are portable reports.</p></div><div class="export-grid"><article><h3>Excel workbook</h3><p>Seven polished sheets with the live schedule, progress, mistakes, patterns, mastery, scores, and lists.</p><button class="button button--primary" type="button" data-export-xlsx>Create XLSX</button></article><article><h3>Mistake log CSV</h3><p>Every log field with stable headers and safe quoting for commas, newlines, and Unicode.</p><button class="button" type="button" data-export-csv>Export CSV</button></article><article><h3>Complete JSON backup</h3><p>The supported full round-trip format for all progress, settings, drafts, and tracking data.</p><button class="button" type="button" data-export-json>Export JSON</button></article><article><h3>Import JSON backup</h3><p>Validated before any change. You choose replace or merge and can download a safety backup first.</p><button class="button" type="button" data-import-json>Choose backup</button><input class="sr-only" type="file" accept="application/json,.json" data-import-file></article></div></section>`;
+function exportCenter() {
+  return `<section class="export-center"><h2>Backups and reports</h2><p>JSON restores all tracker data. Excel and CSV are readable reports.</p><div class="export-grid"><article><h3>Back up all data</h3><p>Progress, notes, settings, saved reminders, and scores.</p><button class="button button--primary" data-export-json>Export JSON</button></article><article><h3>Restore a backup</h3><p>Review the file, choose merge or replace, and save a safety copy first.</p><button class="button" data-import-json>Choose backup</button><input class="sr-only" type="file" accept="application/json,.json" data-import-file></article></div><h3>Reports</h3><div class="button-row"><button class="button" data-export-xlsx>Create XLSX</button><button class="button" data-export-csv>Export CSV</button></div></section>`;
 }
 
 function entryDialog(entry, data) {
@@ -226,24 +237,17 @@ function entryDialog(entry, data) {
 export function renderLog(context, route = {}) {
   const tab = resolveLogTab(route.detail || "");
   const overdue = dueEntries(context.state).filter((entry) => entry.dueState === "overdue").length;
-  const repeated = topCounts(context.state.mistakes.map((entry) => entry.topic), 50).filter(([, count]) => count > 1).length;
-  const rated = Object.values(context.state.mastery).filter((item) => item.confidence !== undefined && item.confidence !== "").length;
 
   const panels = {
     capture: () => quickForm(context),
-    repair: () => `${retestQueue(context)}${patternSummary(context)}`,
+    repair: () => `${needsReview(context)}${retestQueue(context)}${patternSummary(context)}`,
     entries: () => logTable(context),
     mastery: () => masterySection(context),
     export: () => exportCenter(context),
   };
 
-  // The counters are orienting context for reviewing, but pure noise when the
-  // job is "write this down before I forget it", so capture skips them.
-  const overview = tab === "capture" ? "" : `<div class="log-overview"><article><span>Entries</span><strong>${context.state.mistakes.length}</strong></article><article><span>Retests overdue</span><strong>${overdue}</strong></article><article><span>Repeated topics</span><strong>${repeated}</strong></article><article><span>Mastery rated</span><strong>${rated}/40</strong></article></div>`;
-
   return `<header class="view-header"><div><span class="eyebrow">${plural(context.state.mistakes.length, "saved entry", "saved entries")} · ${plural(overdue, "overdue retest")}</span><h1>Log + repair</h1></div></header>
     ${tabStrip(context, overdue)}
-    ${overview}
     <div class="log-panel">${(panels[tab] || panels.capture)()}</div>`;
 }
 
@@ -259,6 +263,7 @@ function formEntry(form, existing) {
     retestResult: values.retestResult?.trim() || existing?.retestResult || "",
     confidence: values.confidence === "" || values.confidence === undefined ? "" : Number(values.confidence),
     tags: String(values.tags || "").split(",").map((tag) => tag.trim()).filter(Boolean), notes: values.notes?.trim() || "",
+    masteryTopicId: values.masteryTopicId || "", captureStatus: existing?.captureStatus || "reviewed",
     assignmentId: values.assignmentId || "", createdAt: existing?.createdAt || now, updatedAt: now,
   };
 }
@@ -274,11 +279,12 @@ function openEntry(context, id) {
 function openRetest(context, id) {
   const entry = context.state.mistakes.find((item) => item.id === id);
   if (!entry) return;
-  context.openDialog({ title: "Record retest", body: `<form data-retest-form><p class="dialog-lead"><strong>${escapeHTML(entry.topic)}</strong><br>${escapeHTML(entry.fix)}</p><label>Retest result<textarea required name="retestResult" rows="4" placeholder="What happened when you tried it again?">${escapeHTML(entry.retestResult || "")}</textarea></label><label>Status<select name="retestStatus"><option>Retested</option><option>Resolved</option><option>Scheduled</option></select></label><button class="button button--primary" type="submit">Save retest</button></form>`, onMount: (dialog) => {
+  context.openDialog({ title: "Record retest", body: `<form data-retest-form><p class="dialog-lead"><strong>${escapeHTML(entry.topic)}</strong><br>${escapeHTML(entry.fix)}</p><label>Retest result<textarea required name="retestResult" rows="4" placeholder="What happened when you tried it again?">${escapeHTML(entry.retestResult || "")}</textarea></label><label>Status<select name="retestStatus"><option value="Resolved">Resolved</option><option value="Scheduled">Needs another retest</option><option value="Retested">Retested — no next date</option></select></label><label>Next retest date<input name="nextRetestDate" type="date" min="${todayISO()}" value=""></label><p class="form-error" data-retest-error role="alert"></p><button class="button button--primary" type="submit">Save retest</button></form>`, onMount: (dialog) => {
     dialog.querySelector("[data-retest-form]").addEventListener("submit", (event) => {
       event.preventDefault();
       const values = formToObject(event.currentTarget);
-      const mistakes = context.state.mistakes.map((item) => item.id === id ? { ...item, retestResult: values.retestResult, retestStatus: values.retestStatus, updatedAt: new Date().toISOString() } : item);
+      if (values.retestStatus === "Scheduled" && !values.nextRetestDate) { dialog.querySelector("[data-retest-error]").textContent = "Choose the next retest date."; return; }
+      const mistakes = context.state.mistakes.map((item) => item.id === id ? { ...item, ...(values.retestStatus === "Scheduled" ? { retestDate: values.nextRetestDate } : {}), retestResult: values.retestResult, retestStatus: values.retestStatus, updatedAt: new Date().toISOString() } : item);
       context.updateState({ ...context.state, mistakes }, { success: "Retest saved", onSaved: () => dialog.close() });
     });
   } });
@@ -289,7 +295,7 @@ function importDialog(context, payload) {
   try { validated = validateBackup(payload, context.data.schedule); }
   catch (error) { context.openDialog({ title: "Backup rejected safely", body: `<div class="import-error"><p>${escapeHTML(error.message)}</p><p>No existing tracker data was changed.</p></div>` }); return; }
   const summary = validated.summary;
-  context.openDialog({ title: "Import complete JSON backup", body: `<form data-import-confirm><div class="import-summary"><p>This backup contains:</p><ul><li>${summary.dailyRecords} daily records (${summary.activeDailyRecords} current-plan; ${summary.historicalDailyRecords} preserved history)</li><li>${summary.mistakeEntries} mistake entries</li><li>${summary.examRecords} exam records</li><li>${summary.masteryRecords} mastery records</li><li>${summary.focusSessions} focus sessions</li><li>Registered date: ${escapeHTML(summary.registeredExamDate)}</li><li>Display name: ${escapeHTML(summary.displayName)}</li></ul></div><fieldset><legend>How should conflicts be handled?</legend><label class="radio-control"><input type="radio" name="strategy" value="replace" checked><span><strong>Replace existing state</strong>Every current tracker record, setting, and draft will be replaced.</span></label><label class="radio-control"><input type="radio" name="strategy" value="merge"><span><strong>Merge, newest entry wins</strong>Imported daily, exam, mastery, and settings values win; duplicate mistake IDs use the newest update.</span></label></fieldset><div class="safety-box"><strong>Safety first</strong><p>Download the current state before importing if you may need to undo this change.</p><button class="button" type="button" data-safety-backup>Download safety backup</button></div><label class="check-control"><input type="checkbox" required data-import-check><span>I understand what will be replaced or merged.</span></label><button class="button button--primary" type="submit" data-apply-import disabled>Apply import</button></form>`, onMount: (dialog) => {
+  context.openDialog({ title: "Import complete JSON backup", body: `<form data-import-confirm><div class="import-summary"><p>This backup contains:</p><ul><li>${summary.dailyRecords} daily records (${summary.activeDailyRecords} current-plan; ${summary.historicalDailyRecords} preserved history)</li><li>${summary.mistakeEntries} mistake entries</li><li>${summary.examRecords} exam records</li><li>${summary.masteryRecords} mastery records</li><li>${summary.focusSessions} focus sessions</li><li>Registered date: ${escapeHTML(summary.registeredExamDate)}</li><li>Display name: ${escapeHTML(summary.displayName)}</li></ul></div><fieldset><legend>How should conflicts be handled?</legend><label class="radio-control"><input type="radio" name="strategy" value="replace" checked><span><strong>Replace existing state</strong>Every current tracker record, setting, and draft will be replaced.</span></label><label class="radio-control"><input type="radio" name="strategy" value="merge"><span><strong>Merge, newest entry wins</strong>For conflicting records and settings, the newest saved update wins. Records unique to either copy are kept.</span></label></fieldset><div class="safety-box"><strong>Safety first</strong><p>Download the current state before importing if you may need to undo this change.</p><button class="button" type="button" data-safety-backup>Download safety backup</button></div><label class="check-control"><input type="checkbox" required data-import-check><span>I understand what will be replaced or merged.</span></label><button class="button button--primary" type="submit" data-apply-import disabled>Apply import</button></form>`, onMount: (dialog) => {
     const form = dialog.querySelector("[data-import-confirm]");
     const check = form.querySelector("[data-import-check]");
     const apply = form.querySelector("[data-apply-import]");
@@ -300,12 +306,13 @@ function importDialog(context, payload) {
       if (!check.checked) return;
       const strategy = new FormData(form).get("strategy");
       const next = strategy === "merge" ? mergeStates(context.state, validated.state) : validated.state;
-      context.updateState(next, { success: "Backup imported successfully", onSaved: () => dialog.close() });
+      context.updateState(next, { success: "Backup imported successfully", onSaved: () => { clearEditorDrafts(); dialog.close(); } });
     });
   } });
 }
 
 export function bindLog(container, context, route) {
+  container.querySelector("[data-show-all-retests]")?.addEventListener("click", () => { showAllRetests = true; context.rerender(); });
   const form = container.querySelector("[data-mistake-form]");
   const draftSave = debounce(() => {
     if (editingId || !form?.isConnected) return;
@@ -328,13 +335,21 @@ export function bindLog(container, context, route) {
   });
   form?.addEventListener("submit", (event) => {
     event.preventDefault();
+    const captureOnly = Boolean(event.submitter?.hasAttribute("data-capture-only"));
+    for (const name of ["section", "topic", "errorType", "whyMissed", "takeaway", "fix"]) form.elements[name].required = !captureOnly;
+    const error = form.querySelector("[data-capture-error]");
+    error.textContent = "";
+    if (captureOnly && !form.elements.topic.value.trim() && !form.elements.questionRef.value.trim()) { error.textContent = "Add a short topic or question reference."; form.elements.topic.focus(); return; }
+    if (!captureOnly) form.querySelector(".capture-review").open = true;
     if (!form.checkValidity()) { form.reportValidity(); return; }
     const existing = editingId ? context.state.mistakes.find((entry) => entry.id === editingId) : null;
     const entry = formEntry(form, existing);
+    entry.captureStatus = captureOnly ? "needs-review" : "reviewed";
+    if (!entry.topic) entry.topic = entry.questionRef;
     const mistakes = existing ? context.state.mistakes.map((item) => item.id === existing.id ? entry : item) : [entry, ...context.state.mistakes];
     context.updateState({ ...context.state, mistakes, drafts: { ...context.state.drafts, mistake: {} } }, {
-      success: existing ? "Entry updated" : "Entry saved",
-      onSaved: () => { editingId = ""; lastSavedId = entry.id; context.clearQuickLogPrefill?.(); },
+      success: captureOnly ? "Reminder saved for review" : existing ? "Review updated" : "Entry saved",
+      onSaved: () => { clearEditorDraft(`mistake-${editingId || "new"}`); editingId = ""; lastSavedId = entry.id; context.clearQuickLogPrefill?.(); },
     });
   });
   container.querySelector("[data-cancel-edit]")?.addEventListener("click", () => { editingId = ""; context.rerender(); });
@@ -367,7 +382,11 @@ export function bindLog(container, context, route) {
 
   // Any change to what is being filtered puts you back on the first page.
   const search = container.querySelector("[data-log-search]");
-  search?.addEventListener("input", debounce(() => { logFilters.search = search.value; logPage = 0; context.rerender(); }, 250));
+  let composing = false;
+  const updateSearch = debounce(() => { if (composing || !search.isConnected) return; logFilters.search = search.value; logPage = 0; context.rerender(); }, 250);
+  search?.addEventListener("compositionstart", () => { composing = true; });
+  search?.addEventListener("compositionend", () => { composing = false; updateSearch(); });
+  search?.addEventListener("input", updateSearch);
   container.querySelectorAll("[data-log-filter]").forEach((control) => control.addEventListener("change", () => { logFilters[control.dataset.logFilter] = control.value; logPage = 0; context.rerender(); }));
   container.querySelector("[data-log-reset]")?.addEventListener("click", () => { Object.assign(logFilters, { search: "", section: "all", source: "all", result: "all", errorType: "all", retest: "all", dateFrom: "", dateTo: "", sort: "updated-desc" }); logPage = 0; context.rerender(); });
   container.querySelectorAll("[data-log-page]").forEach((button) => button.addEventListener("click", () => {

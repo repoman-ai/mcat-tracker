@@ -57,17 +57,23 @@ function matchingBlocks(section, query) {
 
 export function renderGuide(context, route, { isRouteChange = true } = {}) {
   if (isRouteChange) guideQuery = "";
-  const sections = context.data.guide.sections.filter((section) => sectionMatches(section, guideQuery));
+  const query = guideQuery.trim();
+  const sections = context.data.guide.sections.filter((section) => sectionMatches(section, query));
   return `<header class="view-header"><div><span class="eyebrow">Complete meaningful content from the study guide</span><h1>Guide</h1><p>Search the operating rules, phases, time templates, exam guidance, decision rules, registration, and source links.</p></div><a class="button" href="#today">Back to Today</a></header>
-    <section class="guide-search-panel"><label class="guide-search">Search guide<input type="search" data-guide-search value="${escapeAttr(guideQuery)}" placeholder="Try “CARS,” “March,” “full-length review”…"><span>${sections.length} matching section${sections.length === 1 ? "" : "s"}</span></label><nav class="guide-section-nav" aria-label="Guide sections">${context.data.guide.sections.map((section) => `<a href="#guide/${escapeAttr(section.id)}" class="${route.detail === section.id ? "is-active" : ""}">${escapeHTML(section.title.replace(/^\d+\.\s*/, ""))}</a>`).join("")}</nav></section>
-    <section class="guide-context-cards" aria-label="Frequently needed guidance"><a href="#guide/operating-rules"><span>When you sit down</span><strong>Operating rules</strong></a><a href="#guide/full-length-and-section-bank-schedule"><span>Before an exam</span><strong>Full-length + SB schedule</strong></a><a href="#guide/january-vs-march-decision"><span>At the evidence checkpoint</span><strong>January vs. March</strong></a><a href="#guide/registration-and-resource-controls"><span>After registration</span><strong>Date + resources</strong></a></section>
-    <section class="guide-sections" aria-label="Study guide content">${sections.length ? sections.map((section, index) => `<details class="guide-section" id="guide-section-${escapeAttr(section.id)}" data-guide-section="${escapeAttr(section.id)}" ${route.detail === section.id || (guideQuery && index === 0) ? "open" : ""}><summary><span>${escapeHTML(section.title)}</span><span class="disclosure-icon" aria-hidden="true">⌄</span></summary><article>${matchingBlocks(section, guideQuery).map((block) => renderBlock(block, guideQuery)).join("")}</article></details>`).join("") : emptyState("No guide results", `Nothing matched “${guideQuery}”. Try a broader term.`)}</section>
-    <section class="guide-source-note"><strong>Source fidelity</strong><p>Chapter names and subsections are generated from <code>kaplan-mcat-books.md</code> and appear contextually in Today, Plan, and Log. They are intentionally not dumped into one giant guide page.</p></section>`;
+    <section class="guide-search-panel"><label class="guide-search">Search guide<input type="search" data-guide-search data-view-focus="guide-search" value="${escapeAttr(guideQuery)}" placeholder="Try “CARS,” “March,” “full-length review”…"><span role="status">${sections.length} matching section${sections.length === 1 ? "" : "s"}</span></label></section>
+    ${guideQuery ? '<button class="button button--quiet" type="button" data-guide-clear>Clear search</button>' : `<section class="guide-context-cards" aria-label="Frequently needed guidance"><a href="#guide/operating-rules"><span>When you sit down</span><strong>Operating rules</strong></a><a href="#guide/full-length-and-section-bank-schedule"><span>Before an exam</span><strong>Full-length + SB schedule</strong></a><a href="#guide/january-vs-march-decision"><span>At the evidence checkpoint</span><strong>January vs. March</strong></a><a href="#guide/registration-and-resource-controls"><span>After registration</span><strong>Date + resources</strong></a></section>`}
+    <section class="guide-sections" aria-label="Study guide content">${sections.length ? sections.map((section, index) => `<details class="guide-section" id="guide-section-${escapeAttr(section.id)}" data-guide-section="${escapeAttr(section.id)}" ${route.detail === section.id || (guideQuery && index === 0) ? "open" : ""}><summary><span>${escapeHTML(section.title)}</span><span class="disclosure-icon" aria-hidden="true">⌄</span></summary><article>${matchingBlocks(section, query).map((block) => renderBlock(block, query)).join("")}</article></details>`).join("") : emptyState("No guide results", `Nothing matched “${guideQuery}”. Try a broader term.`)}</section>
+`;
 }
 
 export function bindGuide(container, context, route, { isRouteChange = true } = {}) {
   const search = container.querySelector("[data-guide-search]");
-  search?.addEventListener("input", debounce(() => { guideQuery = search.value.trim(); context.rerender(); }, 250));
+  let composing = false;
+  const searchChanged = debounce(() => { if (composing || !search.isConnected) return; guideQuery = search.value; context.rerender(); }, 250);
+  search?.addEventListener("compositionstart", () => { composing = true; });
+  search?.addEventListener("compositionend", () => { composing = false; searchChanged(); });
+  search?.addEventListener("input", searchChanged);
+  container.querySelector("[data-guide-clear]")?.addEventListener("click", () => { guideQuery = ""; context.rerender(); container.querySelector("[data-guide-search]")?.focus(); });
   if (isRouteChange && route.detail) {
     // The rendered section is already mounted. Scroll synchronously, as Plan
     // does, so a delayed callback cannot race another render or route.

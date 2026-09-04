@@ -1,3 +1,4 @@
+import { parseActualCount } from "./daily.js";
 import { APP_VERSION, uniqueId } from "./utils.js";
 
 export const STORAGE_KEY = "mcatMomentum.state.v2";
@@ -65,6 +66,8 @@ function sanitizeMistakes(items) {
         source: String(item.source || ""),
         section: String(item.section || ""),
         chapterId: String(item.chapterId || ""),
+        masteryTopicId: String(item.masteryTopicId || ""),
+        captureStatus: item.captureStatus === "needs-review" ? "needs-review" : "reviewed",
         topic: String(item.topic || ""),
         questionRef: String(item.questionRef || ""),
         description: String(item.description || ""),
@@ -102,6 +105,7 @@ export function normalizeState(input) {
     settings: {
       ...base.settings,
       ...settings,
+      reducedMotionOverride: ["system", "on", "off"].includes(settings.reducedMotionOverride) ? settings.reducedMotionOverride : "system",
       displayName: sanitizeDisplayName(settings.displayName),
       updatedAt: String(settings.updatedAt || source.updatedAt || base.settings.updatedAt),
     },
@@ -172,6 +176,13 @@ export function validateBackup(payload, schedule = null) {
   if (rawMistakes !== undefined && !Array.isArray(rawMistakes)) throw new Error("The mistake log must be an array.");
   const ids = (rawMistakes || []).map((entry) => entry?.id).filter(Boolean);
   if (new Set(ids).size !== ids.length) throw new Error("The backup contains duplicate mistake entry IDs. No data was changed.");
+  for (const record of Object.values(payload.state.daily || {})) {
+    try { parseActualCount(record.actualQuestions); parseActualCount(record.actualCars); }
+    catch { throw new Error("This backup contains an invalid daily count. Counts must be whole numbers of zero or more, or blank. No data was changed."); }
+  }
+  for (const record of Object.values(payload.state.exams || {})) {
+    for (const value of Object.values(record.diagnosticPercent || {})) if (value !== "" && (!Number.isFinite(Number(value)) || Number(value) < 0 || Number(value) > 100)) throw new Error("Diagnostic percentages must be between 0 and 100. No data was changed.");
+  }
   const state = normalizeState(payload.state);
   const activeIds = schedule ? new Set(schedule.map((row) => row.id)) : null;
   const activeDailyRecords = activeIds ? Object.keys(state.daily).filter((id) => activeIds.has(id)).length : null;

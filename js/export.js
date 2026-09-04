@@ -1,5 +1,5 @@
 import { createBackup } from "./storage.js";
-import { assignmentTasks, taskProgress } from "./daily.js";
+import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js";
 import {
   countPracticeQuestions,
   csvCell,
@@ -9,6 +9,8 @@ import {
   todayISO,
   topCounts,
 } from "./utils.js";
+
+function exportFields(data) { return [...data.workbook.mistakeLog.fieldDefinitions, { key: "captureStatus", label: "Capture Status", type: "text" }, { key: "masteryTopicId", label: "Mastery Topic ID", type: "text" }]; }
 
 const NAVY = "0E2A47";
 const BLUE = "2B6F8A";
@@ -94,19 +96,19 @@ function progressRows(data, state) {
     const rows = data.schedule.filter((row) => row.week === week.week);
     const studyRows = rows.filter((row) => !row.isRest);
     const completed = studyRows.filter((row) => state.daily[row.id]?.status === "complete").length;
-    const actualQuestions = rows.reduce((sum, row) => sum + Number(state.daily[row.id]?.actualQuestions || 0), 0);
-    const actualCars = rows.reduce((sum, row) => sum + Number(state.daily[row.id]?.actualCars || 0), 0);
+    const questions = recordedCounts(rows, state, "actualQuestions");
+    const cars = recordedCounts(rows, state, "actualCars");
     return [
       week.week, weekDateRange(data, week.week), week.phase, week.focus, week.planned_hours,
       studyRows.length, completed, percent(completed, studyRows.length) / 100,
-      week.uworld_questions, actualQuestions, week.cars_passages, actualCars,
-      week.milestone, week.exam_or_section_bank || "",
+      rows.reduce((sum, row) => sum + countPracticeQuestions(row.practiceTarget), 0), questions.total, week.cars_passages, cars.total,
+      week.milestone, week.exam_or_section_bank || "", questions.days, cars.days,
     ];
   });
 }
 
 function mistakeRows(data, state) {
-  const fields = data.workbook.mistakeLog.fieldDefinitions;
+  const fields = exportFields(data);
   return state.mistakes.map((entry) => fields.map((field) => {
     const value = entry[field.key];
     if (field.type === "date") return value ? makeDateFromISO(value) : "";
@@ -118,7 +120,7 @@ function weeklyPatternRows(data, state) {
   return data.plan.weeks.map((week) => {
     const scheduleRows = data.schedule.filter((row) => row.week === week.week);
     const dates = new Set(scheduleRows.map((row) => row.date));
-    const entries = state.mistakes.filter((entry) => dates.has(entry.date));
+    const entries = state.mistakes.filter((entry) => entry.captureStatus !== "needs-review" && dates.has(entry.date));
     const top = (key) => topCounts(entries.map((entry) => entry[key]), 1)[0]?.[0] || "";
     const repeated = topCounts(entries.map((entry) => entry.topic), 10).filter(([, count]) => count > 1).map(([value, count]) => `${value} (${count})`).join("; ");
     const nextAction = entries.filter((entry) => entry.retestStatus !== "Resolved").sort((a, b) => String(a.retestDate || "9999").localeCompare(String(b.retestDate || "9999")))[0]?.fix || "";
@@ -139,7 +141,7 @@ function weeklyPatternRows(data, state) {
 function masteryRows(data, state) {
   return data.workbook.mastery.topics.map((topic) => {
     const user = state.mastery[topic.id] || {};
-    const related = state.mistakes.filter((entry) => entry.topic === topic.topic || entry.tags?.includes(topic.topic)).length;
+    const related = state.mistakes.filter((entry) => (entry.masteryTopicId ? entry.masteryTopicId === topic.id : (entry.topic === topic.topic || entry.tags?.includes(topic.topic)))).length;
     return [topic.section, topic.category, topic.topic, user.confidence ?? "", user.lastReviewed ? makeDateFromISO(user.lastReviewed) : "", user.nextReview ? makeDateFromISO(user.nextReview) : "", user.notes || "", related];
   });
 }
@@ -149,9 +151,10 @@ function examRows(data, state) {
     const user = state.exams[exam.id] || {};
     return [
       exam.name, exam.source, makeDateFromISO(exam.plannedDate), user.completed ? "Complete" : "Not complete",
-      user.cp ?? "", user.cars ?? "", user.bb ?? "", user.ps ?? "", user.total ?? "",
+      ...(["cp", "cars", "bb", "ps", "total"].map((key) => exam.diagnostic ? "" : user[key] ?? "")),
       user.timingStatus || "", user.unfinishedSection ? "Yes" : "No", user.reviewStatus || "Not started",
       user.reviewDate ? makeDateFromISO(user.reviewDate) : "", user.notes || "", user.repairThemes || "",
+      ...["cp", "cars", "bb", "ps"].map((key) => exam.diagnostic ? user.diagnosticPercent?.[key] ?? "" : ""),
     ];
   });
 }
@@ -174,7 +177,7 @@ export function exportCorruptRecovery(raw, filename = `MCAT_Tracker_Corrupt_Reco
 }
 
 export function exportMistakeCSV(data, state) {
-  const fields = data.workbook.mistakeLog.fieldDefinitions;
+  const fields = exportFields(data);
   const lines = [fields.map((field) => csvCell(field.label)).join(",")];
   state.mistakes.forEach((entry) => {
     lines.push(fields.map((field) => csvCell(entry[field.key])).join(","));
@@ -183,8 +186,20 @@ export function exportMistakeCSV(data, state) {
   downloadBlob(blob, `MCAT_Mistake_Log_${todayISO()}.csv`);
 }
 
+let excelLibrary;
+export function loadExcelLibrary() {
+  if (globalThis.ExcelJS) return Promise.resolve(globalThis.ExcelJS);
+  if (!excelLibrary) excelLibrary = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = new URL("../vendor/exceljs.min.js", import.meta.url).href;
+    script.onload = () => { if (globalThis.ExcelJS) resolve(globalThis.ExcelJS); else { script.remove(); reject(new Error("Excel export could not load. Try again.")); } };
+    script.onerror = () => { script.remove(); reject(new Error("Excel export could not load. Check your connection and try again.")); };
+    document.head.append(script);
+  }).catch((error) => { excelLibrary = null; throw error; });
+  return excelLibrary;
+}
 export async function exportWorkbook(data, state) {
-  if (!globalThis.ExcelJS) throw new Error("The local Excel export library did not load.");
+  await loadExcelLibrary();
   const workbook = new ExcelJS.Workbook();
   workbook.creator = "MCAT Momentum";
   workbook.lastModifiedBy = "MCAT Momentum";
@@ -200,12 +215,12 @@ export async function exportWorkbook(data, state) {
     { dateColumns: [1], highlightStatusColumn: 14, tabColor: "2B6F8A" });
 
   const progress = addSheet(workbook, `${data.plan.prep_weeks}-Week Progress`,
-    ["Week", "Dates", "Phase", "Focus", "Planned Hours", "Study Days", "Completed Days", "Completion %", "Planned Questions", "Actual Questions", "CARS Target", "Actual CARS", "Milestone", "FL / Section Bank"],
-    progressRows(data, state), [8, 24, 19, 32, 14, 12, 15, 14, 17, 16, 13, 12, 48, 22],
+    ["Week", "Dates", "Phase", "Focus", "Planned Hours", "Study Days", "Completed Days", "Completion %", "Planned Questions", "Recorded QBank Questions", "CARS Target", "Recorded CARS Passages", "Milestone", "FL / Section Bank", "Days with QBank Counts", "Days with CARS Counts"],
+    progressRows(data, state), [8, 24, 19, 32, 14, 12, 15, 14, 17, 20, 13, 20, 48, 22, 20, 20],
     { tabColor: "5C8D79" });
   progress.getColumn(8).numFmt = "0%";
 
-  const mistakeFields = data.workbook.mistakeLog.fieldDefinitions;
+  const mistakeFields = exportFields(data);
   addSheet(workbook, "Mistake Log", mistakeFields.map((field) => field.label), mistakeRows(data, state),
     mistakeFields.map((field) => ["whyMissed", "takeaway", "fix", "notes", "description"].includes(field.key) ? 38 : ["createdAt", "updatedAt"].includes(field.key) ? 22 : 18),
     { dateColumns: mistakeFields.map((field, index) => field.type === "date" ? index + 1 : 0).filter(Boolean), highlightStatusColumn: mistakeFields.findIndex((field) => field.key === "retestStatus") + 1, tabColor: "D79A47" });
@@ -221,8 +236,8 @@ export async function exportWorkbook(data, state) {
     { dateColumns: [5, 6], tabColor: "5C8D79" });
 
   addSheet(workbook, "Full-Length Scores",
-    ["Exam", "Source", "Planned Date", "Status", "C/P", "CARS", "B/B", "P/S", "Total", "Timing Status", "Any Section Unfinished?", "Review Status", "Review Date", "Notes", "Key Repair Themes"],
-    examRows(data, state), [30, 22, 16, 16, 10, 10, 10, 10, 10, 18, 22, 18, 16, 38, 38],
+    ["Exam", "Source", "Planned Date", "Status", "C/P", "CARS", "B/B", "P/S", "Total", "Timing Status", "Any Section Unfinished?", "Review Status", "Review Date", "Notes", "Key Repair Themes", "Diagnostic C/P %", "Diagnostic CARS %", "Diagnostic B/B %", "Diagnostic P/S %"],
+    examRows(data, state), [30, 22, 16, 16, 10, 10, 10, 10, 10, 18, 22, 18, 16, 38, 38, 18, 18, 18, 18],
     { dateColumns: [3, 13], highlightStatusColumn: 4, tabColor: "8A5E95" });
 
   const lists = listsRows(data);

@@ -62,6 +62,7 @@ const now = new Date().toISOString();
 
 const state = normalizeState({
   daily: {
+    "2026-09-01": {actualQuestions:0, actualCars:""},
     "2026-10-12": { status: "complete", actualQuestions: 40, actualCars: 3, notes: nasty, updatedAt: now },
     "2026-10-13": { status: "in-progress", actualQuestions: 12, actualCars: 1, notes: "", updatedAt: now },
   },
@@ -116,6 +117,8 @@ for (const { handle, filename } of captured) {
     const progress = exported.getWorksheet(`${data.plan.prep_weeks}-Week Progress`);
     if (schedule.rowCount !== data.schedule.length + 1) throw new Error("Exported daily schedule has stale row count");
     if (!progress || progress.rowCount !== data.plan.prep_weeks + 1) throw new Error("Exported week progress is stale");
+    if (progress.getCell("J2").value !== 0 || progress.getCell("O2").value !== 1) throw new Error("Explicit zero needs one recorded day");
+    if (![null, ""].includes(progress.getCell("L2").value) || progress.getCell("P2").value !== 0) throw new Error("Missing CARS counts must remain unrecorded");
     if (schedule.getCell("A2").value.toISOString().slice(0, 10) !== data.plan.plan_start) throw new Error("Exported start date is stale");
     if (schedule.getCell("M1").value !== "Checklist Progress") throw new Error("Exported schedule is missing checklist progress");
     if (exported.getWorksheet("Full-Length Scores").getCell("C2").value.toISOString().slice(0, 10) !== data.exams[0].plannedDate) throw new Error("Exported diagnostic date is stale");

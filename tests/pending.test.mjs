@@ -74,12 +74,12 @@ test("catch-up stays present on rest, exam, placeholder and after-plan days", ()
   }
 });
 
-test("today's check-off and start controls precede long instructions", () => {
+test("today's checklist leads the action and reference material stays disclosed", () => {
   preview("2026-09-10");
   const html = renderToday({ data, state: empty() });
-  const start = html.indexOf("data-start-day=");
-  assert.ok(start > 0 && start < html.indexOf('class="today-facts"'));
-  assert.ok(html.indexOf('data-toggle-complete="2026-09-10"') < start);
+  const checklist = html.indexOf('class="task-checklist"');
+  assert.ok(checklist > 0 && checklist < html.indexOf('data-toggle-complete="2026-09-10"'));
+  assert.doesNotMatch(html, /data-start-day=|class="today-facts"/);
 });
 
 test("Completed includes every saved completion and historical records, newest date first", () => {
@@ -190,9 +190,10 @@ test("Plan's past-due filter uses the same queue and keeps check-off in collapse
   change();
   const html = renderPlan(context, {}, { isRouteChange: false });
   const ids = [...html.matchAll(/data-assignment-details="([^"]+)"/g)].map((match) => match[1]);
-  assert.deepEqual(ids, pendingRows(data, context.state).map((row) => row.id));
+  assert.deepEqual([...ids].sort(), pendingRows(data, context.state).map((row) => row.id));
   assert.match(html, /class="past-due-label">Past due/);
-  assert.ok(html.indexOf('data-toggle-complete="2026-09-01"') < html.indexOf('class="plan-day__detail"'));
+  const firstDay = html.slice(html.indexOf(`data-assignment-details="${ids[0]}"`));
+  assert.ok(firstDay.indexOf(`data-toggle-complete="${ids[0]}"`) < firstDay.indexOf('class="plan-day__detail"'));
 });
 
 test("View all keeps the entire schedule, resolves today once, and opens the backlog", () => {
@@ -241,6 +242,9 @@ test("zero past-due days never hides the schedule", () => {
 
 test("checking off work and rerendering keeps one focus timer and its original assignment", () => {
   preview("2026-09-10");
+  const originalNow = Date.now;
+  let now = originalNow();
+  Date.now = () => now;
   const originalSet = globalThis.setInterval;
   const originalClear = globalThis.clearInterval;
   let ticks;
@@ -258,7 +262,7 @@ test("checking off work and rerendering keeps one focus timer and its original a
   try {
     const first = mount(context);
     first.toggle.click();
-    ticks();
+    now += 1000; ticks();
     assert.equal(first.clock.textContent, "24:59");
     context.state = withDailyStatus(context.state, "2026-09-01", "complete");
     const second = mount(context);
@@ -273,7 +277,7 @@ test("checking off work and rerendering keeps one focus timer and its original a
     assert.equal(third.clock.textContent, "24:59");
     third.toggle.click();
     assert.equal(intervalCount, 2);
-    for (let i = 0; i < 1499; i += 1) ticks();
+    now += 1499 * 1000; ticks();
     assert.equal(third.clock.textContent, "00:00");
     assert.equal(third.toggle.textContent, "Save block");
     assert.equal(third.toggle.disabled, false);
@@ -285,6 +289,7 @@ test("checking off work and rerendering keeps one focus timer and its original a
     assert.equal(third.clock.textContent, "25:00");
     assert.equal(third.finish.disabled, true);
   } finally {
+    Date.now = originalNow;
     globalThis.setInterval = originalSet;
     globalThis.clearInterval = originalClear;
   }

@@ -1,5 +1,6 @@
+import { createFocusTimer } from "../focus-timer.js";
 import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js";
-import { withDailyStatus } from "../daily.js";
+import { recordedCounts } from "../daily.js";
 import {
   countPracticeQuestions,
   daysBetween,
@@ -15,9 +16,11 @@ import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, comple
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.
-const focus = { remaining: 25 * 60, timer: null, startedAt: "", assignmentId: "", paint: () => {} };
+const elapsedClock = createFocusTimer();
+const focus = { timer: null, startedAt: "", assignmentId: "", paint: () => {} };
 
 export function leaveToday() {
+  elapsedClock.pause();
   clearInterval(focus.timer);
   focus.timer = null;
   focus.paint = () => {};
@@ -29,6 +32,7 @@ function countdown(data, state, today) {
   const days = daysBetween(today, target);
   const isRegistered = Boolean(registered);
   if (days === null) return "";
+  if (!registered) return `<p class="quiet-countdown">No registered date · planning against Jan 22–23. <a href="#exams">Set date</a></p>`;
   const headline = days >= 0 ? `${days} days` : `${Math.abs(days)} days ago`;
   return `
     <section class="countdown-card ${isRegistered ? "countdown-card--registered" : ""}">
@@ -53,8 +57,14 @@ function catchUpSection(rows, state, today) {
 }
 
 function renderCompleted(context, rows, today) {
+  const sessions = context.state.focusSessions || [];
+  const minutes = sessions.reduce((total, session) => total + Number(session.minutes || 0), 0);
+  const currentWeek = getTodayContext(context.data, today).row?.week;
+  const weekIds = new Set(weekRows(context.data, currentWeek).map((row) => row.id));
+  const weekMinutes = sessions.filter((session) => weekIds.has(session.assignmentId)).reduce((total, session) => total + Number(session.minutes || 0), 0);
   return `<header class="view-header today-header"><div><span class="eyebrow">Your finished work</span><h1>Completed</h1></div></header>
     ${todayTabs(rows.length, true)}
+    ${sessions.length ? `<p class="focus-history">Saved focus time: <strong>${Math.round(weekMinutes)} min</strong> for this week’s assignments · ${Math.round(minutes)} min total</p>` : ""}
     <section class="completed-work" aria-label="Completed assignments">
       <p class="muted">All checked-off days, newest scheduled date first. Tap a checked box to reopen a current-plan day; notes and counts stay saved. Earlier plan history is read-only.</p>
       ${rows.length ? `<ul class="completed-list">${rows.map((row) => workRow(row, context.state, today, true)).join("")}</ul>` : emptyState("Nothing checked off yet", "Completed study days will appear here, including work you check off later.", '<a class="button" href="#today">Back to today</a>')}
@@ -73,115 +83,56 @@ function actionCopy(row, status, contextState) {
   return { eyebrow: "Your next concrete action", button: "Review assignment" };
 }
 
-export function renderToday(context, route = {}) {
+export function dayTitle(row) {
+  const names = { "General Chemistry": "Gen Chem", "Critical Analysis and Reasoning Skills": "CARS", "Physics and Math": "Physics + Math", "Organic Chemistry": "Organic Chem", "Behavioral Sciences": "Psych/Soc" };
+  const subjects = [...new Set((row.chapters || []).map((chapter) => names[chapter.subject] || chapter.subject))];
+  return subjects.length ? subjects.join(" + ") : row.assignment;
+}
+
+export function renderToday(context, route = {}, { isRouteChange = true } = {}) {
   const { data, state } = context;
   const today = todayISO();
   const completed = completedRows(data, state);
   if (route.detail === "completed") return renderCompleted(context, completed, today);
   const pending = pendingRows(data, state, today);
-  const catchup = catchUpSection(pending, state, today);
-  const due = dueEntries(state, today).filter((entry) => entry.dueState !== "upcoming");
-  const repairs = due.length ? `<p class="pending-repairs"><a href="#log/repair">${plural(due.length, "retest")} due</a> · Record retests in Log</p>` : "";
   const todayContext = getTodayContext(data, today);
   const row = todayContext.row;
-  if (!row) {
-    return `
-      <header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(formatDateLong(today))}</span><h1>End of the dated plan</h1><p>Choose your next block using your registered exam date and readiness evidence.</p></div></header>
-      ${todayTabs(completed.length)}
-      <div class="today-grid"><div class="today-main">${catchup}<section class="card card--hero"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><div class="button-row"><a class="button button--primary" href="#log/repair">Open repair queue</a><a class="button" href="#exams">Review exams</a></div></section>${repairs}</div><aside class="today-sidebar">${countdown(data, state, today)}</aside></div>`;
-  }
-
+  const due = dueEntries(state, today).filter((entry) => entry.dueState !== "upcoming");
+  const repairs = due.length ? `<p class="pending-repairs"><a href="#log/repair">${plural(due.length, "retest")} due</a></p>` : "";
+  if (!row) return `<header class="view-header today-header"><div><h1>End of the dated plan</h1><p>Choose your next block using your registered exam date and readiness evidence.</p></div></header>${todayTabs(completed.length)}<section class="card"><h2>Protect the work you built</h2><p>Keep repairs narrow: mistake-log retests, mastery topics, CARS, and logistics.</p><a class="button" href="#log/repair">Open repair queue</a> <a href="#exams">Review exams</a></section>${repairs}${catchUpSection(pending, state, today)}${countdown(data, state, today)}`;
   const daily = state.daily[row.id] || {};
   const status = daily.status || "not-started";
-  const copy = actionCopy(row, status, todayContext.state);
-  const rows = typeof row.week === "number" ? weekRows(data, row.week) : data.schedule.filter((item) => item.week === "TEST");
+  const done = status === "complete";
+  const isScheduled = todayContext.state === "scheduled";
+  const actionable = isStudyRow(row) && isScheduled;
+  const rows = weekRows(data, row.week);
   const studyRows = rows.filter(isStudyRow);
   const completedDays = studyRows.filter((item) => state.daily[item.id]?.status === "complete").length;
-  const plannedQuestions = rows.reduce((sum, item) => sum + countPracticeQuestions(item.practiceTarget), 0);
-  const actualQuestions = rows.reduce((sum, item) => sum + Number(state.daily[item.id]?.actualQuestions || 0), 0);
-  const plannedCars = rows.reduce((sum, item) => sum + Number(item.carsPassages || 0), 0);
-  const actualCars = rows.reduce((sum, item) => sum + Number(state.daily[item.id]?.actualCars || 0), 0);
-  const isActionable = isStudyRow(row);
-  const startsIn = daysBetween(today, row.date);
-  const timingLine = todayContext.state === "before-plan"
-    ? `The plan begins ${formatDateLong(row.date)} (${plural(startsIn, "day")} from now). No catch-up is needed.`
-    : todayContext.state === "gap"
-      ? `No row is assigned for today. The next scheduled block is ${formatDateLong(row.date)}.`
-      : `${typeof row.week === "number" ? `Week ${row.week}` : "Test window"} · ${row.phase}`;
-
-  // The topbar already carries the full date, so the heading leads with the
-  // orienting fact instead of repeating it, keeping the action card near the top
-  // of a phone screen. Off-schedule states still explain themselves in prose.
-  const isScheduled = todayContext.state === "scheduled";
+  const tomorrow = data.schedule.find((item) => item.date > row.date);
+  const next = tomorrow ? `<p class="tomorrow-preview"><span>Next · ${escapeHTML(formatDateLong(tomorrow.date))}</span><strong>${escapeHTML(dayTitle(tomorrow))}</strong></p>` : '<p class="tomorrow-preview">You reached the end of the dated plan.</p>';
+  const questions = recordedCounts(rows, state, "actualQuestions"), cars = recordedCounts(rows, state, "actualCars");
+  const recorded = ({ total, days }) => days ? `${total} · ${plural(days, "day")} recorded` : "Not recorded yet";
+  const stopRule = row.sourceNotes?.match(/Stop after [^.]+(?:\.[0-9]+)?[^.]*\./i)?.[0] || "";
   const heading = isScheduled ? "Today" : "Your next block";
-  const name = state.settings.displayName;
-  const guidance = row.week === 1 && data.plan.restart
-    ? `Fresh start · diagnostic Saturday, September 5. ${row.sourceNotes || data.plan.restart.note}`
-    : row.sourceNotes;
-  return `
-    <header class="view-header today-header">
-      <div><span class="eyebrow">${escapeHTML(timingLine)}</span><h1>${escapeHTML(name ? `${heading}, ${name}` : heading)}</h1>${isScheduled ? "" : `<p>${escapeHTML(formatDateLong(row.date))}</p>`}</div>
-    </header>
+  const timing = todayContext.state === "before-plan" ? `The plan begins ${formatDateLong(row.date)}. No catch-up is needed.` : todayContext.state === "gap" ? `No row is assigned today. Next block: ${formatDateLong(row.date)}.` : `${typeof row.week === "number" ? `Week ${row.week}` : "Test window"} · ${row.phase}`;
+  return `<header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(timing)}</span><h1>${escapeHTML(state.settings.displayName ? `${heading}, ${state.settings.displayName}` : heading)}</h1></div></header>
     ${todayTabs(completed.length)}
-    ${pending.length ? `<a class="today-backlog-link" href="#plan/past-due">${pending.length} past-due days · Review in Plan →</a>` : ""}
-    <div class="today-grid">
-      <div class="today-main">
-        <article id="today-assignment" tabindex="-1" class="today-action today-action--${escapeAttr(row.dayType)} ${status === "complete" ? "is-complete" : ""}">
-          <div class="today-action__top">
-            <div><span class="eyebrow">${escapeHTML(copy.eyebrow)}</span><span class="status-badge status-badge--${escapeAttr(status)}">${escapeHTML(statusLabel(status))}</span></div>
-            <span class="workload-pill">${escapeHTML(row.estimatedWorkload.label)}</span>
-          </div>
-          <h2>${escapeHTML(row.assignment)}</h2>
-          <div class="action-buttons today-primary-actions ${status === "complete" ? "today-primary-actions--complete" : ""}">
-            ${isActionable && isScheduled ? completionButton(row, state) : ""}
-            ${isActionable && status !== "complete" && isScheduled ? `<button class="button button--primary" type="button" data-start-day="${escapeAttr(row.id)}">${status === "in-progress" ? "Continue today" : "Start block"}</button>` : ""}
-            <button class="button ${!isActionable || !isScheduled ? "button--primary action-buttons__lead" : "button--quiet action-buttons__trail"}" type="button" data-open-assignment="${escapeAttr(row.id)}">${escapeHTML(copy.button)}</button>
-          </div>
-          ${isActionable && isScheduled ? taskChecklist(row, state) : ""}
-          ${guidance ? `<aside class="assignment-guidance"><span class="eyebrow">Guardrails for today</span><p>${escapeHTML(guidance)}</p></aside>` : ""}
-          ${row.chapters.length ? `<p class="chapter-line">${row.chapters.map((chapter) => `<span>${escapeHTML(chapter.id)}</span> ${escapeHTML(chapter.title)}`).join(" · ")}</p>` : ""}
-          <dl class="today-facts">
-            <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "None required")}</dd></div>
-            <div><dt>Mode</dt><dd>${escapeHTML(modeLabel(row.mode))}</dd></div>
-            <div><dt>Practice</dt><dd>${escapeHTML(row.practiceTargetDisplay || "No practice quota")}</dd></div>
-            <div><dt>CARS</dt><dd>${row.carsPassages || 0} passage${row.carsPassages === 1 ? "" : "s"}</dd></div>
-          </dl>
-          <div class="milestone-line"><span aria-hidden="true">◇</span><div><strong>This week’s milestone</strong><p>${escapeHTML(row.weeklyMilestone)}</p></div></div>
-          ${isActionable && isScheduled ? `<div class="button-row"><button class="button button--quiet" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button></div>` : ""}
-        </article>
-        ${catchup}
-        ${repairs}
-
-        ${isActionable && todayContext.state === "scheduled" ? `
-          <section class="focus-card" aria-labelledby="focus-title">
-            <div><span class="eyebrow">Optional focus mode</span><h3 id="focus-title">One calm block</h3><p>A 25-minute timer. Leaving Today pauses it; return to resume. Only finishing saves a session.</p></div>
-            <div class="focus-controls"><output data-focus-clock aria-live="polite">25:00</output><button class="button" type="button" data-focus-toggle>Start</button><button class="button button--quiet" type="button" data-focus-finish disabled>Finish block</button></div>
-          </section>` : ""}
-
-      </div>
-
-      <aside class="today-sidebar">
-        ${countdown(data, state, today)}
-        <section class="card momentum-card">
-          <span class="eyebrow">Weekly momentum</span>
-          <h3>${typeof row.week === "number" ? `Week ${row.week}` : "Placeholder window"}</h3>
-          ${progressBar(completedDays, studyRows.length, "Study days complete")}
-          ${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}
-          ${plannedQuestions ? progressBar(actualQuestions, plannedQuestions, "Practice questions complete") : ""}
-          ${plannedCars ? progressBar(actualCars, plannedCars, "CARS passages complete") : ""}
-          <p class="gentle-copy">${completedDays === 0 ? "A clean start is enough. Finish one manageable block." : completedDays < studyRows.length ? "You are building the week one finished block at a time." : "The week’s planned study days are complete."}</p>
-        </section>
-        <section class="card next-week-card">
-          <span class="eyebrow">At a glance</span>
-          <dl class="compact-stats">
-            <div><dt>Phase</dt><dd>${escapeHTML(row.phase)}</dd></div>
-            <div><dt>Planned hours</dt><dd>${row.weeklyHours}</dd></div>
-            <div><dt>Week progress</dt><dd>${percent(completedDays, studyRows.length)}%</dd></div>
-            <div><dt>Next retests</dt><dd><a href="#log/repair">View queue</a></dd></div>
-          </dl>
-        </section>
-      </aside>
-    </div>`;
+    <div class="today-grid"><div class="today-main">
+    <article id="today-assignment" tabindex="-1" class="today-action today-action--${escapeAttr(row.dayType)} ${done ? "is-complete" : ""}">
+      <div class="today-action__top"><span class="eyebrow">${done ? "Today is complete" : row.isRest ? "Rest is today's plan" : escapeHTML(actionCopy(row, status, todayContext.state).eyebrow)}</span>${!done && !row.isRest ? `<span class="workload-pill" title="Advisory workload estimate">${escapeHTML(row.estimatedWorkload.label)}</span>` : ""}</div>
+      ${done ? `<div class="day-success"><span aria-hidden="true">✓</span><div><h2>${isScheduled ? "Today's plan is complete" : "Block complete"}</h2><p>${escapeHTML(dayTitle(row))} · ${completedDays}/${studyRows.length} study days this week</p></div></div>` : `<h2>${escapeHTML(dayTitle(row))}</h2>`}
+      ${!done && row.chapters.length ? `<p class="assignment-subtitle">${row.chapters.length} chapters · ${escapeHTML(modeLabel(row.mode))} · ${escapeHTML(row.resource)}</p>` : ""}
+      ${!done && stopRule ? `<p class="stop-rule">${escapeHTML(stopRule)}</p>` : ""}
+      ${actionable ? (done ? `<details class="completed-checklist" data-view-key="completed-${escapeAttr(row.id)}" ${!isRouteChange ? "open" : ""}><summary>Review completed steps</summary>${taskChecklist(row, state)}</details>` : taskChecklist(row, state)) : ""}
+      <div class="button-row today-tools">${actionable ? `<button class="button" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button>` : ""}<button class="button button--quiet" type="button" data-open-assignment="${escapeAttr(row.id)}">${done ? "Review day" : row.isRest ? "Review rest guidance" : "Details & counts"}</button></div>
+      ${actionable ? `<div class="today-complete-action">${completionButton(row, state)}</div>` : ""}
+      ${!done && row.sourceNotes ? `<details class="assignment-guidance" data-view-key="today-guidance"><summary>Guardrails for today</summary><p>${escapeHTML(row.sourceNotes)}</p></details>` : ""}
+      ${done ? next : ""}
+    </article>
+    ${actionable && (!done || focus.startedAt) ? `<section class="focus-card" aria-labelledby="focus-title"><div><h3 id="focus-title">One calm block</h3><p>Optional 25-minute timer. Leaving Today pauses it; return to resume.</p></div><div class="focus-controls"><output data-focus-clock aria-live="off">25:00</output><button class="button" type="button" data-focus-toggle>Start</button><button class="button button--quiet" type="button" data-focus-finish disabled>Finish block</button></div></section>` : ""}
+    ${pending.length ? `<details class="today-backlog" data-view-key="today-backlog"><summary>${pending.length} unfinished days · review when useful</summary>${catchUpSection(pending, state, today)}</details>` : ""}${repairs}
+    ${!done ? next : ""}
+    </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${progressBar(completedDays, studyRows.length, "Study days complete")}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
 }
 
 export function bindToday(container, context) {
@@ -189,11 +140,6 @@ export function bindToday(container, context) {
   bindCompletionButtons(container, context);
   bindTaskChecklist(container, context);
   bindWorkRows(container, context);
-
-  container.querySelector("[data-start-day]")?.addEventListener("click", (event) => {
-    const id = event.currentTarget.dataset.startDay;
-    context.updateState(withDailyStatus(context.state, id, "in-progress"), { success: "Study block started" });
-  });
 
   container.querySelector("[data-log-assignment]")?.addEventListener("click", (event) => {
     const row = context.data.index.scheduleByDate.get(event.currentTarget.dataset.logAssignment);
@@ -205,33 +151,34 @@ export function bindToday(container, context) {
   const finish = container.querySelector("[data-focus-finish]");
   if (clock && toggle && finish) {
     focus.paint = () => {
-      clock.value = `${String(Math.floor(focus.remaining / 60)).padStart(2, "0")}:${String(focus.remaining % 60).padStart(2, "0")}`;
+      clock.value = `${String(Math.floor(elapsedClock.remaining / 60)).padStart(2, "0")}:${String(elapsedClock.remaining % 60).padStart(2, "0")}`;
       clock.textContent = clock.value;
-      toggle.textContent = focus.remaining === 0 ? "Save block" : focus.timer ? "Pause" : focus.startedAt ? "Resume" : "Start";
+      toggle.textContent = elapsedClock.remaining === 0 ? "Save block" : focus.timer ? "Pause" : focus.startedAt ? "Resume" : "Start";
       toggle.disabled = false;
       finish.disabled = !focus.startedAt;
     };
-    const stop = () => { clearInterval(focus.timer); focus.timer = null; focus.paint(); };
+    const stop = () => { elapsedClock.pause(); clearInterval(focus.timer); focus.timer = null; focus.paint(); };
     toggle.addEventListener("click", () => {
-      if (focus.remaining === 0) { finish.click(); return; }
+      if (elapsedClock.remaining === 0) { finish.click(); return; }
       if (focus.timer) { stop(); return; }
       if (!focus.startedAt) {
         focus.startedAt = new Date().toISOString();
         focus.assignmentId = getTodayContext(context.data, todayISO()).row?.id || "";
       }
+      elapsedClock.start();
       focus.timer = setInterval(() => {
-        focus.remaining = Math.max(0, focus.remaining - 1);
         focus.paint();
-        if (focus.remaining === 0) { stop(); context.showToast("Focus block complete"); }
+        if (elapsedClock.remaining === 0) { stop(); context.showToast("Focus block complete"); }
       }, 1000);
       focus.paint();
     });
     finish.addEventListener("click", () => {
       stop();
-      const session = { id: uniqueId("focus"), assignmentId: focus.assignmentId, startedAt: focus.startedAt, endedAt: new Date().toISOString(), minutes: Math.max(1, Math.round((25 * 60 - focus.remaining) / 60)) };
+      if (elapsedClock.elapsed < 1000) { context.showToast("No focus time to save yet."); return; }
+      const session = { id: uniqueId("focus"), assignmentId: focus.assignmentId, startedAt: focus.startedAt, endedAt: new Date().toISOString(), minutes: Math.round(elapsedClock.elapsed / 600) / 100 };
       context.updateState({ ...context.state, focusSessions: [...context.state.focusSessions, session] }, {
         success: "Focus session saved",
-        onSaved: () => { Object.assign(focus, { remaining: 25 * 60, startedAt: "", assignmentId: "" }); focus.paint(); },
+        onSaved: () => { elapsedClock.reset(); Object.assign(focus, { startedAt: "", assignmentId: "" }); focus.paint(); },
       });
     });
     focus.paint();

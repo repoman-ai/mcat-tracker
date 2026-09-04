@@ -673,7 +673,7 @@ body.is-locked .app-shell { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
+  html:not([data-reduce-motion="off"]) *, html:not([data-reduce-motion="off"]) *::before, html:not([data-reduce-motion="off"]) *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
 }
 
 @media print {
@@ -720,3 +720,72 @@ body.is-locked .app-shell { display: none; }
 
 .today-backlog-link { display: block; width: fit-content; margin: -.2rem 0 .6rem; padding: .4rem 0; min-height: var(--touch); color: #77582e; font-size: .8rem; font-weight: 700; }
 #today-assignment { scroll-margin-top: 88px; }
+
+/* Audit revision: task-first layouts and explicit completion feedback. */
+.today-action h2 { display: block; overflow: visible; -webkit-line-clamp: unset; font-size: clamp(1.45rem, 3.5vw, 2.2rem); overflow-wrap: anywhere; }
+.assignment-subtitle { margin: .4rem 0 .8rem; color: var(--muted); font-size: .85rem; }
+.stop-rule { margin: .5rem 0; color: #76552e; font-weight: 650; font-size: .9rem; }
+.task-checklist { border: 0; padding: 0; background: transparent; box-shadow: none; margin: 1rem 0; }
+.task-checklist > header .eyebrow { display: none; }
+.task-checklist li + li { margin-top: .4rem; }
+.task-check { min-height: 52px; }
+.today-tools { margin-top: 1rem; }
+.today-tools .button { font-size: .82rem; }
+.today-complete-action { margin-top: .6rem; }
+.today-complete-action .completion-check { font-size: .8rem; min-height: 44px; }
+.today-action .assignment-guidance { margin: .8rem 0 0; }
+.assignment-guidance summary, .assignment-reference summary, .completed-checklist summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: .4rem; font-weight: 650; }
+.assignment-guidance summary::before, .assignment-reference summary::before, .completed-checklist summary::before { content: '+'; }
+.assignment-guidance[open] summary::before, .assignment-reference[open] summary::before, .completed-checklist[open] summary::before { content: '−'; }
+.day-success { display: flex; gap: .8rem; align-items: flex-start; margin-top: .8rem; }
+.day-success > span { border-radius: 50%; display: grid; place-items: center; flex: 0 0 40px; height: 40px; background: #416e5c; color: #fff; font-size: 1.5rem; }
+.day-success h2 { margin: 0 0 .5rem; }
+.day-success p { margin: 0; font-size: .88rem; }
+.tomorrow-preview { margin: .5rem 0; padding: 1rem 0; border-top: 1px solid var(--line); }
+.tomorrow-preview span, .tomorrow-preview strong { display: block; }
+.tomorrow-preview span { font-size: .78rem; color: var(--muted); }
+.tomorrow-preview strong { margin-top: .3rem; font-size: .95rem; }
+.today-backlog, .plan-filters, .plan-guidance, .registered-date-control, .entry-filters { margin: 0 0 1rem; }
+.today-backlog > summary, .plan-filters > summary, .plan-guidance > summary, .registered-date-control > summary, .entry-filters > summary { min-height: 44px; padding: .65rem; cursor: pointer; font-size: .85rem; font-weight: 650; }
+.recorded-counts { margin: 1rem 0 .5rem; display: grid; gap: .8rem; }
+.recorded-counts dt { font-size: .78rem; color: var(--muted); }
+.recorded-counts dd { margin: .15rem 0 0; font-size: .85rem; font-weight: 600; }
+.quiet-countdown { font-size: .8rem; color: var(--muted); padding: .6rem; }
+.inline-editor { scroll-margin-top: 80px; }
+.inline-editor [data-use-planned] { font-size: .8rem; }
+.celebration-canvas { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; pointer-events: none; z-index: 100; }
+.log-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); overflow: visible; gap: .3rem; }
+.log-tabs a { flex: 1 1 auto; min-width: 0; min-height: 44px; padding: .55rem .2rem; text-align: center; }
+.log-tabs a strong { font-size: .75rem; }
+.capture-review { border-top: 1px solid var(--line); padding-top: .5rem; }
+.capture-review > summary { min-height: 44px; padding-block: .6rem; cursor: pointer; font-weight: 650; }
+.capture-review[open] { display: grid; gap: .85rem; }
+.needs-review { padding: 1rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); margin-bottom: 1rem; }
+.needs-review h2 { font-size: 1.15rem; }
+.needs-review ul { list-style: none; padding: 0; margin: 0; }
+.needs-review li { display: flex; justify-content: space-between; align-items: center; gap: .8rem; padding: .75rem 0; }
+.needs-review li + li { border-top: 1px solid var(--line); }
+.needs-review small { display: block; color: var(--muted); }
+.confidence-control button { min-width: 44px; min-height: 44px; }
+.mastery-section > .section-heading { flex-direction: column; align-items: flex-start; }
+.mastery-section > .section-heading > span { font-size: .85rem; }
+.chart-empty { min-height: 72px; padding: 1rem; }
+.score-trends { margin-top: 1rem; }
+.score-trends h3 { margin-top: 1.5rem; }
+.score-values { margin-top: 1rem; }
+.score-values > summary { min-height: 44px; cursor: pointer; }
+.score-values caption { text-align: left; padding: .6rem; }
+html[data-reduce-motion="on"] *, html[data-reduce-motion="on"] *::before, html[data-reduce-motion="on"] *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
+@media (max-width: 699px) {
+  .complete-log .table-wrap { overflow: visible; border: 0; background: transparent; }
+  .complete-log .data-table, .complete-log tbody { display: block; width: 100%; }
+  .complete-log thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .complete-log tr { display: grid; grid-template-columns: 1fr 1fr; gap: .35rem; margin: .8rem 0; padding: .8rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--paper); }
+  .complete-log td { display: block; min-width: 0; border: 0; padding: .3rem; overflow-wrap: anywhere; }
+  .complete-log td[data-label="Topic / cause"], .complete-log .row-actions { grid-column: 1 / -1; }
+  .complete-log td[data-label]::before { content: attr(data-label); display: block; font-size: .7rem; color: var(--muted); }
+  .complete-log .icon-button { min-height: 44px; }
+  .today-action { padding: 1rem; }
+  .today-tools { gap: .3rem; }
+  .today-tools .button { padding-inline: .55rem; }
+}

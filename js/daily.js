@@ -1,4 +1,32 @@
 /** Daily records sync last-write-wins per day, including completion and undo. */
+export function restoredDailyRecord(previous, current, now = Date.now()) {
+  // A reversal is a NEW edit. Monotonic even when two clicks share a millisecond.
+  const timestamp = Math.max(now, (Date.parse(current?.updatedAt) || 0) + 1);
+  return { ...(previous || { status: "not-started", completedTasks: {} }), updatedAt: new Date(timestamp).toISOString() };
+}
+
+export function parseActualCount(value) {
+  if (value === "" || value === null || value === undefined) return "";
+  if (!["number", "string"].includes(typeof value)) throw new Error("Enter a whole number of zero or more, or leave it blank.");
+  const number = Number(value);
+  if (!Number.isSafeInteger(number) || number < 0) throw new Error("Enter a whole number of zero or more, or leave it blank.");
+  return number;
+}
+
+export function dailyTimestamp(record) { return new Date(Math.max(Date.now(), (Date.parse(record?.updatedAt) || 0) + 1)).toISOString(); }
+
+/** Share the same optional-count semantics between Today and exported reports. */
+export function recordedCounts(rows, state, key) {
+  let total = 0, days = 0;
+  for (const row of rows) {
+    try {
+      const count = parseActualCount(state.daily[row.id]?.[key]);
+      if (count !== "") { total += count; days++; }
+    } catch { /* Legacy invalid values remain editable in the daily record. */ }
+  }
+  return { total: days ? total : "", days };
+}
+
 export function withDailyStatus(state, id, status) {
   const record = { ...state.daily[id] };
   if (status === "deferred" && record.status !== "deferred") {
@@ -10,7 +38,7 @@ export function withDailyStatus(state, id, status) {
     ...state,
     daily: {
       ...state.daily,
-      [id]: { ...record, status, updatedAt: new Date().toISOString() },
+      [id]: { ...record, status, updatedAt: dailyTimestamp(record) },
     },
   };
 }
@@ -97,7 +125,7 @@ export function withDailyTask(state, row, taskId, complete) {
     ...state,
     daily: {
       ...state.daily,
-      [row.id]: { ...existing, status, completedTasks, updatedAt: new Date().toISOString() },
+      [row.id]: { ...existing, status, completedTasks, updatedAt: dailyTimestamp(existing) },
     },
   };
 }
@@ -113,7 +141,7 @@ export function withDailyCompletion(state, row, complete) {
         ...existing,
         status: complete ? "complete" : "not-started",
         completedTasks,
-        updatedAt: new Date().toISOString(),
+        updatedAt: dailyTimestamp(existing),
       },
     },
   };

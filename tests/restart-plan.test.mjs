@@ -52,7 +52,7 @@ assert.equal(chapterRows.at(-1).date, "2026-11-16");
 assert.deepEqual(data.sectionBanks.map(s => s.totalQuestions), [200, 200, 200]);
 assert.equal(data.plan.question_targets.uworld_baseline, data.plan.weeks.reduce((n, w) => n + w.uworld_questions, 0));
 assert.match(renderPlan(context, {}), /145 dated rows · 20 Tuesday-Monday weeks/);
-assert.match(renderToday(context), /September 5/);
+assert.match(renderToday(context), /AAMC Unscored Sample Sat Sep 5/);
 assert.match(renderToday(context), /PHY10/);
 assert.doesNotMatch(renderToday(context), /class="catchup-card"/);
 window.location.search = "?today=2026-09-05";
