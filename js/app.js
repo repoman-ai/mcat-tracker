@@ -1,5 +1,6 @@
 import { bindEditorDrafts } from "./editor-drafts.js";
 import { createCelebrationController } from "./celebrate.js";
+import { createDialogController } from "./dialog.js";
 import { loadSiteData } from "./data.js";
 import { exportCorruptRecovery } from "./export.js";
 import { navigate, startRouter } from "./router.js";
@@ -18,16 +19,14 @@ import { captureViewState, scrollInstantly } from "./view-state.js";
 
 const root = document.querySelector("#view-root");
 const dialog = document.querySelector("#app-dialog");
-const dialogTitle = dialog.querySelector("#dialog-title");
-const dialogBody = dialog.querySelector("[data-dialog-body]");
 const toast = document.querySelector("[data-toast]");
 const banner = document.querySelector("[data-app-banner]");
 const topbarDate = document.querySelector("[data-topbar-date]");
 
 let data;
 let state;
+let displayedDate = todayISO();
 let currentRoute = { view: "today", detail: "" };
-let previousFocus = null;
 let quickLogPrefill = null;
 let syncStatus = getSyncStatus();
 let lockEmailOverride = false;
@@ -44,16 +43,8 @@ const lockEmailField = lockScreen.querySelector("[data-lock-email-field]");
 const showToast = createToastController(toast, document);
 const celebration = createCelebrationController(document, window);
 
-function openDialog({ title, body, onMount }) {
-  if (dialog.open) dialog.close();
-  previousFocus = document.activeElement;
-  dialogTitle.textContent = title;
-  dialogBody.innerHTML = body;
-  dialog.showModal();
-  onMount?.(dialog);
-  bindEditorDrafts(dialog);
-  dialog.querySelector("button, a, input, select, textarea")?.focus();
-}
+const appDialog = createDialogController(dialog, { document, view: window });
+const openDialog = (options) => appDialog.open(options);
 
 const updateState = createStateUpdater({
   save: saveState,
@@ -113,7 +104,7 @@ function bindDisplayNameField(scope) {
     const displayName = sanitizeDisplayName(value);
     updateState({ ...state, settings: { ...state.settings, displayName, updatedAt: new Date().toISOString() } }, {
       success: displayName ? `Display name saved as ${displayName}` : "Display name removed",
-      onSaved: () => { if (dialog.open) dialog.close(); },
+      onSaved: () => { if (appDialog.isOpen) appDialog.close(); },
     });
   };
   form.addEventListener("submit", (event) => { event.preventDefault(); save(form.elements.displayName.value); });
@@ -201,17 +192,17 @@ function openSyncDialog() {
     scope.querySelector("[data-motion-form]")?.addEventListener("submit", (event) => {
       event.preventDefault();
       const reducedMotionOverride = event.currentTarget.elements.reducedMotionOverride.value;
-      updateState({ ...state, settings: { ...state.settings, reducedMotionOverride, updatedAt: new Date().toISOString() } }, { success: "Appearance saved", onSaved: () => dialog.close() });
+      updateState({ ...state, settings: { ...state.settings, reducedMotionOverride, updatedAt: new Date().toISOString() } }, { success: "Appearance saved", onSaved: () => appDialog.close() });
     });
     loadLoginUsernameEditor(scope);
-    scope.querySelector("[data-sync-unlock]")?.addEventListener("click", () => { dialog.close(); renderLockScreen({ focus: true }); });
+    scope.querySelector("[data-sync-unlock]")?.addEventListener("click", () => { appDialog.close(); renderLockScreen({ focus: true }); });
     scope.querySelector("[data-sync-now]")?.addEventListener("click", async (event) => {
       const button = event.currentTarget; button.disabled = true; button.textContent = "Syncing…";
-      await syncNow(); dialog.close(); showToast(getSyncStatus().message, getSyncStatus().mode === "error" ? "error" : "success");
+      await syncNow(); appDialog.close(); showToast(getSyncStatus().message, getSyncStatus().mode === "error" ? "error" : "success");
     });
     scope.querySelector("[data-sync-lock]")?.addEventListener("click", async (event) => {
       const button = event.currentTarget; button.disabled = true;
-      try { await signOutOfSync(); dialog.close(); showToast("This device is locked"); }
+      try { await signOutOfSync(); appDialog.close(); showToast("This device is locked"); }
       catch (problem) { scope.querySelector("[data-sync-error]").textContent = problem.message; button.disabled = false; }
     });
   } });
@@ -326,6 +317,16 @@ function openQuickLog(row = null) {
   navigate("log", "new");
 }
 
+/** Pull-to-refresh: re-check the date first, then sync if this device can. */
+async function refreshNow() {
+  if (!data || !state) return;
+  displayedDate = todayISO();
+  renderCurrent();
+  if (!syncStatus.configured || !syncStatus.signedIn) { showToast("Up to date on this device"); return; }
+  const result = await syncNow();
+  showToast(result.message || getSyncStatus().message, result.mode === "error" ? "error" : "success");
+}
+
 function clearQuickLogPrefill() {
   quickLogPrefill = null;
   context.quickLogPrefill = null;
@@ -342,6 +343,7 @@ const context = {
   celebrate: (event) => { try { return celebration.celebrate(event, state, data); } catch { return ""; } },
   openQuickLog,
   clearQuickLogPrefill,
+  refreshNow,
   registerViewCleanup: (cleanup) => viewCleanups.push(cleanup),
   rerender: (options) => renderCurrent(options),
 };
@@ -408,7 +410,7 @@ function renderCurrent({ preserveView = true, routeChange = false } = {}) {
     // may then deliberately scroll to their own target in the view binder.
     if (!sameRoute) {
       celebration.stop();
-      if (dialog.open) dialog.close();
+      if (appDialog.isOpen) appDialog.close();
       scrollInstantly(window);
       // Give every route a focus destination; specific binders may refine it.
       root.focus({ preventScroll: true });
@@ -429,15 +431,6 @@ function renderCurrent({ preserveView = true, routeChange = false } = {}) {
   }
 }
 
-dialog.querySelector("[data-dialog-close]").addEventListener("click", () => dialog.close());
-dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
-dialog.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && dialog.open) {
-    event.preventDefault();
-    dialog.close();
-  }
-});
-dialog.addEventListener("close", () => { dialogBody.innerHTML = ""; if (previousFocus?.isConnected) previousFocus.focus(); previousFocus = null; });
 // Re-selecting Plan is an explicit request for the full schedule, even when
 // its hash is already #plan and the browser would emit no hashchange.
 document.querySelectorAll('[data-nav="plan"]').forEach((link) => link.addEventListener("click", (event) => {
@@ -483,7 +476,6 @@ initialize();
 document.querySelector(".skip-link")?.addEventListener("click", (event) => {
   event.preventDefault(); root.focus({ preventScroll: true }); root.scrollIntoView({ block: "start", behavior: "instant" });
 });
-let displayedDate = todayISO();
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden && data && state && displayedDate !== todayISO()) {
     displayedDate = todayISO(); renderCurrent();

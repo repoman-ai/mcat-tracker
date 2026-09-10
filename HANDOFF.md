@@ -3,6 +3,26 @@
 This file is a convenience snapshot, not a source of truth. Always inspect the working tree, Git
 index, live application, and Supabase project before continuing.
 
+## September 10 plan adjustment — current
+
+The revised 145-date schedule deliberately keeps its September 1 date IDs so browser and cloud
+progress migrate in place. September 1–2 are now reading-only and remain complete: Physics/Math
+10–11 and General Chemistry 1–3. September 3–9 are rest/superseded rows and create no catch-up
+queue. The next assignment is General Chemistry 4 on September 10. The AAMC Unscored Sample is
+Saturday, September 19, with protected review September 20–21. The October third-party exam is
+removed; all six official AAMC exams remain.
+
+All 83 chapters finish November 30. Core practice is 216 UWorld science questions plus 360 Section
+Bank questions (120 each B/B, C/P and P/S); 240 more Section Bank questions are optional reserve,
+not debt. Scheduled CARS passages come from the UWorld MCAT QBank and are counted separately from
+the science-question quota. Weekly ceilings total 367 hours, all low estimates fit, and upper-bound
+risk remains visible rather than being hidden by the generator.
+
+The pending phone/tablet gesture work is retained: pull to refresh Today, swipe between Today and
+Completed, swipe an unfinished row to complete it, and drag a mobile sheet down to close it. Every
+gesture duplicates an on-screen control, is disabled for precise pointers, and has focused regression
+coverage in `tests/gestures.test.mjs`.
+
 ## UI/UX audit implementation — September 3, 2026
 
 Read [IMPLEMENTATION_HANDOFF_2026-09-03.md](IMPLEMENTATION_HANDOFF_2026-09-03.md) first for the current
@@ -26,13 +46,11 @@ include a Checklist Progress column. Daily source notes are now visible as guard
 assignment details instead of being hidden for most of the schedule. Regression coverage is in
 `tests/checklist.test.mjs`.
 
-## September restart — August 31, 2026
+## September restart — historical August 31 snapshot
 
-The schedule now starts September 1: 145 days, 20 Tuesday–Monday weeks. Diagnostic September 5,
-protected review September 6–7. All 83 chapters finish by November 16. Third-party FL October 10;
-six official FL dates remain November 21, December 5/12/19 and January 2/9. There are 484 scheduled
-UWorld questions and 600 Section Bank questions. No authentication, cloud data or saved progress was
-reset. Date keys and exam IDs retain their existing format.
+This was the initial restart and is superseded by the September 10 adjustment above. Its key durable
+constraint remains: date keys and exam IDs retain their existing format, so authentication, cloud
+data and saved progress do not need a reset.
 
 `study-guide.json` is the current guide source; `MCAT_Study_Plan_2026-09-01.md` and the matching `.docx`
 are readable local copies. The standalone XLSX now has 145 dated rows and a `20-Week Tracker` tab.
@@ -47,13 +65,11 @@ Run `python3 -S scripts/generate_site_data.py` and `node --test tests/*.test.mjs
 The restart-specific regression tests cover dates, coverage, holidays, exam review, UI and saved-state
 preservation. Do not run the old August plan builders; they would restore obsolete assumptions.
 
-The workload review distributes SBs in 20–30-question blocks through January 6. Weeks 8–11
-have 50 SB questions each (Friday 20, Saturday 30) and no extra UWorld. Official-exam weeks
-use early-week SB blocks; holidays/rest and full-length review have no extra quotas. Weekly
-budgets are unchanged (426 total): low-bound overrun fails generation; midpoint/upper-bound
-risks remain explicit in the Plan UI. Unknown modes fail before special-day branches. Source
-hashes replace wall-clock generatedAt; unchanged inputs regenerate byte-identically. Mode
-deduplication is display-only. Backup counts distinguish current schedule records and history.
+The current workload policy is summarized in the September 10 section above. Low-bound overrun
+fails generation; midpoint/upper-bound risks remain explicit in Plan. Unknown modes fail before
+special-day branches. Source hashes replace wall-clock `generatedAt`; unchanged inputs regenerate
+byte-identically. Mode deduplication is display-only. Backup counts distinguish current schedule
+records and history.
 
 ## Past-due work and completion — August 31, 2026
 
@@ -91,7 +107,7 @@ removed to keep the action above the phone navigation. Plan resolves the preview
 View-state restoration is isolated in `js/view-state.js`, preserving disclosure state, named scroll
 areas, focus and window position rather than expanding an app-level list for each widget.
 
-Verification: the full Node test run passes (33 checks, including the existing Python workload suite),
+Verification: the full Node test run passes (84 checks, including the existing Python workload suite),
 all modules pass syntax checks, and `git diff --check` is clean. A tracked-module-graph regression starts
 at each entry point and verifies every relative import will be present in a Pages deployment.
 Browser checks used an isolated synthetic account: 375×667, 1280×800 and 1440×900, longest

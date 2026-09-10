@@ -23,8 +23,8 @@ assert.equal(scheduledWeekForDate(data, "2026-09-08"), 2);
 assert.equal(scheduledWeekForDate(data, "2027-01-23"), 20);
 assert.equal(scheduledWeekForDate(data, "2027-01-24"), 20);
 assert.equal(getTodayContext(data, "2027-01-24").state, "after-plan");
-assert.deepEqual(data.exams.map(e => e.plannedDate), ["2026-09-05", "2026-10-10", "2026-11-21", "2026-12-05", "2026-12-12", "2026-12-19", "2027-01-02", "2027-01-09"]);
-assert.deepEqual(data.exams[0].reviewAssignmentIds, ["2026-09-06", "2026-09-07"]);
+assert.deepEqual(data.exams.map(e => e.plannedDate), ["2026-09-19", "2026-11-21", "2026-12-05", "2026-12-12", "2026-12-19", "2027-01-02", "2027-01-09"]);
+assert.deepEqual(data.exams[0].reviewAssignmentIds, ["2026-09-20", "2026-09-21"]);
 for (const exam of data.exams) {
   const row = data.index.scheduleByDate.get(exam.plannedDate);
   assert.equal(row.day, "Sat");
@@ -48,19 +48,32 @@ const chapterRows = data.schedule.filter(r => r.chapterIds.length);
 const ids = chapterRows.flatMap(r => r.chapterIds);
 assert.equal(ids.length, 83);
 assert.equal(new Set(ids).size, 83);
-assert.equal(chapterRows.at(-1).date, "2026-11-16");
-assert.deepEqual(data.sectionBanks.map(s => s.totalQuestions), [200, 200, 200]);
+assert.equal(chapterRows.at(-1).date, "2026-11-30");
+assert.deepEqual(data.sectionBanks.map(s => s.totalQuestions), [120, 120, 120]);
+assert.equal(data.plan.question_targets.section_bank_reserve, 240);
 assert.equal(data.plan.question_targets.uworld_baseline, data.plan.weeks.reduce((n, w) => n + w.uworld_questions, 0));
 assert.match(renderPlan(context, {}), /145 dated rows · 20 Tuesday-Monday weeks/);
-assert.match(renderToday(context), /AAMC Unscored Sample Sat Sep 5/);
+assert.match(renderToday(context), /Sep 1-2 reading preserved/);
 assert.match(renderToday(context), /PHY10/);
 assert.doesNotMatch(renderToday(context), /class="catchup-card"/);
-window.location.search = "?today=2026-09-05";
+window.location.search = "?today=2026-09-19";
 assert.match(renderToday(context), /AAMC Unscored Sample/);
-window.location.search = "?today=2026-09-06";
+window.location.search = "?today=2026-09-20";
 assert.match(renderToday(context), /Full-length review/);
-assert.match(renderGuide(context, {}), /September 1 restart/);
-assert.doesNotMatch(JSON.stringify(data.guide), /August 19|August 22|22-week|158 daily|880 baseline/);
+assert.match(renderGuide(context, {}), /September 10 adjustment/);
+assert.doesNotMatch(JSON.stringify(data.guide), /August 19|August 22|22-week|158 daily|880 baseline|AAMC Unscored Sample Sat Sep 5|third-party full-length moves/);
+
+// Date-keyed cloud progress remains truthful after the restructure: the two
+// completed reading days stay complete and superseded Sep 3-9 rows do not
+// create a new past-due queue on Sep 10.
+window.location.search = "?today=2026-09-10";
+const preserved = normalizeState({ daily: {
+  "2026-09-01": { status: "complete", updatedAt: "2026-09-10T12:00:00.000Z" },
+  "2026-09-02": { status: "complete", updatedAt: "2026-09-10T12:00:00.000Z" },
+} });
+const preservedHTML = renderToday({ data, state: preserved });
+assert.match(preservedHTML, /Completed <span>2<\/span>/);
+assert.doesNotMatch(preservedHTML, /Past due/);
 
 // Regeneration must not reset existing logs, historic records, settings or scores.
 const saved = normalizeState({ daily: { "2026-08-19": { status: "complete" } }, settings: { registeredExamDate: "2027-01-23", displayName: "Student" }, exams: { "exam-03": { total: 520 } } });
@@ -68,4 +81,4 @@ const before = JSON.stringify(saved);
 renderPlan({ data, state: saved }, {});
 renderToday({ data, state: saved });
 assert.equal(JSON.stringify(saved), before);
-console.log("September restart dates, workload placement, guide, UI and preserved-state checks passed");
+console.log("September 10 restructure, workload placement, guide, UI and preserved-state checks passed");

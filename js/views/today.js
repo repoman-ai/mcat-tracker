@@ -1,4 +1,5 @@
 import { createFocusTimer, focusMinutes } from "../focus-timer.js";
+import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js";
 import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js";
 import { recordedCounts } from "../daily.js";
 import {
@@ -41,7 +42,7 @@ function countdown(data, state, today) {
 }
 
 function todayTabs(completedCount, completed = false) {
-  return `<nav class="today-tabs" aria-label="Study work"><a href="#today" ${completed ? "" : 'aria-current="page"'}>Today</a><a href="#today/completed" ${completed ? 'aria-current="page"' : ""}>Completed <span>${completedCount}</span></a></nav>`;
+  return `<nav class="today-tabs" aria-label="Study work"><a href="#today" ${completed ? "" : 'aria-current="page"'}>Today</a><a href="#today/completed" ${completed ? 'aria-current="page"' : ""}>Completed <span>${completedCount}</span></a><button class="button button--quiet" type="button" data-refresh-today data-view-focus="refresh-today">Refresh</button></nav>`;
 }
 
 function catchUpSection(rows, state, today) {
@@ -136,11 +137,25 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
     </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${progressBar(completedDays, studyRows.length, "Study days complete")}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details data-view-key="today-milestone"><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
 }
 
-export function bindToday(container, context) {
+export function bindToday(container, context, route = { detail: "" }) {
   focus.paint = () => {};
   bindCompletionButtons(container, context);
   bindTaskChecklist(container, context);
   bindWorkRows(container, context);
+
+  container.querySelector("[data-refresh-today]")?.addEventListener("click", () => context.refreshNow?.());
+  const view = container.ownerDocument?.defaultView || globalThis;
+  const indicator = container.ownerDocument?.querySelector("[data-pull-refresh]");
+  // Both gestures are rebound per render because they close over this route,
+  // so each one hands back its cleanup for the next render to run.
+  context.registerViewCleanup?.(enablePullToRefresh(container, { indicator, view, onRefresh: () => context.refreshNow?.(), onError: () => context.showToast("Refresh failed. Try again.", "error") }));
+  context.registerViewCleanup?.(enableViewPager(container, {
+    view,
+    onSwipe: (direction) => {
+      const target = pageSwipeTarget(route.detail, direction);
+      if (target !== null) context.navigate("today", target);
+    },
+  }));
 
   container.querySelector("[data-log-assignment]")?.addEventListener("click", (event) => {
     const row = context.data.index.scheduleByDate.get(event.currentTarget.dataset.logAssignment);

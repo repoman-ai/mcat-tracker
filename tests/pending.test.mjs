@@ -36,7 +36,7 @@ test("Past due is visible first, above all Today cards, with the oldest assignme
   assert.ok(todayGrid > pastDue);
   assert.doesNotMatch(html, /class="today-backlog"/);
   assert.deepEqual([...html.matchAll(/data-work-row="([^"]+)"/g)].map((m) => m[1]), rows.slice(0, 3).map((row) => row.id));
-  assert.match(html, new RegExp(`Showing oldest 3 of ${rows.length}`));
+  assert.match(html, rows.length > 3 ? new RegExp(`Showing oldest 3 of ${rows.length}`) : /Oldest first/);
   assert.match(html, new RegExp(`View all ${rows.length} in Plan`));
 });
 

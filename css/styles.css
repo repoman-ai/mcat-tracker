@@ -675,6 +675,52 @@ body.is-locked .app-shell { display: none; }
   .mastery-row details { grid-column: auto; }
 }
 
+/* ---- Touch gestures (phones and tablets) ----
+   Each of these is a shortcut for a control that is still on screen: the sheet
+   keeps its close button, rows keep their checkbox, and Today keeps its tabs. */
+
+/* Slide the sheet down to dismiss. */
+.app-dialog { transition: transform .24s cubic-bezier(.2,.8,.3,1); overscroll-behavior-y: contain; }
+.app-dialog.is-dragging { transition: none; }
+
+@media (max-width: 559px) {
+  /* A sheet anchored to the bottom edge is what a downward drag expects. */
+  .app-dialog { width: 100%; max-width: none; max-height: 92dvh; margin: auto auto 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .dialog-body { padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); }
+  .dialog-shell > header { padding-top: 1.35rem; }
+  .dialog-shell > header::before { content: ""; position: absolute; top: .45rem; left: 50%; width: 2.25rem; height: .25rem; border-radius: 999px; background: var(--line-strong); transform: translateX(-50%); }
+}
+
+/* Swipe a row to the right to check it off. */
+.work-row[data-swipe-complete] { position: relative; overflow: clip; }
+.work-row[data-swipe-complete] > * { transform: translateX(var(--swipe-x, 0px)); }
+.work-row.is-swiping { background: var(--teal-soft); }
+.work-row.is-swiping > * { transition: none; }
+.work-row[data-swipe-complete]:not(.is-swiping) > * { transition: transform .2s cubic-bezier(.2,.8,.3,1); }
+.work-row.is-swiping::before {
+  content: "✓ Complete";
+  position: absolute; top: 50%; left: .85rem;
+  color: #285f47; font-size: .78rem; font-weight: 800; letter-spacing: .03em;
+  opacity: var(--swipe-progress, 0);
+  transform: translateY(-50%) scale(calc(.9 + var(--swipe-progress, 0) * .1));
+  pointer-events: none;
+}
+
+/* Pull down from the top of Today to re-check the date and sync. */
+.pull-refresh { position: fixed; z-index: 25; top: 0; left: 50%; display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; background: var(--paper); box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transform: translate(-50%, calc(var(--pull-y, 0px) - 42px)); transition: opacity .15s ease, visibility .15s ease; pointer-events: none; }
+.pull-refresh.is-visible { opacity: 1; visibility: visible; }
+.pull-refresh__dial { width: 16px; height: 16px; border: 2.5px solid var(--line-strong); border-top-color: var(--blue); border-radius: 50%; }
+.pull-refresh.is-armed .pull-refresh__dial { border-color: var(--teal); border-top-color: var(--teal); }
+.today-tabs [data-refresh-today] { margin-left: auto; }
+.pull-refresh.is-busy .pull-refresh__dial { border-top-color: var(--blue); animation: spin .8s linear infinite; }
+
+/* Swipe sideways between Today and Completed. */
+@media (max-width: 559px) {
+  .view-root.is-paging { transition: none; will-change: transform; }
+  .view-root:not(.is-paging) { transition: transform .2s cubic-bezier(.2,.8,.3,1); }
+}
+html[data-reduce-motion="on"] .work-row.is-swiping::before { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html:not([data-reduce-motion="off"]) *, html:not([data-reduce-motion="off"]) *::before, html:not([data-reduce-motion="off"]) *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
 }

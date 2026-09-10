@@ -12,9 +12,9 @@ import { renderLog } from '../js/views/log.js';
 import { renderExams } from '../js/views/exams.js';
 const raw = JSON.parse(await fs.readFile(new URL('../data/site-data.json', import.meta.url), 'utf8'));
 globalThis.fetch = async () => ({ok:true,json:async()=>structuredClone(raw)});
-globalThis.window = {location:{search:'?today=2026-09-03',hash:'#today'}};
+globalThis.window = {location:{search:'?today=2026-09-01',hash:'#today'}};
 const data = await loadSiteData();
-const row = data.index.scheduleByDate.get('2026-09-03');
+const row = data.index.scheduleByDate.get('2026-09-01');
 
 test('Undo remains newer than the completed record, including absent previous records', () => {
   for (const previous of [null,{status:'in-progress',actualQuestions:0,notes:'Keep me',updatedAt:'2026-09-01T00:00:00Z'}]) {
@@ -68,7 +68,7 @@ test('celebration eligibility requires a completion edge and correct date, origi
 });
 
 test('failed writes do not emit completion effects; repeated binding emits one effect per click', () => {
-  let clicks=[]; const button={dataset:{taskAssignment:row.id,toggleTask:'practice:0'},addEventListener(_event,handler){clicks.push(handler);}};
+  let clicks=[]; const button={dataset:{taskAssignment:row.id,toggleTask:'chapter:PHY10'},addEventListener(_event,handler){clicks.push(handler);}};
   const root={querySelectorAll(){return[button];}};
   let effects=0;
   const context={data,state:normalizeState({}),updateState(){return false;},showToast(){},celebrate(){effects++;}};

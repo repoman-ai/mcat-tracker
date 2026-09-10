@@ -19,14 +19,12 @@ test("chapter and practice work become stable, understandable checklist steps", 
   assert.deepEqual(assignmentTasks(row).map(({ id, label }) => ({ id, label })), [
     { id: "chapter:PHY10", label: "Review PHY10 · Mathematics" },
     { id: "chapter:PHY11", label: "Review PHY11 · Reasoning About the Design and Execution of Research" },
-    { id: "practice:0", label: "Complete 8 UWorld topic questions" },
-    { id: "practice:1", label: "Complete 1 CARS passage" },
   ]);
-  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-05")).map((task) => task.id), ["assignment:0"]);
+  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-19")).map((task) => task.id), ["assignment:0"]);
   assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-13")), []);
-  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-06")).map((task) => task.id), ["review:incorrect", "review:flagged", "review:guessed-correct"]);
-  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-07")).map((task) => task.label), ["Finish full-length review", "Confidence map", "Weekly pattern review"]);
-  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-10-24")).map((task) => task.label), ["Answer review", "Brief maintenance", "Complete 2 CARS passages", "Complete 30 B/B Section Bank questions"]);
+  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-20")).map((task) => task.id), ["review:incorrect", "review:flagged", "review:guessed-correct"]);
+  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-09-21")).map((task) => task.label), ["Finish full-length review", "Confidence map", "Weekly pattern review"]);
+  assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-10-24")).map((task) => task.label), ["Study PS05 · Motivation, Emotion, and Stress", "Complete 20 B/B Section Bank questions", "Complete 1 CARS passage from UWorld QBank"]);
   for (const scheduleRow of data.schedule.filter((item) => !item.isRest && !item.isTestWindow)) {
     const ids = assignmentTasks(scheduleRow).map((task) => task.id);
     assert.ok(ids.length, `${scheduleRow.id} has no actionable checklist step`);
@@ -39,19 +37,19 @@ test("partial steps persist, start the day, and the final step completes it", ()
   const tasks = assignmentTasks(row);
   state = withDailyTask(state, row, tasks[0].id, true);
   assert.equal(state.daily[row.id].status, "in-progress");
-  assert.deepEqual(taskProgress(row, state), { tasks, completed: 1, total: 4 });
+  assert.deepEqual(taskProgress(row, state), { tasks, completed: 1, total: 2 });
   for (const task of tasks.slice(1)) state = withDailyTask(state, row, task.id, true);
   assert.equal(state.daily[row.id].status, "complete");
-  assert.equal(taskProgress(row, state).completed, 4);
+  assert.equal(taskProgress(row, state).completed, 2);
   state = withDailyTask(state, row, tasks[1].id, false);
   assert.equal(state.daily[row.id].status, "in-progress");
-  assert.equal(taskProgress(row, state).completed, 3);
+  assert.equal(taskProgress(row, state).completed, 1);
 });
 
 test("whole-day completion and reopening update every step without erasing notes", () => {
   const state = normalizeState({ daily: { [row.id]: { status: "in-progress", notes: "keep this", completedTasks: { "chapter:PHY10": true } } } });
   const completed = withDailyCompletion(state, row, true);
-  assert.equal(taskProgress(row, completed).completed, 4);
+  assert.equal(taskProgress(row, completed).completed, 2);
   assert.equal(completed.daily[row.id].notes, "keep this");
   const reopened = withDailyCompletion(completed, row, false);
   assert.equal(taskProgress(row, reopened).completed, 0);
@@ -61,11 +59,11 @@ test("whole-day completion and reopening update every step without erasing notes
 test("Today, assignment details, and Plan all expose the same progress", () => {
   const state = withDailyTask(empty(), row, "chapter:PHY10", true);
   const checklist = taskChecklist(row, state);
-  assert.match(checklist, /1\/4 done/);
+  assert.match(checklist, /1\/2 done/);
   assert.match(checklist, /aria-pressed="true"[^>]*aria-label="Reopen: Review PHY10/);
   assert.match(renderToday({ data, state }), /Block checklist/);
   assert.match(renderToday({ data, state }), /Guardrails for today/);
-  assert.match(renderPlan({ data, state }, {}), /class="plan-day__progress">1\/4 steps/);
+  assert.match(renderPlan({ data, state }, {}), /class="plan-day__progress">1\/2 steps/);
   assert.doesNotMatch(renderPlan({ data, state }, {}), /<textarea/);
   assert.match(assignmentDetailHTML(row, data, state), /Guardrails for this block/);
 });

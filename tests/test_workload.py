@@ -19,10 +19,10 @@ def row(**changes):
 
 class WorkloadTests(unittest.TestCase):
     def test_stop_rule_is_explicit_and_source_rewording_requires_review(self):
-        rule = g.TODAY_STOP_RULES["2026-09-03"]
-        self.assertEqual(g.stop_rule_for(dict(date="2026-09-03", notes=rule)), rule)
+        rule = g.TODAY_STOP_RULES["2026-09-10"]
+        self.assertEqual(g.stop_rule_for(dict(date="2026-09-10", notes=rule)), rule)
         with self.assertRaisesRegex(g.ValidationError, "source notes changed"):
-            g.stop_rule_for(dict(date="2026-09-03", notes="Reworded guardrail"))
+            g.stop_rule_for(dict(date="2026-09-10", notes="Reworded guardrail"))
         self.assertEqual(g.stop_rule_for(dict(date="2026-09-08", notes="")), "")
 
     def test_unknown_modes_rejected_even_before_special_day_returns(self):
@@ -48,6 +48,11 @@ class WorkloadTests(unittest.TestCase):
         result = g.infer_workload(row(mode="Section Bank / review", chapterIds=[], practiceTarget="10 B/B Section Bank questions; 20 C/P Section Bank questions; 5 UWorld questions", carsPassages=2))
         self.assertEqual(result["lowMinutes"], 15 + 30*5 + 5*4 + 2*15)
         self.assertEqual(result["highMinutes"], 30 + 30*8 + 5*7 + 2*22)
+
+    def test_uworld_cars_source_does_not_count_as_science_questions(self):
+        result = g.infer_workload(row(mode="Practice / retrieval", chapterIds=[], practiceTarget="1 CARS passage from UWorld QBank", carsPassages=1))
+        self.assertEqual(result["lowMinutes"], 35 + 15)
+        self.assertEqual(result["highMinutes"], 70 + 22)
 
     def test_placeholder_conditional_not_half_hour_study(self):
         result = g.infer_workload(row(mode="Exam if officially scheduled", chapterIds=[], week="TEST"))

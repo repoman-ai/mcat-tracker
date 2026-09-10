@@ -16,7 +16,7 @@ This map shows where every authoritative source component appears. `data/site-da
 | Study guide | Phase Map + question-volume budget | Guide; Plan phase map | Complete tables and phase navigation. |
 | Study guide | Honest Time Templates | Guide; Today workload context | Complete guide section; Today adds a clearly labeled inference. |
 | Study guide | Week-by-Week Plan + Week 1 | Guide; Plan | Full guide tables plus the complete interactive daily schedule. |
-| Study guide | Full-Length and Section Bank Schedule | Exams; Plan; Guide | All 8 exams and 600 Section Bank questions are linked to dated assignments. |
+| Study guide | Full-Length and Section Bank Schedule | Exams; Plan; Guide | All 7 exams and 360 Section Bank questions are linked to dated assignments. |
 | Study guide | January vs. March Decision + March protocol | Exams readiness card; Guide | The plan’s own decision rule is shown as guidance, not definitive advice. |
 | Study guide | Registration and Resource Controls + source links | Exams date setting; Guide | Full content and clickable source links. |
 | Workbook | Mistake Log fields and validation lists | Log quick capture; complete log; CSV/XLSX | The fast form keeps common fields visible and retains workbook-compatible concepts. |
@@ -32,8 +32,8 @@ This map shows where every authoritative source component appears. `data/site-da
 - Week boundaries: Tuesday-Monday
 - Kaplan assignments resolved: 83 / 83; unknown IDs: 0
 - Plan weeks reconciled: 20 / 20
-- Full-length events: 8
-- Section Bank questions: 600
+- Full-length events: 7
+- Section Bank questions: 360
 - Workload: every mode explicitly costed; every week's low estimate within its budget; upper/midpoint risks shown in Plan
 - Mastery topics: 40
 - Meaningful guide sections mapped: 9 / 9, plus plan overview and source links

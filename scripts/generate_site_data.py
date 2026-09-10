@@ -515,7 +515,7 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
         high += 30
 
     practice = row["practiceTarget"]
-    for count in re.findall(r"(\d+)\s+UWorld", practice, flags=re.I):
+    for count in re.findall(r"(\d+)\s+UWorld(?:\s+(?:topic|science))?\s+questions?", practice, flags=re.I):
         count = int(count)
         low += count * 4
         high += count * 7
@@ -559,10 +559,14 @@ def guide_links_for(row: dict[str, Any]) -> list[str]:
 # Reviewed display excerpts, checked against source notes during regeneration.
 # Rewording a source guardrail must update this mapping explicitly.
 TODAY_STOP_RULES = {
-    "2026-09-01": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
-    "2026-09-02": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
-    "2026-09-03": "Stop after 3.5 hours; flag unfinished review for after the diagnostic, never rush to tick boxes.",
-    "2026-09-04": "Cap today at 60-90 minutes including one CARS passage.",
+    "2026-09-10": "Stop after 2.5 hours and leave any remaining review for the next content day.",
+    "2026-09-11": "Stop after 2 hours.",
+    "2026-09-12": "Stop after 3 hours.",
+    "2026-09-14": "Stop after 2.5 hours.",
+    "2026-09-15": "Stop after 2.5 hours.",
+    "2026-09-16": "Stop after 2.5 hours.",
+    "2026-09-17": "Stop after 60-90 minutes.",
+    "2026-09-18": "Cap the full block at 60-90 minutes.",
 }
 
 
@@ -712,7 +716,7 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         uworld_total = sum(
             int(count)
             for row in rows
-            for count in re.findall(r"(\d+)\s+UWorld", row["practiceTarget"], flags=re.I)
+            for count in re.findall(r"(\d+)\s+UWorld(?:\s+(?:topic|science))?\s+questions?", row["practiceTarget"], flags=re.I)
         )
         if cars_total != int(week["cars_passages"]):
             fail(f"Week {week_number} CARS target mismatch: schedule={cars_total}, plan={week['cars_passages']}")

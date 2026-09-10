@@ -2,9 +2,9 @@
 
 A private, local-first, phone-first MCAT study tracker generated from the authoritative plan files in the parent directory. It answers **"what should I study right now?"** first, then keeps the complete 20-week schedule, study guide, exam tracker, mistake log, repair queue, and mastery checklist one tap away.
 
-## September 1 restart
+## September 10 adjustment
 
-The current plan starts Tuesday, September 1, 2026. Diagnostic: Saturday, September 5; review: September 6–7. All 83 chapters remain scheduled, with a 26-hour launch and mostly 22–24-hour content weeks. August assignments are no longer part of the schedule. Browser/cloud records, logs, settings, exam IDs, and authentication are preserved.
+The dated plan still starts Tuesday, September 1, 2026 so existing progress IDs remain stable. Physics/Math 10–11 and General Chemistry 1–3 stay completed as reading-only assignments. September 3–9 is superseded rather than overdue. The diagnostic moves to Saturday, September 19, with review September 20–21. All 83 chapters remain scheduled through November 30. Browser/cloud records, logs, settings, and authentication are preserved.
 
 The current guide comes from `study-guide.json`; `MCAT_Study_Plan_2026-09-01.docx` is the matching Word copy. The standalone XLSX was regenerated with the 145-day schedule and 20-week tracker. It supplies mistake-log fields, validation options and mastery topics to the website; website exports add current browser/cloud progress. The original August files are archived. Do not use the August DOCX dates.
 
@@ -20,13 +20,17 @@ No build step, no framework. Plain HTML, CSS, and ES modules. It always saves lo
 4. Tap **Log** in the bottom bar to capture a missed, flagged, or guessed-correct question. Date, source, section, chapter, and topic are pre-filled from today's assignment, so only the error type and three short answers are left to type.
 5. Check **Log → Repair** for retests that are due and the repeated patterns worth one repair plan.
 
+On touch devices, the same visible controls also have optional shortcuts: pull down on Today to
+refresh, swipe between Today and Completed, swipe an unfinished row right to complete it, and drag a
+mobile detail sheet down to close it. None of these gestures is required to use the tracker.
+
 ### The five views
 
 | View | What it holds |
 | --- | --- |
 | **Today** | Past-due check-off list above today's action, per-chapter and per-practice checklist, Completed tab, workload, weekly momentum, due-retest link, exam countdown, optional 25-minute focus timer |
 | **Plan** | Phase map, all 20 weeks, filters including Past due, step progress and check-off in day summaries, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
-| **Exams** | Eight scheduled full-lengths, section and total trends, timing and review status, the plan's readiness rule, registered-date setting |
+| **Exams** | Seven scheduled full-lengths, section and total trends, timing and review status, the plan's readiness rule, registered-date setting |
 | **Log** | Five panels — Capture, Repair, Entries, Mastery, Export |
 | **Guide** | The complete study guide with search, deep links, and accessible sections |
 
@@ -50,21 +54,21 @@ The generator reads only these files from the parent directory:
 - `study-guide.json`
 - `MCAT_520_Plus_Mistake_Log.xlsx`
 
-It refuses to write output unless the sources pass every integrity check: the complete date range declared in `plan.json` (currently 145 continuous dated rows), no duplicate or missing dates, 20 Tuesday–Monday weeks, all 83 chapter IDs resolving with no unknown IDs, weekly CARS and UWorld totals matching `plan.json`, eight Saturday full-lengths with two review days each, 200 Section Bank questions per science section, and complete guide/mastery coverage.
+It refuses to write output unless the sources pass every integrity check: the complete date range declared in `plan.json` (currently 145 continuous dated rows), no duplicate or missing dates, 20 Tuesday–Monday weeks, all 83 chapter IDs resolving with no unknown IDs, weekly CARS and UWorld totals matching `plan.json`, seven Saturday full-lengths with two review days each, 120 core Section Bank questions per science section, and complete guide/mastery coverage.
 
 Files in `archive/` are superseded versions and are **not** sources.
 
-Week 1 counts four warm-up CARS passages plus the nine-passage diagnostic. Thanksgiving and Christmas practice targets are redistributed away from the rest days. Weekly totals are reconciled at generation time.
+The September 10 reset starts with one UWorld CARS passage or one small science-question set rather than stacking both every day. Full-lengths contribute nine CARS passages. Thanksgiving and Christmas remain protected rest days. Weekly totals are reconciled at generation time.
 
 ### Workload review
 
-The weekly hours are capacity budgets, totaling 426 hours; inferred durations are advisory ranges, not fitted promises. Generation fails when a week's low estimate exceeds its budget. Plan shows both the full range and warnings when the midpoint or upper estimate exceeds capacity. No estimate is clamped to a week number. Mode costs are explicit, unknown modes fail, and question costs include answer review. All source mode tokens count toward chapter costs, but repeated labels/cards are shown only once.
+The weekly hours are capacity ceilings totaling 367 hours; inferred durations are advisory ranges, not fitted promises. Generation fails when a week's low estimate exceeds its budget. Plan shows upper-bound risk when slower reading or review could exceed capacity. No estimate is clamped to a week number. Mode costs are explicit, unknown modes fail, and question costs include answer review.
 
-The plan now has 484 UWorld questions and 600 Section Bank questions in 20–30-question blocks, October 23–January 6. Weeks 8–11 contain 50 SB questions each, replacing UWorld micro-quotas; holiday floats mix sciences and official-exam weeks use early-week blocks. Saturday science checkpoints bridge the October 10–November 21 full-length gap without adding a full-length. Rest and full-length review days carry no extra quotas. Logistics and conditional placeholder test days are costed explicitly.
+The core plan has 216 UWorld science questions and 360 Section Bank questions. Another 240 Section Bank questions remain optional reserve and never become overdue. Weeks 8–11 contain two 20-question Section Bank blocks and no extra UWorld science quota. A scheduled CARS passage comes from the UWorld QBank, but its questions are tracked separately from science-question volume. The October third-party full-length was removed; the September diagnostic and six official AAMC exams remain.
 
-The preparation estimate is approximately 344–519 hours. Every low bound fits, but several midpoint estimates still exceed capacity—especially exam weeks. Those are visible risks, not claims that the whole plan will fit regardless of review depth. Prioritize review, reduce new volume, and replan after two actual overruns. Existing August history remains preserved; backup import distinguishes current-plan records from history.
+Every weekly low estimate fits its ceiling. Upper estimates remain visible because unfamiliar chapters can take longer. Prioritize answer review, reduce new volume, and replan after two actual overruns. Existing history remains preserved; backup import distinguishes current-plan records from history.
 
-Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`. The one-time `scripts/rebalance_plan.py` records this revision; routine regeneration never reruns a migration.
+Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`. The September 10 migration is recorded by the parent workspace's `scripts/restructure_plan_2026_09_10.py`; routine regeneration never reruns a migration.
 
 ### Placeholder exam dates
 
