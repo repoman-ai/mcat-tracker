@@ -541,7 +541,7 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
         "lowMinutes": low,
         "highMinutes": high,
         "label": workload_label,
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps.",
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps.",
     }
 
 
@@ -858,7 +858,7 @@ def build_mode_definitions(plan: dict[str, Any], guide: dict[str, Any]) -> list[
         ("Exam under test conditions", "Treat the exam as the week's main practice volume. Reproduce testing conditions and do not stack a normal QBank quota on top."),
         ("Evidence-driven review", "Review every incorrect, flagged, and guessed-correct item. Name the cause, record one concrete fix, and schedule a retest 7-14 days later."),
         ("Practice / retrieval", "Use questions, spaced retrieval, and the mistake log to choose the next repair target. Count deeply reviewed work, not screens completed."),
-        ("Section Bank / review", "Complete the named questions and review incorrect, flagged and guessed-correct answers. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."),
+        ("Section Bank / review", "Complete the named questions and retry the key idea for incorrect, flagged, and guessed-correct answers before reading the explanation. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."),
         ("Light retrieval", "Use only short, confidence-building retrieval. Stop broad content work and protect sleep during the taper."),
         ("Rest", "Rest is planned work. Optional Anki maintenance may stay brief, but there is no catch-up quota."),
         ("Rest / logistics", "Protect recovery and complete only the named logistics task. Do not turn the block into an unplanned study marathon."),
@@ -929,6 +929,12 @@ def main() -> int:
             fail(f"Missing authoritative source: {path}")
 
     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
+    retention = plan.get("retention_protocol", {})
+    required_retention = {"daily_retrieval", "question_mix", "feedback", "cards", "weekly", "cars", "minimum_viable_day"}
+    if set(retention) != required_retention or any(not str(retention[key]).strip() for key in required_retention):
+        fail("plan.json must define every reviewed retention_protocol rule exactly once")
+    if "September 19 diagnostic" not in plan.get("study_modes", {}).get("override_rule", ""):
+        fail("The study-mode override must reference the current September 19 diagnostic")
     chapters = parse_chapters()
     chapter_index = {chapter["id"]: chapter for chapter in chapters}
     guide = parse_guide()

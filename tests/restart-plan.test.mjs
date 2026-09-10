@@ -52,6 +52,15 @@ assert.equal(chapterRows.at(-1).date, "2026-11-30");
 assert.deepEqual(data.sectionBanks.map(s => s.totalQuestions), [120, 120, 120]);
 assert.equal(data.plan.question_targets.section_bank_reserve, 240);
 assert.equal(data.plan.question_targets.uworld_baseline, data.plan.weeks.reduce((n, w) => n + w.uworld_questions, 0));
+assert.match(data.plan.study_modes.override_rule, /September 19 diagnostic/);
+assert.match(data.plan.retention_protocol.daily_retrieval, /first 10 minutes.*closed-book recall/i);
+assert.match(data.plan.retention_protocol.question_mix, /70% current-topic and 30% earlier-topic/);
+assert.match(data.plan.retention_protocol.cards, /retrieval failures, repeated misses, or high-yield facts/);
+assert.match(data.plan.retention_protocol.minimum_viable_day, /Do not mark the full day complete/);
+assert.match(data.index.scheduleByDate.get("2026-09-11").sourceNotes, /first passage untimed.*main point.*author stance.*evidence map/i);
+assert.match(data.index.scheduleByDate.get("2026-09-22").sourceNotes, /six current-topic and two earlier-topic/);
+assert.match(data.index.scheduleByDate.get("2026-09-22").sourceNotes, /CARS: work toward about 10 minutes/);
+assert.match(data.index.scheduleByDate.get("2026-09-10").sourceNotes, /10-minute spaced-retrieval loop/);
 assert.match(renderPlan(context, {}), /145 dated rows · 20 Tuesday-Monday weeks/);
 assert.match(renderToday(context), /Sep 1-2 reading preserved/);
 assert.match(renderToday(context), /PHY10/);
@@ -61,6 +70,7 @@ assert.match(renderToday(context), /AAMC Unscored Sample/);
 window.location.search = "?today=2026-09-20";
 assert.match(renderToday(context), /Full-length review/);
 assert.match(renderGuide(context, {}), /September 10 adjustment/);
+assert.match(renderGuide(context, {}), /Retention loop/);
 assert.doesNotMatch(JSON.stringify(data.guide), /August 19|August 22|22-week|158 daily|880 baseline|AAMC Unscored Sample Sat Sep 5|third-party full-length moves/);
 
 // Date-keyed cloud progress remains truthful after the restructure: the two

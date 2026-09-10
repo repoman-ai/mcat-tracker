@@ -3,13 +3,13 @@
   "sourceProvenance": [
     {
       "file": "schedule.csv",
-      "sha256": "ef5f426baf837da451ef6443983d5622d44a671cc9eaf87d42fc959a0f9510e1",
-      "bytes": 51382
+      "sha256": "03ea3653a75cb65cc2241452508b42f49f0dc5cef473cecd521c9ee3d3b1185d",
+      "bytes": 65742
     },
     {
       "file": "plan.json",
-      "sha256": "b9385c57e7c1c248faec18d9fa42744c234f8019856345d1fc5c21eeb945a6d4",
-      "bytes": 11274
+      "sha256": "328a96f3afe5f94569e83b59a485811723e573fde6f798dd710f2869cdd16830",
+      "bytes": 13108
     },
     {
       "file": "kaplan-mcat-books.md",
@@ -18,13 +18,13 @@
     },
     {
       "file": "study-guide.json",
-      "sha256": "caeee08aff99addc71f309d523c5a3e575646869d993a50a5999d05c54b5d4ef",
-      "bytes": 23944
+      "sha256": "e2256c226cdb661871ecd9699d21393cb1557c7eb96f3279694ec086563603b5",
+      "bytes": 26600
     },
     {
       "file": "MCAT_520_Plus_Mistake_Log.xlsx",
-      "sha256": "3533c5ba1944af1981bd1df6f268e03bdceacb70adcf025a94be33dc071b418a",
-      "bytes": 46820
+      "sha256": "35a4e5ee76061057f72e8345878c523f3c23065a0dbe42d8fab72fee1b16bf1e",
+      "bytes": 47641
     },
     {
       "file": "README.md",
@@ -62,7 +62,7 @@
       "Full read": "Use for likely-dead foundations; complete objectives, concept checks, short closed-book summary, then questions.",
       "Objectives + checks": "Read objectives/summary, complete checks, then reread only gaps exposed by recall or questions.",
       "Questions first": "Attempt questions/passages first, then use the chapter only for exposed gaps.",
-      "override_rule": "After the Week 1 diagnostic, confidence 0-1 upgrades to Full read, confidence 2 uses Objectives + checks, and confidence 3 uses Questions first.",
+      "override_rule": "After the September 19 diagnostic, confidence 0-1 upgrades to Full read, confidence 2 uses Objectives + checks, and confidence 3 uses Questions first.",
       "Rapid review": "Launch-only familiar material: 30-45 minutes per chapter, objectives and closed-book checks first. Flag gaps for post-diagnostic repair; do not chase mastery before the baseline."
     },
     "readiness_rule": {
@@ -321,11 +321,25 @@
       "budget_role": "planned_hours is the weekly capacity budget, not a promise that every upper-bound estimate fits.",
       "validation": "Fail if the low estimate exceeds the budget. Show midpoint and upper-bound risks; never clamp estimates to fit.",
       "execution": "Protect full-lengths, answer review, and sleep. If the time cap is reached, move unfinished reading into the next content block by replacing new volume; never stack it on top.",
-      "maintenance": "Chapter days add 15-30 minutes Anki/log maintenance. Operational mode blocks already include maintenance; exam/review days have no extra quota.",
+      "maintenance": "Chapter days include a 10-minute spaced-retrieval loop plus selective Anki/mistake-log work, all within the existing 15-30 minute maintenance allowance. Operational mode blocks already include maintenance; exam/review days have no extra quota.",
       "estimates": "Mode ranges and question review allowances are planning assumptions, not measured completion times. The midpoint is a sensitivity check, not a statistical forecast."
     },
     "resource_sources": {
       "uworld_cars": "https://gradschool.uworld.com/mcat/sections-subjects/cars/"
+    },
+    "learning_sources": [
+      "https://pubmed.ncbi.nlm.nih.gov/26173288/",
+      "https://pubmed.ncbi.nlm.nih.gov/16719566/",
+      "https://pubmed.ncbi.nlm.nih.gov/37615780/"
+    ],
+    "retention_protocol": {
+      "daily_retrieval": "Use the first 10 minutes of each chapter day for closed-book recall: one prompt from the previous study day, one from about seven days earlier, and one high-yield relationship, pathway, or equation. Check notes only after the attempt.",
+      "question_mix": "Through September 21, keep science questions topic-aligned. Starting September 22, when filters allow, use about 70% current-topic and 30% earlier-topic UWorld science questions; an eight-question block is approximately six plus two.",
+      "feedback": "For every wrong, flagged, or guessed-correct item, state why the chosen answer failed, write one concise correction, and reattempt the idea closed book in 7-14 days before rereading the explanation.",
+      "cards": "Create or unsuspend Anki cards only for retrieval failures, repeated misses, or high-yield facts. Keep cards and mistake-log work inside the existing maintenance window.",
+      "weekly": "At the end of Monday's work, convert at most three recurring weaknesses into retrieval prompts for the next week.",
+      "cars": "On September 11, work untimed. Through September 18, use a soft 12-minute passage cap; from September 22, work toward about 10 minutes per passage. Review the main point, author stance, evidence map, and every miss before counting a passage complete.",
+      "minimum_viable_day": "If time is short, complete the 10-minute retrieval loop plus the smallest scheduled practice unit and leave the remaining steps incomplete. Do not mark the full day complete."
     }
   },
   "phaseMap": [
@@ -491,10 +505,10 @@
     {
       "id": "section-bank-review",
       "name": "Section Bank / review",
-      "summary": "Complete the named questions and review incorrect, flagged and guessed-correct answers. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added.",
+      "summary": "Complete the named questions and retry the key idea for incorrect, flagged, and guessed-correct answers before reading the explanation. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added.",
       "whenToUse": "Use when this exact mode appears on the dated schedule.",
       "requiredOutput": "Complete the named block without adding unrelated volume.",
-      "completeInstructions": "Complete the named questions and review incorrect, flagged and guessed-correct answers. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."
+      "completeInstructions": "Complete the named questions and retry the key idea for incorrect, flagged, and guessed-correct answers before reading the explanation. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."
     },
     {
       "id": "light-retrieval",
@@ -2715,7 +2729,7 @@
         "lowMinutes": 75,
         "highMinutes": 120,
         "label": "~1.2–2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -2834,7 +2848,7 @@
         "lowMinutes": 105,
         "highMinutes": 165,
         "label": "~1.8–2.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3148,7 +3162,7 @@
       "weeklyHours": 10,
       "weeklyMilestone": "Start practice gently; one chapter on most days",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete one chapter. Stop after 2.5 hours and leave any remaining review for the next content day.",
+      "sourceNotes": "Complete one chapter. Stop after 2.5 hours and leave any remaining review for the next content day. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3160,7 +3174,7 @@
         "lowMinutes": 105,
         "highMinutes": 165,
         "label": "~1.8–2.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3233,7 +3247,7 @@
       "weeklyHours": 10,
       "weeklyMilestone": "Start practice gently; one chapter on most days",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Read the two short strategy chapters, then complete one untimed UWorld QBank CARS passage. Stop after 2 hours.",
+      "sourceNotes": "Read the two short strategy chapters, then complete one untimed UWorld QBank CARS passage. Stop after 2 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Keep this first passage untimed; review the main point, author stance, evidence map, and every miss.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3245,7 +3259,7 @@
         "lowMinutes": 130,
         "highMinutes": 212,
         "label": "~2.2–3.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3303,7 +3317,7 @@
       "weeklyHours": 10,
       "weeklyMilestone": "Start practice gently; one chapter on most days",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete one chapter and review all eight questions. Stop after 3 hours.",
+      "sourceNotes": "Complete one chapter and review all eight questions. Stop after 3 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3315,7 +3329,7 @@
         "lowMinutes": 97,
         "highMinutes": 166,
         "label": "~1.6–2.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3401,7 +3415,7 @@
       "weeklyHours": 10,
       "weeklyMilestone": "Start practice gently; one chapter on most days",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete one chapter and one UWorld QBank CARS passage. Stop after 2.5 hours.",
+      "sourceNotes": "Complete one chapter and one UWorld QBank CARS passage. Stop after 2.5 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3413,7 +3427,7 @@
         "lowMinutes": 80,
         "highMinutes": 132,
         "label": "~1.3–2.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3475,7 +3489,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 19; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours.",
+      "sourceNotes": "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3487,7 +3501,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3545,7 +3559,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 19; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours.",
+      "sourceNotes": "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3557,7 +3571,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3582,7 +3596,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 19; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Use closed-book recall only, then complete one CARS passage. Stop after 60-90 minutes.",
+      "sourceNotes": "Use closed-book recall only, then complete one CARS passage. Stop after 60-90 minutes. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3594,7 +3608,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3619,7 +3633,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 19; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Cap the full block at 60-90 minutes. Prepare food, ID, timing, and the testing space, then stop.",
+      "sourceNotes": "Cap the full block at 60-90 minutes. Prepare food, ID, timing, and the testing space, then stop. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3631,7 +3645,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3693,7 +3707,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 19; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -3730,7 +3744,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "AAMC Unscored Sample Sat Sep 19; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -3815,7 +3829,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Nine chapters; one CARS passage per active day",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3826,7 +3840,7 @@
         "lowMinutes": 202,
         "highMinutes": 323,
         "label": "~3.4–5.4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3911,7 +3925,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Nine chapters; one CARS passage per active day",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -3922,7 +3936,7 @@
         "lowMinutes": 162,
         "highMinutes": 268,
         "label": "~2.7–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -3995,7 +4009,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Nine chapters; one CARS passage per active day",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4006,7 +4020,7 @@
         "lowMinutes": 142,
         "highMinutes": 243,
         "label": "~2.4–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4060,7 +4074,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Nine chapters; one CARS passage per active day",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4071,7 +4085,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4125,7 +4139,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Nine chapters; one CARS passage per active day",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4136,7 +4150,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4222,7 +4236,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Nine chapters; one CARS passage per active day",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4233,7 +4247,7 @@
         "lowMinutes": 152,
         "highMinutes": 243,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4302,7 +4316,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; question review comes before added volume",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4313,7 +4327,7 @@
         "lowMinutes": 162,
         "highMinutes": 268,
         "label": "~2.7–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4394,7 +4408,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; question review comes before added volume",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4405,7 +4419,7 @@
         "lowMinutes": 142,
         "highMinutes": 243,
         "label": "~2.4–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4459,7 +4473,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; question review comes before added volume",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4470,7 +4484,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4520,7 +4534,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; question review comes before added volume",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4531,7 +4545,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4593,7 +4607,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; question review comes before added volume",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4604,7 +4618,7 @@
         "lowMinutes": 152,
         "highMinutes": 243,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4694,7 +4708,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; question review comes before added volume",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4705,7 +4719,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4782,7 +4796,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; keep daily work within the stop rule",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4793,7 +4807,7 @@
         "lowMinutes": 162,
         "highMinutes": 268,
         "label": "~2.7–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4870,7 +4884,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; keep daily work within the stop rule",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4881,7 +4895,7 @@
         "lowMinutes": 142,
         "highMinutes": 243,
         "label": "~2.4–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -4939,7 +4953,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; keep daily work within the stop rule",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -4950,7 +4964,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5004,7 +5018,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; keep daily work within the stop rule",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5015,7 +5029,7 @@
         "lowMinutes": 152,
         "highMinutes": 243,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5061,7 +5075,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; keep daily work within the stop rule",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5072,7 +5086,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5162,7 +5176,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; keep daily work within the stop rule",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5173,7 +5187,7 @@
         "lowMinutes": 112,
         "highMinutes": 188,
         "label": "~1.9–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5246,7 +5260,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; no third-party full-length",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5257,7 +5271,7 @@
         "lowMinutes": 202,
         "highMinutes": 323,
         "label": "~3.4–5.4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5342,7 +5356,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; no third-party full-length",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5353,7 +5367,7 @@
         "lowMinutes": 142,
         "highMinutes": 243,
         "label": "~2.4–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5419,7 +5433,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; no third-party full-length",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5430,7 +5444,7 @@
         "lowMinutes": 152,
         "highMinutes": 243,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5484,7 +5498,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; no third-party full-length",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5495,7 +5509,7 @@
         "lowMinutes": 152,
         "highMinutes": 243,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5561,7 +5575,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; no third-party full-length",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5572,7 +5586,7 @@
         "lowMinutes": 152,
         "highMinutes": 243,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5658,7 +5672,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "Eight chapters; no third-party full-length",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. If filters allow, make the eight-question block about six current-topic and two earlier-topic questions. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5669,7 +5683,7 @@
         "lowMinutes": 92,
         "highMinutes": 163,
         "label": "~1.5–2.7 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5774,7 +5788,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5785,7 +5799,7 @@
         "lowMinutes": 210,
         "highMinutes": 322,
         "label": "~3.5–5.4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5862,7 +5876,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5873,7 +5887,7 @@
         "lowMinutes": 210,
         "highMinutes": 322,
         "label": "~3.5–5.4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5927,7 +5941,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -5938,7 +5952,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -5992,7 +6006,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6003,7 +6017,7 @@
         "lowMinutes": 220,
         "highMinutes": 347,
         "label": "~3.7–5.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6054,7 +6068,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6065,7 +6079,7 @@
         "lowMinutes": 180,
         "highMinutes": 292,
         "label": "~3–4.9 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6152,7 +6166,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6163,7 +6177,7 @@
         "lowMinutes": 60,
         "highMinutes": 107,
         "label": "~1–1.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6252,7 +6266,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6263,7 +6277,7 @@
         "lowMinutes": 210,
         "highMinutes": 322,
         "label": "~3.5–5.4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6340,7 +6354,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6351,7 +6365,7 @@
         "lowMinutes": 170,
         "highMinutes": 267,
         "label": "~2.8–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6401,7 +6415,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6412,7 +6426,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6466,7 +6480,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6477,7 +6491,7 @@
         "lowMinutes": 160,
         "highMinutes": 267,
         "label": "~2.7–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6528,7 +6542,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6539,7 +6553,7 @@
         "lowMinutes": 180,
         "highMinutes": 292,
         "label": "~3–4.9 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6622,7 +6636,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 B/B Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6633,7 +6647,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6710,7 +6724,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6721,7 +6735,7 @@
         "lowMinutes": 170,
         "highMinutes": 267,
         "label": "~2.8–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6806,7 +6820,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6817,7 +6831,7 @@
         "lowMinutes": 170,
         "highMinutes": 267,
         "label": "~2.8–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6863,7 +6877,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -6874,7 +6888,7 @@
         "lowMinutes": 80,
         "highMinutes": 132,
         "label": "~1.3–2.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6924,7 +6938,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6935,7 +6949,7 @@
         "lowMinutes": 220,
         "highMinutes": 347,
         "label": "~3.7–5.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -6986,7 +7000,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -6997,7 +7011,7 @@
         "lowMinutes": 160,
         "highMinutes": 267,
         "label": "~2.7–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7084,7 +7098,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7095,7 +7109,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7176,7 +7190,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7187,7 +7201,7 @@
         "lowMinutes": 150,
         "highMinutes": 242,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7260,7 +7274,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7271,7 +7285,7 @@
         "lowMinutes": 170,
         "highMinutes": 267,
         "label": "~2.8–4.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7321,7 +7335,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7332,7 +7346,7 @@
         "lowMinutes": 80,
         "highMinutes": 132,
         "label": "~1.3–2.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7382,7 +7396,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -7393,7 +7407,7 @@
         "lowMinutes": 220,
         "highMinutes": 347,
         "label": "~3.7–5.8 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7440,7 +7454,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -7451,7 +7465,7 @@
         "lowMinutes": 180,
         "highMinutes": 292,
         "label": "~3–4.9 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7538,7 +7552,7 @@
       "weeklyHours": 22,
       "weeklyMilestone": "Eight chapters + 40 C/P Section Bank questions",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday.",
+      "sourceNotes": "Complete the assigned chapter block and review practice before adding volume. Stop after 3 hours on weekdays or 4 hours on Saturday. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7549,7 +7563,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7574,7 +7588,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Choose one weak area from the mistake log and stop after 90 minutes. Do not add new chapters before the exam.",
+      "sourceNotes": "Choose one weak area from the mistake log and stop after 90 minutes. Do not add new chapters before the exam. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7585,7 +7599,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7610,7 +7624,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Choose one weak area from the mistake log and stop after 90 minutes. Do not add new chapters before the exam.",
+      "sourceNotes": "Choose one weak area from the mistake log and stop after 90 minutes. Do not add new chapters before the exam. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7621,7 +7635,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7646,7 +7660,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Choose one weak area from the mistake log and stop after 90 minutes. Do not add new chapters before the exam.",
+      "sourceNotes": "Choose one weak area from the mistake log and stop after 90 minutes. Do not add new chapters before the exam. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7657,7 +7671,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7755,7 +7769,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -7792,7 +7806,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "AAMC Practice Exam 1 Sat Nov 21; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -7881,7 +7895,7 @@
       "weeklyHours": 15,
       "weeklyMilestone": "All 83 chapters complete by Nov 30; Thanksgiving and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected.",
+      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7892,7 +7906,7 @@
         "lowMinutes": 150,
         "highMinutes": 242,
         "label": "~2.5–4 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -7942,7 +7956,7 @@
       "weeklyHours": 15,
       "weeklyMilestone": "All 83 chapters complete by Nov 30; Thanksgiving and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected.",
+      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -7953,7 +7967,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8039,7 +8053,7 @@
       "weeklyHours": 15,
       "weeklyMilestone": "All 83 chapters complete by Nov 30; Thanksgiving and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected.",
+      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -8050,7 +8064,7 @@
         "lowMinutes": 120,
         "highMinutes": 187,
         "label": "~2–3.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8100,7 +8114,7 @@
       "weeklyHours": 15,
       "weeklyMilestone": "All 83 chapters complete by Nov 30; Thanksgiving and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected.",
+      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -8111,7 +8125,7 @@
         "lowMinutes": 80,
         "highMinutes": 132,
         "label": "~1.3–2.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8197,7 +8211,7 @@
       "weeklyHours": 15,
       "weeklyMilestone": "All 83 chapters complete by Nov 30; Thanksgiving and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected.",
+      "sourceNotes": "Finish the assigned chapter block and one CARS passage. Stop after 2.5 hours; Thanksgiving and Sunday remain protected. Start with 10 minutes of closed-book recall. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -8208,7 +8222,7 @@
         "lowMinutes": 80,
         "highMinutes": 132,
         "label": "~1.3–2.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8233,7 +8247,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 B/B Section Bank questions; exam Sat Dec 5; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -8244,7 +8258,7 @@
         "lowMinutes": 130,
         "highMinutes": 212,
         "label": "~2.2–3.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8281,7 +8295,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8317,7 +8331,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8415,7 +8429,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 B/B Section Bank questions; exam Sat Dec 5; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -8452,7 +8466,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 B/B Section Bank questions; exam Sat Dec 5; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -8489,7 +8503,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 C/P Section Bank questions; exam Sat Dec 12; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -8500,7 +8514,7 @@
         "lowMinutes": 130,
         "highMinutes": 212,
         "label": "~2.2–3.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8537,7 +8551,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8573,7 +8587,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8671,7 +8685,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 C/P Section Bank questions; exam Sat Dec 12; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -8708,7 +8722,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 C/P Section Bank questions; exam Sat Dec 12; review Sun-Mon",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -8745,7 +8759,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 C/P Section Bank questions; decide January or March after review",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -8756,7 +8770,7 @@
         "lowMinutes": 130,
         "highMinutes": 212,
         "label": "~2.2–3.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8794,7 +8808,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8831,7 +8845,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -8932,7 +8946,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 C/P Section Bank questions; decide January or March after review",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -8970,7 +8984,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "20 C/P Section Bank questions; decide January or March after review",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -9008,7 +9022,7 @@
       "weeklyHours": 16,
       "weeklyMilestone": "90 Section Bank questions; Christmas and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9019,7 +9033,7 @@
         "lowMinutes": 130,
         "highMinutes": 212,
         "label": "~2.2–3.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9046,7 +9060,7 @@
       "weeklyHours": 16,
       "weeklyMilestone": "90 Section Bank questions; Christmas and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9057,7 +9071,7 @@
         "lowMinutes": 130,
         "highMinutes": 212,
         "label": "~2.2–3.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9084,7 +9098,7 @@
       "weeklyHours": 16,
       "weeklyMilestone": "90 Section Bank questions; Christmas and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9095,7 +9109,7 @@
         "lowMinutes": 155,
         "highMinutes": 252,
         "label": "~2.6–4.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9159,7 +9173,7 @@
       "weeklyHours": 16,
       "weeklyMilestone": "90 Section Bank questions; Christmas and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9170,7 +9184,7 @@
         "lowMinutes": 155,
         "highMinutes": 252,
         "label": "~2.6–4.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9234,7 +9248,7 @@
       "weeklyHours": 16,
       "weeklyMilestone": "90 Section Bank questions; Christmas and Sunday off",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Use the mistake log to choose one repair theme. Keep the block under 90 minutes unless it is a scheduled exam or Section Bank block.",
+      "sourceNotes": "Use the mistake log to choose one repair theme. Keep the block under 90 minutes unless it is a scheduled exam or Section Bank block. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -9245,7 +9259,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9271,7 +9285,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "25 P/S Section Bank questions; New Year's Day off; exam Sat Jan 2",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9282,7 +9296,7 @@
         "lowMinutes": 155,
         "highMinutes": 252,
         "label": "~2.6–4.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9320,7 +9334,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9357,7 +9371,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9458,7 +9472,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "25 P/S Section Bank questions; New Year's Day off; exam Sat Jan 2",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -9496,7 +9510,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "25 P/S Section Bank questions; New Year's Day off; exam Sat Jan 2",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -9534,7 +9548,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "25 P/S Section Bank questions; final exam Sat Jan 9",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review every incorrect, flagged, and guessed-correct answer before adding questions. Stop when review no longer fits.",
+      "sourceNotes": "For every incorrect, flagged, or guessed-correct answer, retry the key idea closed book before reading the explanation. Stop when review no longer fits. CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "section-bank",
       "isRest": false,
       "isExam": false,
@@ -9545,7 +9559,7 @@
         "lowMinutes": 155,
         "highMinutes": 252,
         "label": "~2.6–4.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9583,7 +9597,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9620,7 +9634,7 @@
         "lowMinutes": 35,
         "highMinutes": 70,
         "label": "~35 min–1.2 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9721,7 +9735,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "25 P/S Section Bank questions; final exam Sat Jan 9",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days.",
+      "sourceNotes": "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -9759,7 +9773,7 @@
       "weeklyHours": 20,
       "weeklyMilestone": "25 P/S Section Bank questions; final exam Sat Jan 9",
       "sourceStatus": "Not Started",
-      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first.",
+      "sourceNotes": "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week.",
       "dayType": "full-length-review",
       "isRest": false,
       "isExam": false,
@@ -9797,7 +9811,7 @@
       "weeklyHours": 8,
       "weeklyMilestone": "No new broad content; protect sleep and confidence",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -9808,7 +9822,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9834,7 +9848,7 @@
       "weeklyHours": 8,
       "weeklyMilestone": "No new broad content; protect sleep and confidence",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -9845,7 +9859,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9871,7 +9885,7 @@
       "weeklyHours": 8,
       "weeklyMilestone": "No new broad content; protect sleep and confidence",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "study",
       "isRest": false,
       "isExam": false,
@@ -9882,7 +9896,7 @@
         "lowMinutes": 50,
         "highMinutes": 92,
         "label": "~50 min–1.5 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -9919,7 +9933,7 @@
         "lowMinutes": 20,
         "highMinutes": 45,
         "label": "~20–45 min",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10019,7 +10033,7 @@
       "weeklyHours": 8,
       "weeklyMilestone": "No new broad content; protect sleep and confidence",
       "sourceStatus": "Not Started",
-      "sourceNotes": "",
+      "sourceNotes": "CARS: work toward about 10 minutes, then review the main point, stance, evidence, and misses.",
       "dayType": "logistics",
       "isRest": false,
       "isExam": false,
@@ -10030,7 +10044,7 @@
         "lowMinutes": 35,
         "highMinutes": 67,
         "label": "~35 min–1.1 hr",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10067,7 +10081,7 @@
         "lowMinutes": 20,
         "highMinutes": 45,
         "label": "~20–45 min",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10105,7 +10119,7 @@
         "lowMinutes": 20,
         "highMinutes": 45,
         "label": "~20–45 min",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10143,7 +10157,7 @@
         "lowMinutes": 20,
         "highMinutes": 45,
         "label": "~20–45 min",
-        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days add 15-30 min maintenance. No week-specific caps."
+        "basis": "Advisory sum: each mode block + questions with review + CARS; chapter days include a 10-minute retrieval loop and selective Anki/log work within 15-30 min maintenance. No week-specific caps."
       },
       "relatedGuideSections": [
         "operating-rules",
@@ -10515,10 +10529,25 @@
             "items": [
               "A scheduled CARS passage comes from the UWorld MCAT QBank. Its passage questions count as CARS practice, not toward the separate UWorld science-question quota.",
               "Review every science and CARS answer. Count reviewed questions, not screens completed.",
-              "Log wrong, flagged, and guessed-correct items with one concrete fix and a retest due in 7-14 days.",
+              "For wrong, flagged, and guessed-correct items, retry the key idea closed book before reading the explanation; then record one concrete fix and a retest due in 7-14 days.",
               "Use the diagnostic confidence map to choose chapter depth. Do not reread familiar material simply because it appears on the calendar.",
-              "Keep Anki and log maintenance within 15-30 minutes on chapter days. Full-length and review days carry no extra practice quota.",
-              "Source for UWorld CARS inclusion: https://gradschool.uworld.com/mcat/sections-subjects/cars/"
+              "Create or unsuspend Anki cards only for retrieval failures, repeated misses, or high-yield facts. Keep retrieval, Anki, and log work within the existing 15-30 minute chapter-day allowance."
+            ]
+          },
+          {
+            "type": "heading",
+            "text": "Retention loop",
+            "level": 2
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "items": [
+              "Start each chapter day with 10 minutes of closed-book recall: yesterday, about seven days ago, and one high-yield relationship. Check notes afterward.",
+              "Keep science questions topic-aligned through September 21. Starting September 22, when filters allow, mix about 70% current-topic with 30% earlier-topic questions.",
+              "For CARS, work untimed September 11, use a soft 12-minute cap through September 18, then work toward about 10 minutes. Review main point, stance, evidence, and every miss.",
+              "Each Monday, turn at most three recurring weaknesses into next week's retrieval prompts.",
+              "On a short day, do the retrieval loop plus the smallest practice unit; leave the day incomplete if other assigned work remains."
             ]
           },
           {
@@ -10674,6 +10703,10 @@
           {
             "type": "paragraph",
             "text": "The weekly number is a ceiling. If the minimum estimate exceeds the ceiling, the generator rejects the schedule. Midpoint and upper-bound risks remain visible so the plan does not hide uncertain reading time."
+          },
+          {
+            "type": "paragraph",
+            "text": "The 10-minute retrieval loop and selective Anki/mistake-log work are already included in the 15-30 minute chapter-day maintenance allowance; they are not extra work."
           },
           {
             "type": "paragraph",
@@ -10843,19 +10876,19 @@
                 "2026-09-10",
                 "General Chemistry Ch. 4 - Compounds and Stoichiometry",
                 "No additional quota",
-                "Complete one chapter. Stop after 2.5 hours and leave any remaining review for the next content day."
+                "Complete one chapter. Stop after 2.5 hours and leave any remaining review for the next content day. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window."
               ],
               [
                 "2026-09-11",
                 "Critical Analysis and Reasoning Skills Ch. 1 - About CARS; Critical Analysis and Reasoning Skills Ch. 2 - Analyzing Rhetoric",
                 "1 CARS passage from UWorld QBank",
-                "Read the two short strategy chapters, then complete one untimed UWorld QBank CARS passage. Stop after 2 hours."
+                "Read the two short strategy chapters, then complete one untimed UWorld QBank CARS passage. Stop after 2 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Keep this first passage untimed; review the main point, author stance, evidence map, and every miss."
               ],
               [
                 "2026-09-12",
                 "Biology Ch. 1 - The Cell",
                 "8 UWorld science questions",
-                "Complete one chapter and review all eight questions. Stop after 3 hours."
+                "Complete one chapter and review all eight questions. Stop after 3 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window."
               ],
               [
                 "2026-09-13",
@@ -10867,31 +10900,31 @@
                 "2026-09-14",
                 "Biology Ch. 2 - Reproduction",
                 "1 CARS passage from UWorld QBank",
-                "Complete one chapter and one UWorld QBank CARS passage. Stop after 2.5 hours."
+                "Complete one chapter and one UWorld QBank CARS passage. Stop after 2.5 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss."
               ],
               [
                 "2026-09-15",
                 "Biochemistry Ch. 1 - Amino Acids, Peptides, and Proteins",
                 "8 UWorld science questions; 1 CARS passage from UWorld QBank",
-                "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours."
+                "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss."
               ],
               [
                 "2026-09-16",
                 "Biochemistry Ch. 2 - Enzymes",
                 "8 UWorld science questions; 1 CARS passage from UWorld QBank",
-                "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours."
+                "Complete one chapter, review eight science questions, and complete one CARS passage. Stop after 2.5 hours. Begin with the 10-minute spaced-retrieval loop; it is included in the 15-30 minute maintenance window. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss."
               ],
               [
                 "2026-09-17",
                 "Light amino-acid and enzyme retrieval",
                 "1 CARS passage from UWorld QBank",
-                "Use closed-book recall only, then complete one CARS passage. Stop after 60-90 minutes."
+                "Use closed-book recall only, then complete one CARS passage. Stop after 60-90 minutes. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss."
               ],
               [
                 "2026-09-18",
                 "Light formula and amino-acid recall + diagnostic logistics",
                 "1 CARS passage from UWorld QBank",
-                "Cap the full block at 60-90 minutes. Prepare food, ID, timing, and the testing space, then stop."
+                "Cap the full block at 60-90 minutes. Prepare food, ID, timing, and the testing space, then stop. Use a soft 12-minute passage cap; review the main point, author stance, evidence map, and every miss."
               ],
               [
                 "2026-09-19",
@@ -10903,13 +10936,13 @@
                 "2026-09-20",
                 "Full-length review: incorrect, flagged, and guessed-correct",
                 "No additional quota",
-                "Review for 4-5 hours. Identify at most three repair priorities and schedule retests in 7-14 days."
+                "Review for 4-5 hours. For each miss, attempt the underlying idea closed book before rereading the explanation. Identify at most three repair priorities and schedule retests in 7-14 days."
               ],
               [
                 "2026-09-21",
                 "Finish full-length review + confidence map + weekly pattern review",
                 "No additional quota",
-                "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first."
+                "Finish review in 2-2.5 hours. Use the evidence to choose Full read, Objectives + checks, or Questions first. Turn at most three recurring weaknesses into retrieval prompts for the next week."
               ]
             ]
           }
