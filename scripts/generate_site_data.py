@@ -704,6 +704,8 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         rows = [row for row in schedule if row["week"] == week_number]
         if len(rows) != 7:
             fail(f"Week {week_number} must contain exactly seven days")
+        if not any(row["isRest"] for row in rows):
+            fail(f"Week {week_number} must protect at least one rest day")
         for row in rows:
             if row["phase"] != week["phase"] or row["weeklyFocus"] != week["focus"] or row["weeklyHours"] != int(week["planned_hours"]) or row["weeklyMilestone"] != week["milestone"]:
                 fail(f"Schedule values for Week {week_number} do not align with plan.json")

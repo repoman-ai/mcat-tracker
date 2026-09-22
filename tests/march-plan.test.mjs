@@ -35,6 +35,12 @@ for (const exam of data.exams) {
   assert.equal(row.carsPassages, 9);
   assert.equal(exam.reviewAssignmentIds.length, 2);
   assert.ok(exam.reviewAssignmentIds.every((id) => data.index.scheduleByDate.get(id).isFullLengthReview));
+  const priorDay = data.schedule[data.schedule.indexOf(row) - 1];
+  assert.equal(priorDay.isRest, true, `Protect rest before ${exam.name}`);
+  assert.equal(priorDay.practiceTarget, "");
+}
+for (let week = 1; week <= data.plan.prep_weeks; week++) {
+  assert.ok(data.schedule.some((row) => row.week === week && row.isRest), `Week ${week} needs rest`);
 }
 for (const day of ["2026-11-26", "2026-12-25", "2027-01-01"]) {
   const row = data.index.scheduleByDate.get(day);

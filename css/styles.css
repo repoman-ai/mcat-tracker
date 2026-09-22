@@ -190,6 +190,20 @@ input:user-invalid, textarea:user-invalid, select:user-invalid { border-color: #
 .countdown-card p { margin: 0; color: #6d5a3e; font-size: .8rem; line-height: 1.45; }
 .countdown-card a { font-size: .78rem; font-weight: 800; }
 .momentum-card h3, .next-week-card h3 { margin-bottom: 1rem; }
+.week-rhythm { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .2rem; margin-bottom: 1rem; }
+.week-day { display: flex; min-height: 64px; min-width: 0; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: .5rem; color: var(--ink); text-decoration: none; background: var(--canvas); }
+.week-day > span { font-size: .65rem; }
+.week-day > strong { font-size: 1rem; }
+.week-day > small { font-size: .6rem; text-align: center; }
+.week-day--complete { background: var(--teal-soft); border-color: var(--teal); }
+.week-day--partial { background: var(--gold-soft); border-color: var(--gold); }
+.week-day--rest { border-style: dashed; }
+.week-day[aria-current="date"] { outline: 2px solid var(--blue-deep); outline-offset: 1px; }
+.momentum-encouragement, .rest-encouragement { color: var(--blue-deep); font-size: .88rem; }
+.capacity-guidance { margin: 1rem 0; padding: .75rem; border-radius: .6rem; background: var(--gold-soft); font-size: .8rem; }
+.capacity-guidance summary { min-height: var(--touch); display: list-item; align-content: center; cursor: pointer; font-weight: 700; }
+.capacity-guidance p { margin: .6rem 0; }
+.schedule-date-notice { padding: .8rem; border-left: 3px solid var(--gold); background: var(--gold-soft); font-size: .88rem; }
 .progress-block + .progress-block { margin-top: .85rem; }
 .progress-copy { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .35rem; color: var(--muted); font-size: .78rem; }
 .progress-copy strong { color: var(--ink-strong); }

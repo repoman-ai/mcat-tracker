@@ -8,6 +8,8 @@ The dated plan runs September 22, 2026 through March 22, 2027, with March 19 as 
 
 The current guide comes from `study-guide.json`; `MCAT_Study_Plan_2026-09-22.docx` is the matching Word copy. The standalone XLSX contains the 182-day schedule and 26-week tracker. It supplies mistake-log fields and mastery topics to the website; website exports add current browser/cloud progress.
 
+The September 22 review protects Friday before every full-length exam and checks that all 26 weeks contain a rest day. The diagnostic week's 10 UWorld questions are redistributed across Tuesday–Thursday; question totals, chapter dates, exam dates, and review days are preserved. Today now credits individual completed steps in weekly momentum, links directly to each day, and surfaces weekly workload risk. A registered exam date different from the plan displays an explicit schedule-alignment warning. See [the review record](REVIEW_2026-09-22.md).
+
 No build step, no framework. Plain HTML, CSS, and ES modules. It always saves locally, and after you unlock it with a PIN it keeps the same progress on your phone and your computer.
 
 ---

@@ -1,7 +1,8 @@
 import { focusTarget } from "../view-state.js";
+import { parseRoute } from "../router.js?v=20260922-6";
 import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js";
 import { taskProgress } from "../daily.js";
-import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js";
+import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20260922-6";
 import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js";
 
 const defaultFilters = {
@@ -183,7 +184,7 @@ export function bindPlan(container, context, { isRouteChange = true } = {}) {
   if (isRouteChange && window.location.hash === "#plan/past-due") {
     focusTarget(container.querySelector("#plan-past-due"));
   } else if (isRouteChange && window.location.hash.includes("/")) {
-    const target = container.querySelector(`[data-assignment-details="${CSS.escape(decodeURIComponent(window.location.hash.split("/").slice(1).join("/")))}"]`);
+    const target = container.querySelector(`[data-assignment-details="${CSS.escape(parseRoute().detail)}"]`);
     if (target) focusTarget(target);
   }
   // The renderer calls this after restoring outer disclosures, before focus.

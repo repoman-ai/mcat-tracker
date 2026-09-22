@@ -1,0 +1,20 @@
+--- a/scripts/build_march_plan.py
++++ b/scripts/build_march_plan.py
+@@ -96 +96,2 @@
+-        blocked = {day for day in days if day.weekday() == 6 or day in HOLIDAYS or day in review_days or day == exam or day >= TEST}
++        rest_days = {exam - timedelta(days=1)} if exam else {day for day in days if day.weekday() == 6}
++        blocked = {day for day in days if day in rest_days or day in HOLIDAYS or day in review_days or day == exam or day >= TEST}
+@@ -173 +174 @@
+-            elif day in HOLIDAYS or day.weekday() == 6:
++            elif day in HOLIDAYS or day in rest_days:
+@@ -178 +179 @@
+-                notes = ""
++                notes = "Protected pre-exam rest. Prepare logistics and sleep; no catch-up quota." if exam else ""
+--- a/scripts/build_march_guide.py
++++ b/scripts/build_march_guide.py
+@@ -43 +43 @@
+-                    "Keep six official scored full lengths spaced from December through March, with Sunday and Monday protected for review.",
++                    "Keep six official scored full lengths spaced from December through March, with Friday protected for rest and Sunday and Monday protected for review.",
+@@ -69 +69 @@
+-                ["Full-length week", "20 hours", "Exam Saturday, review Sunday and Monday, light work elsewhere."],
++                ["Full-length week", "20 hours", "Rest Friday, exam Saturday, review Sunday and Monday. Keep other work light."],

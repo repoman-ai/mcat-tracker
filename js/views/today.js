@@ -1,7 +1,7 @@
 import { createFocusTimer, focusMinutes } from "../focus-timer.js";
 import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js";
 import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js";
-import { recordedCounts } from "../daily.js";
+import { recordedCounts, taskProgress } from "../daily.js";
 import {
   daysBetween,
   escapeAttr,
@@ -10,7 +10,7 @@ import {
   plural,
   todayISO,
   uniqueId,
-} from "../utils.js";
+} from "../utils.js?v=20260922-6";
 import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
@@ -37,8 +37,35 @@ function countdown(data, state, today) {
     <section class="countdown-card ${isRegistered ? "countdown-card--registered" : ""}">
       <div><span class="eyebrow">${isRegistered ? "Registered MCAT" : "Placeholder window"}</span><strong>${headline}</strong></div>
       <p>${escapeHTML(formatDateLong(target))}</p>
+      ${target !== data.plan.placeholder_exam_window[0] ? '<p class="schedule-date-notice">Your booked date differs from this plan. <a href="#exams">Review schedule alignment</a></p>' : ""}
       <a href="#exams">${isRegistered ? "Update date" : "Set registered date"}</a>
     </section>`;
+}
+
+function weeklyMomentum(rows, state, today) {
+  let completed = 0, total = 0;
+  const days = rows.map((row) => {
+    const progress = taskProgress(row, state);
+    completed += progress.completed;
+    total += progress.total;
+    const done = state.daily[row.id]?.status === "complete";
+    const status = row.isRest ? "Rest" : row.isTestWindow ? "Test date" : done ? "Complete" : progress.completed ? `${progress.completed}/${progress.total} steps` : "Planned";
+    const shortStatus = row.isRest ? "Rest" : row.isTestWindow ? "Test" : done ? "Done" : progress.completed ? `${progress.completed}/${progress.total}` : "Plan";
+    const appearance = row.isRest || row.isTestWindow ? "rest" : done ? "complete" : progress.completed ? "partial" : "planned";
+    return `<a class="week-day week-day--${appearance}" href="#plan/${escapeAttr(row.id)}" ${row.date === today ? 'aria-current="date"' : ""} aria-label="${escapeAttr(`${formatDateLong(row.date)}: ${status}. Open scheduled day`)}"><span>${escapeHTML(row.day)}</span><strong aria-hidden="true">${row.isRest ? "–" : done ? "✓" : row.date.slice(-2)}</strong><small>${escapeHTML(shortStatus)}</small></a>`;
+  }).join("");
+  const message = total && completed === total ? "This week’s steps are complete. Protect your recovery time."
+    : rows.some((row) => row.date === today && row.isRest) ? "Rest is scheduled today. Your saved progress will be here when you return."
+    : completed ? `${plural(completed, "step")} banked. Small blocks add up; keep the next one manageable.`
+      : "Start with one step. Partial progress counts here, too.";
+  return `<nav class="week-rhythm" aria-label="Scheduled week progress">${days}</nav>${progressBar(completed, total, "Weekly steps complete")}<p class="momentum-encouragement">${message}</p>`;
+}
+
+function weeklyCapacity(data, row) {
+  const check = data.validation.weeklyChecks.find((item) => item.week === row.week);
+  if (!check || check.capacityRisk === "within-budget") return "";
+  const range = `${(check.estimatedLowMinutes / 60).toFixed(1)}–${(check.estimatedHighMinutes / 60).toFixed(1)}`;
+  return `<details class="capacity-guidance" data-view-key="weekly-capacity"><summary>${check.budgetMinutes / 60}-hour weekly ceiling · watch the workload</summary><p>Estimated ${range} hours including answer review. ${check.capacityRisk === "midpoint-over-budget" ? "Even the midpoint exceeds this week’s ceiling. " : "Deeper review could exceed this week’s ceiling. "}Protect exam review and rest. Trim new practice first; replan if you overrun twice.</p><a href="#plan/${escapeAttr(row.id)}">Review this week’s workload</a></details>`;
 }
 
 function todayTabs(completedCount, completed = false) {
@@ -129,6 +156,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
       ${done ? `<div class="day-success"><span aria-hidden="true">✓</span><div><h2>${isScheduled ? "Today's plan is complete" : "Block complete"}</h2><p>${escapeHTML(dayTitle(row))} · ${completedDays}/${studyRows.length} study days this week</p></div></div>` : `<h2>${escapeHTML(dayTitle(row))}</h2>`}
       ${!done && row.chapters.length ? `<p class="assignment-subtitle">${plural(row.chapters.length, "chapter")} · ${escapeHTML(modeLabel(row.mode))} · ${escapeHTML(row.resource)}</p>` : ""}
       ${!done && stopRule ? `<p class="stop-rule">${escapeHTML(stopRule)}</p>` : ""}
+      ${row.isRest ? '<p class="rest-encouragement">Recovery is part of the plan. You do not need to clear past-due work to earn today’s rest.</p>' : ""}
       ${actionable ? (done ? `<details class="completed-checklist" data-view-key="completed-${escapeAttr(row.id)}" ${!isRouteChange ? "open" : ""}><summary>Review completed steps</summary>${taskChecklist(row, state)}</details>` : taskChecklist(row, state)) : ""}
       <div class="button-row today-tools">${actionable ? `<button class="button" type="button" data-log-assignment="${escapeAttr(row.id)}">Log a question</button>` : ""}<button class="button button--quiet" type="button" data-open-assignment="${escapeAttr(row.id)}">${done ? "Review day" : row.isRest ? "Review rest guidance" : "Details & counts"}</button></div>
       ${actionable ? `<div class="today-complete-action">${completionButton(row, state)}</div>` : ""}
@@ -138,7 +166,7 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
     ${actionable && (!done || focus.startedAt) ? `<section class="focus-card" aria-labelledby="focus-title"><div><h3 id="focus-title">One calm block</h3><p>Optional 25-minute timer. Leaving Today pauses it; return to resume.</p></div><div class="focus-controls"><output data-focus-clock aria-live="off">25:00</output><button class="button" type="button" data-focus-toggle>Start</button><button class="button button--quiet" type="button" data-focus-finish disabled>Finish block</button></div></section>` : ""}
     ${repairs}
     ${!done ? next : ""}
-    </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${progressBar(completedDays, studyRows.length, "Study days complete")}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details data-view-key="today-milestone"><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
+    </div><aside class="today-sidebar"><section class="card momentum-card"><span class="eyebrow">Weekly momentum</span><h3>${typeof row.week === "number" ? `Week ${row.week}` : "Test window"}</h3>${weeklyMomentum(rows, state, today)}<p class="form-hint">${completedDays}/${studyRows.length} study days complete · rest days are protected.</p>${weeklyCapacity(data, row)}<dl class="recorded-counts"><div><dt>Recorded QBank questions</dt><dd>${recorded(questions)}</dd></div><div><dt>Recorded CARS passages</dt><dd>${recorded(cars)}</dd></div></dl><p class="form-hint">Optional counts are separate from checklist completion.</p><details data-view-key="today-milestone"><summary>This week’s milestone</summary><p>${escapeHTML(row.weeklyMilestone)}</p></details>${!pending.length && today >= data.plan.plan_start ? '<p class="caught-up">✓ No past-due study days</p>' : ""}</section>${countdown(data, state, today)}</aside></div>`;
 }
 
 export function bindToday(container, context, route = { detail: "" }) {

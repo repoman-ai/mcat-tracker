@@ -1,6 +1,6 @@
 import { clearEditorDraft } from "../editor-drafts.js";
 import { withDailyCompletion } from "../daily.js";
-import { escapeAttr, escapeHTML, formatDateLong } from "../utils.js";
+import { escapeAttr, escapeHTML, formatDateLong, parseISODate } from "../utils.js?v=20260922-6";
 
 function score(value) {
   const number = Number(value);
@@ -79,10 +79,14 @@ function examCard(exam, state, data, nextId) {
 
 export function renderExams(context) {
   const registered = context.state.settings.registeredExamDate;
+  const planningDate = context.data.plan.placeholder_exam_window[0];
+  const dateNotice = registered && registered !== planningDate
+    ? `<p class="schedule-date-notice" role="status">Your registered date is ${escapeHTML(formatDateLong(registered))}. This schedule still targets ${escapeHTML(formatDateLong(planningDate))}; saving a date changes the countdown only. Replan full-lengths, review days, and the taper around your booked date.</p>` : "";
   const completed = context.data.exams.filter((exam) => context.state.exams[exam.id]?.completed).length;
   const nextId = context.data.exams.find((exam) => !context.state.exams[exam.id]?.completed)?.id;
   return `<header class="view-header"><div><span class="eyebrow">${completed}/${context.data.exams.length} exams complete</span><h1>Exams</h1><p>Track scores, timing, review, and the repair themes that matter more than the score alone.</p></div><a class="button" href="#guide/full-length-and-section-bank-schedule">Full-length guidance</a></header>
     <details class="registered-date-control" data-view-key="exam-registration"><summary>${registered ? "Registered MCAT date" : "Set registered MCAT date · March 19 is the planning date"}</summary><section class="exam-date-setting"><div><span class="eyebrow">Countdown anchor</span><h2>${registered ? "Registered date saved" : "March 19 is the planning date"}</h2><p>${registered ? `Your countdown uses ${escapeHTML(formatDateLong(registered))}.` : "Enter the registered MCAT date after scheduling. The planning date remains clearly labeled until then."}</p></div><form data-exam-date-form><label>Registered MCAT date<input name="registeredExamDate" type="date" value="${escapeAttr(registered || "")}"></label><button class="button button--primary" type="submit">Save date</button>${registered ? `<button class="button button--quiet" type="button" data-clear-exam-date>Clear</button>` : ""}</form></section></details>
+    ${dateNotice}
     <section class="exam-list" aria-label="Full-length exam tracker">${context.data.exams.map((exam) => examCard(exam, context.state, context.data, nextId)).join("")}</section>
     ${readinessCard(context.data, context.state)}
     <section class="score-trends" aria-labelledby="trend-title"><div class="section-heading"><div><span class="eyebrow">Progress, not verdict</span><h2 id="trend-title">Score trends</h2></div><span class="target-chip">Target ${context.data.plan.target_score}</span></div>
@@ -154,6 +158,10 @@ export function bindExams(container, context) {
   container.querySelector("[data-exam-date-form]")?.addEventListener("submit", (event) => {
     event.preventDefault();
     const registeredExamDate = new FormData(event.currentTarget).get("registeredExamDate") || "";
+    if (registeredExamDate && !parseISODate(registeredExamDate)) {
+      context.showToast("Enter a valid calendar date.", "error");
+      return;
+    }
     context.updateState({ ...context.state, settings: { ...context.state.settings, registeredExamDate, updatedAt: new Date().toISOString() } }, { success: "Registered exam date saved" });
   });
   container.querySelector("[data-clear-exam-date]")?.addEventListener("click", () => {

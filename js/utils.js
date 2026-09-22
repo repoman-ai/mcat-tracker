@@ -16,7 +16,8 @@ export function escapeAttr(value = "") {
 export function parseISODate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return null;
   const parsed = new Date(`${value}T12:00:00`);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
+  // Date normalizes impossible days (February 30 becomes March 2).
+  return Number.isNaN(parsed.getTime()) || toISODate(parsed) !== value ? null : parsed;
 }
 
 export function toISODate(dateValue) {
