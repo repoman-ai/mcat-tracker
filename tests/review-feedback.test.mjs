@@ -64,7 +64,7 @@ test('Plan orders current week first, retains all others in chronological order,
   window.location.search='?today=2026-10-20';
   const html=renderPlan({data,state},{});
   const weeks=[...html.matchAll(/id="week-(\d+)"/g)].map(match=>Number(match[1]));
-  assert.deepEqual(weeks,[8,...Array.from({length:20},(_,i)=>i+1).filter(w=>w!==8)]);
+  assert.deepEqual(weeks,[5,...Array.from({length:26},(_,i)=>i+1).filter(w=>w!==5)]);
   assert.match(html,/<strong>40<\/strong> QBank questions/);
   window.location.search='?today=2026-09-03';
   assert.match(renderToday({data,state}),/data-view-key="today-milestone"/);

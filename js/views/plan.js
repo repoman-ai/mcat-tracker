@@ -128,7 +128,7 @@ export function renderPlan(context, route, { isRouteChange = true } = {}) {
     <section class="week-list" aria-label="${context.data.plan.prep_weeks}-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p><button class="button" type="button" data-plan-reset>Show full schedule</button></div>`}</section>
     ${route.detail !== "past-due" ? pastDueSection(context, today, route.detail) : ""}
     <details class="plan-guidance" id="plan-arc"><summary>Phase overview and guidance</summary>${phaseMap(context.data, currentWeek)}</details>
-    ${testRows.length ? `<section class="test-window-section"><div class="section-heading"><div><span class="eyebrow">Not a confirmed exam date</span><h2>Placeholder test window</h2></div><a href="#exams">Set registered date</a></div><p>January 22-23 are planning placeholders. The registered date setting controls the live countdown.</p><div class="plan-days">${testRows.map((row) => dayCard(row, context, row.date === route.detail, today)).join("")}</div></section>` : ""}`;
+    ${testRows.length ? `<section class="test-window-section"><div class="section-heading"><div><span class="eyebrow">Not a confirmed exam date</span><h2>Planning test date</h2></div><a href="#exams">Set registered date</a></div><p>March 19 is the planning date. The registered date setting controls the live countdown.</p><div class="plan-days">${testRows.map((row) => dayCard(row, context, row.date === route.detail, today)).join("")}</div></section>` : ""}`;
 }
 
 export function bindPlan(container, context, { isRouteChange = true } = {}) {

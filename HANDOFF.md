@@ -3,7 +3,13 @@
 This file is a convenience snapshot, not a source of truth. Always inspect the working tree, Git
 index, live application, and Supabase project before continuing.
 
-## September 10 plan adjustment — current
+## March 2027 plan — current
+
+The active 26-week schedule runs September 22, 2026 through March 22, 2027, with March 19 as the planning MCAT date. The October 10 AAMC unscored diagnostic and six scored official full lengths each have two protected review days. The first pass of assigned chapters ends January 20; five prior covered chapters are documented. The user's additional completed chapter is not identified in the local source files yet. The static site reads regenerated `data/site-data.json`, and the parent workspace holds the matching schedule, guide, Word file, and workbook. See the parent `README.md` and current `CONTENT_MAP.md` for source and validation details.
+
+## Earlier implementation notes
+
+### September 10 plan adjustment — historical
 
 The revised 145-date schedule deliberately keeps its September 1 date IDs so browser and cloud
 progress migrate in place. September 1–2 are now reading-only and remain complete: Physics/Math

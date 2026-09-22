@@ -1,12 +1,12 @@
 # MCAT Momentum
 
-A private, local-first, phone-first MCAT study tracker generated from the authoritative plan files in the parent directory. It answers **"what should I study right now?"** first, then keeps the complete 20-week schedule, study guide, exam tracker, mistake log, repair queue, and mastery checklist one tap away.
+A private, local-first, phone-first MCAT study tracker generated from the authoritative plan files in the parent directory. It answers **"what should I study right now?"** first, then keeps the complete 26-week schedule, study guide, exam tracker, mistake log, repair queue, and mastery checklist one tap away.
 
-## September 10 adjustment
+## March 2027 plan
 
-The dated plan still starts Tuesday, September 1, 2026 so existing progress IDs remain stable. Physics/Math 10–11 and General Chemistry 1–3 stay completed as reading-only assignments. September 3–9 is superseded rather than overdue. The diagnostic moves to Saturday, September 19, with review September 20–21. All 83 chapters remain scheduled through November 30. Browser/cloud records, logs, settings, and authentication are preserved.
+The dated plan runs September 22, 2026 through March 22, 2027, with March 19 as the planning exam date. The unscored diagnostic is Saturday, October 10, and six scored AAMC full lengths follow from December through March. Each exam has two protected review days. Five covered chapters are documented locally; the remaining assignments finish their first pass in January. The additional chapter recently completed can be marked in the tracker once identified.
 
-The current guide comes from `study-guide.json`; `MCAT_Study_Plan_2026-09-01.docx` is the matching Word copy. The standalone XLSX was regenerated with the 145-day schedule and 20-week tracker. It supplies mistake-log fields, validation options and mastery topics to the website; website exports add current browser/cloud progress. The original August files are archived. Do not use the August DOCX dates.
+The current guide comes from `study-guide.json`; `MCAT_Study_Plan_2026-09-22.docx` is the matching Word copy. The standalone XLSX contains the 182-day schedule and 26-week tracker. It supplies mistake-log fields and mastery topics to the website; website exports add current browser/cloud progress.
 
 No build step, no framework. Plain HTML, CSS, and ES modules. It always saves locally, and after you unlock it with a PIN it keeps the same progress on your phone and your computer.
 
@@ -29,7 +29,7 @@ mobile detail sheet down to close it. None of these gestures is required to use 
 | View | What it holds |
 | --- | --- |
 | **Today** | Past-due check-off list above today's action, per-chapter and per-practice checklist, Completed tab, workload, weekly momentum, due-retest link, exam countdown, optional 25-minute focus timer |
-| **Plan** | Phase map, all 20 weeks, filters including Past due, step progress and check-off in day summaries, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
+| **Plan** | Phase map, all 26 weeks, filters including Past due, step progress and check-off in day summaries, complete daily detail, chapters and subsections. **Jump to week N** skips straight to the current week |
 | **Exams** | Seven scheduled full-lengths, section and total trends, timing and review status, the plan's readiness rule, registered-date setting |
 | **Log** | Five panels — Capture, Repair, Entries, Mastery, Export |
 | **Guide** | The complete study guide with search, deep links, and accessible sections |
@@ -54,25 +54,25 @@ The generator reads only these files from the parent directory:
 - `study-guide.json`
 - `MCAT_520_Plus_Mistake_Log.xlsx`
 
-It refuses to write output unless the sources pass every integrity check: the complete date range declared in `plan.json` (currently 145 continuous dated rows), no duplicate or missing dates, 20 Tuesday–Monday weeks, all 83 chapter IDs resolving with no unknown IDs, weekly CARS and UWorld totals matching `plan.json`, seven Saturday full-lengths with two review days each, 120 core Section Bank questions per science section, and complete guide/mastery coverage.
+It refuses to write output unless the sources pass every integrity check: the complete date range declared in `plan.json` (currently 182 continuous dated rows), no duplicate or missing dates, 26 Tuesday–Monday weeks, all 83 chapter IDs accounted for across covered and assigned chapters, weekly CARS and UWorld totals matching `plan.json`, seven Saturday full-lengths with two review days each, 120 core Section Bank questions per science section, and complete guide/mastery coverage.
 
 Files in `archive/` are superseded versions and are **not** sources.
 
-The September 10 reset starts with one UWorld CARS passage or one small science-question set rather than stacking both every day. Full-lengths contribute nine CARS passages. Thanksgiving and Christmas remain protected rest days. Weekly totals are reconciled at generation time.
+Opening weeks use small reviewed practice sets and three CARS passages each. Full-lengths contribute nine CARS passages. Thanksgiving, Christmas, and New Year's Day are protected rest days. Weekly totals are reconciled at generation time.
 
 ### Workload review
 
-The weekly hours are capacity ceilings totaling 367 hours; inferred durations are advisory ranges, not fitted promises. Generation fails when a week's low estimate exceeds its budget. Plan shows upper-bound risk when slower reading or review could exceed capacity. No estimate is clamped to a week number. Mode costs are explicit, unknown modes fail, and question costs include answer review.
+Weekly hours are capacity ceilings; inferred durations are advisory ranges. Generation fails when a week's low estimate exceeds its budget. Plan shows upper-bound risk when slower reading or review could exceed capacity. No estimate is clamped to a week number. Mode costs are explicit, unknown modes fail, and question costs include answer review.
 
-The core plan has 216 UWorld science questions and 360 Section Bank questions. Another 240 Section Bank questions remain optional reserve and never become overdue. Weeks 8–11 contain two 20-question Section Bank blocks and no extra UWorld science quota. A scheduled CARS passage comes from the UWorld QBank, but its questions are tracked separately from science-question volume. The October third-party full-length was removed; the September diagnostic and six official AAMC exams remain.
+The core plan has 222 UWorld science questions and 360 Section Bank questions. Another 240 Section Bank questions remain optional reserve and never become overdue. Weeks 7–24 include two 10-question Section Bank blocks each. A scheduled CARS passage comes from the UWorld QBank, but its questions are tracked separately from science-question volume. The October diagnostic and six official AAMC exams are scheduled.
 
 Every weekly low estimate fits its ceiling. Upper estimates remain visible because unfamiliar chapters can take longer. Prioritize answer review, reduce new volume, and replan after two actual overruns. Existing history remains preserved; backup import distinguishes current-plan records from history.
 
-Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`. The September 10 migration is recorded by the parent workspace's `scripts/restructure_plan_2026_09_10.py`; routine regeneration never reruns a migration.
+Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`.
 
-### Placeholder exam dates
+### Planned exam date
 
-January 22–23, 2027 are **planning placeholders**, labelled as such everywhere they appear. The countdown says "Placeholder window" until you enter a real date under **Exams → Registered MCAT date**, after which it switches to "Registered MCAT" and counts to your actual date. That date syncs across your devices.
+March 19, 2027 is the **planning date** until you enter a booked date under **Exams → Registered MCAT date**. The countdown then uses the registered date. That date syncs across your devices.
 
 ---
 
@@ -208,7 +208,7 @@ If the status reads **Sync paused**, open the sync panel for the reason. Local p
 
 Everything is under **Log → Export**. All three work offline and none of them change your data.
 
-**Excel workbook** — seven sheets (Daily Schedule, 20-Week Progress, Mistake Log, Weekly Pattern Review, High-Yield Mastery, Full-Length Scores, Lists), with checklist progress, frozen headers, autofilters, real date cells, wrapped long text, and no formulas to break. Generated locally with a vendored copy of ExcelJS.
+**Excel workbook** — seven sheets (Daily Schedule, 26-Week Progress, Mistake Log, Weekly Pattern Review, High-Yield Mastery, Full-Length Scores, Lists), with checklist progress, frozen headers, autofilters, real date cells, wrapped long text, and no formulas to break. Generated locally with a vendored copy of ExcelJS.
 
 **Mistake log CSV** — every field with stable headers, fully quoted, UTF-8 with BOM so Excel opens accents correctly. Commas, quotes, and newlines inside notes are escaped properly.
 

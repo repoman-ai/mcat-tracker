@@ -62,7 +62,7 @@ const now = new Date().toISOString();
 
 const state = normalizeState({
   daily: {
-    "2026-09-01": {actualQuestions:0, actualCars:""},
+    "2026-09-22": {actualQuestions:0, actualCars:""},
     "2026-10-12": { status: "complete", actualQuestions: 40, actualCars: 3, notes: nasty, updatedAt: now },
     "2026-10-13": { status: "in-progress", actualQuestions: 12, actualCars: 1, notes: "", updatedAt: now },
   },
@@ -95,7 +95,7 @@ const state = normalizeState({
     updatedAt: now,
   })),
   mastery: { "hy-1": { confidence: 2, lastReviewed: "2026-10-01", nextReview: "2026-10-20", notes: nasty, updatedAt: now } },
-  settings: { registeredExamDate: "2027-01-23", updatedAt: now },
+  settings: { registeredExamDate: "2027-03-19", updatedAt: now },
 });
 
 state.mistakes[0].captureStatus = "needs-review";

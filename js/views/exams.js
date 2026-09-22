@@ -31,15 +31,15 @@ function readiness(data, state) {
   const repeatedUnfinished = recent.every((record) => record.unfinishedSection);
 
   if (average < 515 || repeatedUnfinished || persistentLow) {
-    return { status: "move", label: "Plan points toward March", detail: "The plan’s move-to-March trigger is present: an average below 515, repeated unfinished sections, or a persistent section below 126.", average, trend, records: recent };
+    return { status: "move", label: "Review the test date", detail: "Recent results show a score gap, repeated unfinished sections, or a persistent section below 126. Consider a later date before the scheduling deadline if this continues.", average, trend, records: recent };
   }
   if (average >= 517 && noSectionBelow && timingStable && trend >= 0) {
-    return { status: "keep", label: "Plan supports keeping January", detail: "The two-exam average is at least 517, no section is below 126, timing is stable, and the trend is flat-to-rising.", average, trend, records: recent };
+    return { status: "keep", label: "March plan is on track", detail: "The two-exam average is at least 517, no section is below 126, timing is stable, and the trend is flat-to-rising.", average, trend, records: recent };
   }
   if (average >= 515 && average <= 516 && trend > 0 && !recent.some((record) => record.unfinishedSection)) {
-    return { status: "borderline", label: "Borderline, with upward evidence", detail: "The plan allows January at 515-516 only with a clear upward trend and no unfinished section. Keep watching section floors and timing.", average, trend, records: recent };
+    return { status: "borderline", label: "Improving, with more evidence needed", detail: "The average is 515-516 and rising. Use the next official exam to check section floors and timing.", average, trend, records: recent };
   }
-  return { status: "borderline", label: "Borderline under the plan’s rule", detail: "The data does not yet satisfy every keep-January condition and does not trigger a clear move-to-March condition. Use the confirmed 30-day deadline and the next official exam.", average, trend, records: recent };
+  return { status: "borderline", label: "Keep checking readiness", detail: "Review the next official exam and the February 17 checkpoint before committing to the March 19 planning date.", average, trend, records: recent };
 }
 
 function readinessCard(data, state) {
@@ -47,7 +47,7 @@ function readinessCard(data, state) {
   return `<section class="readiness-card readiness-card--${result.status}" aria-labelledby="readiness-title">
     <div class="readiness-card__lead"><span class="eyebrow">Plan rule, not a definitive recommendation</span><h2 id="readiness-title">${escapeHTML(result.label)}</h2><p>${escapeHTML(result.detail)}</p></div>
     <div class="readiness-stats"><div><span>Recent two-exam average</span><strong>${result.average === null ? "—" : result.average.toFixed(1)}</strong></div><div><span>Target score</span><strong>${data.plan.target_score}</strong></div><div><span>Trend</span><strong>${result.trend === undefined ? "—" : result.trend > 0 ? `+${result.trend}` : result.trend}</strong></div></div>
-    <details><summary>Read the exact January/March rules</summary><dl class="rule-list"><div><dt>Keep January</dt><dd>${escapeHTML(data.plan.readiness_rule.keep_january)}</dd></div><div><dt>Borderline</dt><dd>${escapeHTML(data.plan.readiness_rule.borderline)}</dd></div><div><dt>Move to March</dt><dd>${escapeHTML(data.plan.readiness_rule.move_to_march)}</dd></div></dl></details>
+    <details><summary>Read the readiness guidance</summary><dl class="rule-list"><div><dt>Continue March</dt><dd>${escapeHTML(data.plan.readiness_rule.keep_march)}</dd></div><div><dt>Improving</dt><dd>${escapeHTML(data.plan.readiness_rule.borderline)}</dd></div><div><dt>Reconsider date</dt><dd>${escapeHTML(data.plan.readiness_rule.reconsider_date)}</dd></div></dl></details>
   </section>`;
 }
 
@@ -82,7 +82,7 @@ export function renderExams(context) {
   const completed = context.data.exams.filter((exam) => context.state.exams[exam.id]?.completed).length;
   const nextId = context.data.exams.find((exam) => !context.state.exams[exam.id]?.completed)?.id;
   return `<header class="view-header"><div><span class="eyebrow">${completed}/${context.data.exams.length} exams complete</span><h1>Exams</h1><p>Track scores, timing, review, and the repair themes that matter more than the score alone.</p></div><a class="button" href="#guide/full-length-and-section-bank-schedule">Full-length guidance</a></header>
-    <details class="registered-date-control" data-view-key="exam-registration"><summary>${registered ? "Registered MCAT date" : "Set registered MCAT date · Jan 22–23 are placeholders"}</summary><section class="exam-date-setting"><div><span class="eyebrow">Countdown anchor</span><h2>${registered ? "Registered date saved" : "January 22-23 are placeholders"}</h2><p>${registered ? `Your countdown uses ${escapeHTML(formatDateLong(registered))}.` : "Enter the registered MCAT date after scheduling. The placeholder window remains clearly labeled until then."}</p></div><form data-exam-date-form><label>Registered MCAT date<input name="registeredExamDate" type="date" value="${escapeAttr(registered || "")}"></label><button class="button button--primary" type="submit">Save date</button>${registered ? `<button class="button button--quiet" type="button" data-clear-exam-date>Clear</button>` : ""}</form></section></details>
+    <details class="registered-date-control" data-view-key="exam-registration"><summary>${registered ? "Registered MCAT date" : "Set registered MCAT date · March 19 is the planning date"}</summary><section class="exam-date-setting"><div><span class="eyebrow">Countdown anchor</span><h2>${registered ? "Registered date saved" : "March 19 is the planning date"}</h2><p>${registered ? `Your countdown uses ${escapeHTML(formatDateLong(registered))}.` : "Enter the registered MCAT date after scheduling. The planning date remains clearly labeled until then."}</p></div><form data-exam-date-form><label>Registered MCAT date<input name="registeredExamDate" type="date" value="${escapeAttr(registered || "")}"></label><button class="button button--primary" type="submit">Save date</button>${registered ? `<button class="button button--quiet" type="button" data-clear-exam-date>Clear</button>` : ""}</form></section></details>
     <section class="exam-list" aria-label="Full-length exam tracker">${context.data.exams.map((exam) => examCard(exam, context.state, context.data, nextId)).join("")}</section>
     ${readinessCard(context.data, context.state)}
     <section class="score-trends" aria-labelledby="trend-title"><div class="section-heading"><div><span class="eyebrow">Progress, not verdict</span><h2 id="trend-title">Score trends</h2></div><span class="target-chip">Target ${context.data.plan.target_score}</span></div>

@@ -10,8 +10,10 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import re
 import sys
+import tempfile
 import zipfile
 from collections import Counter, defaultdict
 from datetime import date, timedelta
@@ -48,14 +50,14 @@ SUBJECT_CODES = {
 }
 
 EXPECTED_GUIDE_SECTIONS = {
-    "what-changed",
+    "plan-at-a-glance",
     "operating-rules",
     "phase-map",
     "honest-time-templates",
     "week-by-week-plan",
     "start-here-week-1",
     "full-length-and-section-bank-schedule",
-    "january-vs-march-decision",
+    "readiness-check",
     "registration-and-resource-controls",
 }
 
@@ -551,23 +553,14 @@ def guide_links_for(row: dict[str, Any]) -> list[str]:
         links.append("full-length-and-section-bank-schedule")
     if row["isTestWindow"]:
         links.append("registration-and-resource-controls")
-    if row["week"] in {16, 17, 18, 19, 20, "TEST"}:
-        links.append("january-vs-march-decision")
+    if isinstance(row["week"], int) and row["week"] >= 18:
+        links.append("readiness-check")
     return list(dict.fromkeys(links))
 
 
 # Reviewed display excerpts, checked against source notes during regeneration.
 # Rewording a source guardrail must update this mapping explicitly.
-TODAY_STOP_RULES = {
-    "2026-09-10": "Stop after 2.5 hours and leave any remaining review for the next content day.",
-    "2026-09-11": "Stop after 2 hours.",
-    "2026-09-12": "Stop after 3 hours.",
-    "2026-09-14": "Stop after 2.5 hours.",
-    "2026-09-15": "Stop after 2.5 hours.",
-    "2026-09-16": "Stop after 2.5 hours.",
-    "2026-09-17": "Stop after 60-90 minutes.",
-    "2026-09-18": "Cap the full block at 60-90 minutes.",
-}
+TODAY_STOP_RULES = {}
 
 
 def stop_rule_for(raw: dict[str, Any]) -> str:
@@ -617,7 +610,7 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
         is_exam = "exam under test conditions" in mode_lower
         is_review = "full-length review" in assignment_lower or "finish full-length review" in assignment_lower
         is_section_bank = "section bank" in raw["practice_target"].lower()
-        is_test_window = week == "TEST"
+        is_test_window = week == "TEST" or mode_lower == "exam if officially scheduled"
         is_logistics = mode_lower in {"logistics", "rest / logistics"}
         if is_test_window:
             day_type = "test-window"
@@ -673,10 +666,12 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
 
     if unknown_chapters:
         fail(f"Unknown chapter IDs in schedule: {sorted(unknown_chapters)}")
-    if len(assigned_chapters) != 83 or len(set(assigned_chapters)) != 83:
-        fail(f"Expected 83 uniquely assigned chapters, found {len(assigned_chapters)} assignments and {len(set(assigned_chapters))} unique")
-    if set(assigned_chapters) != set(chapter_index):
-        fail(f"Schedule/chapter source mismatch. Missing={sorted(set(chapter_index) - set(assigned_chapters))}; extra={sorted(set(assigned_chapters) - set(chapter_index))}")
+    expected_assigned = set(plan["assigned_chapter_ids"])
+    prior = set(plan["prior_chapter_ids"])
+    if expected_assigned | prior != set(chapter_index) or expected_assigned & prior:
+        fail("Prior and assigned chapters must partition the chapter catalog")
+    if len(assigned_chapters) != len(expected_assigned) or set(assigned_chapters) != expected_assigned:
+        fail(f"Expected {len(expected_assigned)} unique remaining chapters; found {len(assigned_chapters)} assignments and {len(set(assigned_chapters))} unique")
 
     dates = [date.fromisoformat(row["date"]) for row in schedule]
     if dates[0] != start or dates[-1].isoformat() != plan["plan_end"]:
@@ -740,8 +735,8 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
 
 
 def validate_week_workload(rows: list[dict[str, Any]], week: dict[str, Any]) -> dict[str, Any]:
-    low = sum(row["estimatedWorkload"]["lowMinutes"] for row in rows)
-    high = sum(row["estimatedWorkload"]["highMinutes"] for row in rows)
+    low = sum(row["estimatedWorkload"]["lowMinutes"] for row in rows if not row["estimatedWorkload"].get("conditional"))
+    high = sum(row["estimatedWorkload"]["highMinutes"] for row in rows if not row["estimatedWorkload"].get("conditional"))
     budget = week["planned_hours"] * 60
     if low > budget:
         fail(f"Week {week['week']} minimum estimate {low} min exceeds {budget} min budget; revise assignments, not estimates")
@@ -890,16 +885,16 @@ This map shows where every authoritative source component appears. `data/site-da
 | `schedule.csv` + saved daily records | Pending and completed study days | Today Past due disclosure; Today → Completed; Plan | Unfinished work stays secondary to today. Completed includes saved historical records. No inferred completion dates. |
 | `schedule.csv` | Assignments, resources, modes, targets, CARS, milestones | Today details; Plan day accordions; contextual Log prefills | Raw source text and per-chapter mode multiplicity are preserved; repeated modes are displayed once. |
 | `plan.json` | Metadata, {validation['numericWeeks']} weeks, targets, phases | Today; Plan; Guide | Planned hours, CARS, focus, and milestones use source values; QBank totals sum scheduled UWorld and Section Bank quantities. |
-| `plan.json` | Preferred/fallback windows, placeholders, registration, readiness rules | Today countdown; Exams; Guide | January 22-23 remain clearly labeled placeholders until a registered date is saved. |
+| `plan.json` | Planning date, registration, readiness rules | Today countdown; Exams; Guide | March 19 is labeled as a planning date until a registered date is saved. |
 | `plan.json` + guide | Study modes and complete instructions | Today/Plan detail drawer; Guide | The plan summary is merged with the guide’s when-to-use and required-output rules. |
 | `kaplan-mcat-books.md` | 83 chapter IDs, titles, and every subsection | Today/Plan chapter details; Log chapter selector | Generated directly; no second editable chapter-title list is maintained. |
-| Study guide | Plan overview and What Changed | Guide → Plan overview / What Changed | Full extracted text, callouts, and lists. |
+| Study guide | Plan overview and Plan at a Glance | Guide → Plan overview / Plan at a Glance | Full guide text, callouts, and lists. |
 | Study guide | Operating Rules + study-mode rule | Guide; Today/Plan contextual links | Full rules and table; surfaced beside daily work. |
 | Study guide | Phase Map + question-volume budget | Guide; Plan phase map | Complete tables and phase navigation. |
 | Study guide | Honest Time Templates | Guide; Today workload context | Complete guide section; Today adds a clearly labeled inference. |
 | Study guide | Week-by-Week Plan + Week 1 | Guide; Plan | Full guide tables plus the complete interactive daily schedule. |
 | Study guide | Full-Length and Section Bank Schedule | Exams; Plan; Guide | All {validation['fullLengthEvents']} exams and {validation['sectionBankQuestions']} Section Bank questions are linked to dated assignments. |
-| Study guide | January vs. March Decision + March protocol | Exams readiness card; Guide | The plan’s own decision rule is shown as guidance, not definitive advice. |
+| Study guide | Readiness Check | Exams readiness card; Guide | The plan’s decision guidance is shown with score, timing, and section evidence. |
 | Study guide | Registration and Resource Controls + source links | Exams date setting; Guide | Full content and clickable source links. |
 | Workbook | Mistake Log fields and validation lists | Log quick capture; complete log; CSV/XLSX | The fast form keeps common fields visible and retains workbook-compatible concepts. |
 | Workbook | Weekly Pattern Review | Log summaries; XLSX export | Counts by error, topic, section, source, repeat issue, and retest status. |
@@ -912,7 +907,7 @@ This map shows where every authoritative source component appears. `data/site-da
 - Duplicate dates: {validation['duplicateDates']}
 - Missing dates: {validation['missingDates']}
 - Week boundaries: {validation['weekBoundary']}
-- Kaplan assignments resolved: {validation['chapterAssignments']} / 83; unknown IDs: 0
+- Remaining Kaplan assignments resolved: {validation['chapterAssignments']}; prior covered chapters: 5; chapter catalog: 83; unknown IDs: 0
 - Plan weeks reconciled: {validation['numericWeeks']} / {validation['numericWeeks']}
 - Full-length events: {validation['fullLengthEvents']}
 - Section Bank questions: {validation['sectionBankQuestions']}
@@ -933,8 +928,8 @@ def main() -> int:
     required_retention = {"daily_retrieval", "question_mix", "feedback", "cards", "weekly", "cars", "minimum_viable_day"}
     if set(retention) != required_retention or any(not str(retention[key]).strip() for key in required_retention):
         fail("plan.json must define every reviewed retention_protocol rule exactly once")
-    if "September 19 diagnostic" not in plan.get("study_modes", {}).get("override_rule", ""):
-        fail("The study-mode override must reference the current September 19 diagnostic")
+    if "diagnostic" not in plan.get("study_modes", {}).get("override_rule", "").lower():
+        fail("The study-mode override must explain how diagnostic evidence changes reading depth")
     chapters = parse_chapters()
     chapter_index = {chapter["id"]: chapter for chapter in chapters}
     guide = parse_guide()
@@ -984,7 +979,12 @@ def main() -> int:
     }
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    # Readers may load this file while the generator runs. Replace it only after
+    # the complete JSON has been written and flushed.
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=OUTPUT_PATH.parent, delete=False) as target:
+        target.write(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+        temporary_path = Path(target.name)
+    os.replace(temporary_path, OUTPUT_PATH)
     write_content_map(validation)
     print(
         json.dumps(

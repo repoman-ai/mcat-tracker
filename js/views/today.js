@@ -31,12 +31,12 @@ function countdown(data, state, today) {
   const days = daysBetween(today, target);
   const isRegistered = Boolean(registered);
   if (days === null) return "";
-  if (!registered) return `<p class="quiet-countdown">No registered date · planning against Jan 22–23. <a href="#exams">Set date</a></p>`;
+  if (!registered) return `<p class="quiet-countdown">No registered date · planning against ${escapeHTML(formatDateLong(target))}. <a href="#exams">Set date</a></p>`;
   const headline = days >= 0 ? `${days} days` : `${Math.abs(days)} days ago`;
   return `
     <section class="countdown-card ${isRegistered ? "countdown-card--registered" : ""}">
       <div><span class="eyebrow">${isRegistered ? "Registered MCAT" : "Placeholder window"}</span><strong>${headline}</strong></div>
-      <p>${isRegistered ? escapeHTML(formatDateLong(target)) : `Jan 22-23, 2027 · not confirmed test dates`}</p>
+      <p>${escapeHTML(formatDateLong(target))}</p>
       <a href="#exams">${isRegistered ? "Update date" : "Set registered date"}</a>
     </section>`;
 }

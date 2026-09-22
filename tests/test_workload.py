@@ -18,12 +18,9 @@ def row(**changes):
 
 
 class WorkloadTests(unittest.TestCase):
-    def test_stop_rule_is_explicit_and_source_rewording_requires_review(self):
-        rule = g.TODAY_STOP_RULES["2026-09-10"]
-        self.assertEqual(g.stop_rule_for(dict(date="2026-09-10", notes=rule)), rule)
-        with self.assertRaisesRegex(g.ValidationError, "source notes changed"):
-            g.stop_rule_for(dict(date="2026-09-10", notes="Reworded guardrail"))
-        self.assertEqual(g.stop_rule_for(dict(date="2026-09-08", notes="")), "")
+    def test_daily_notes_are_used_without_stale_stop_excerpts(self):
+        self.assertEqual(g.TODAY_STOP_RULES, {})
+        self.assertEqual(g.stop_rule_for(dict(date="2026-09-22", notes="Review every answer")), "")
 
     def test_unknown_modes_rejected_even_before_special_day_returns(self):
         for flags in ({}, {"isRest": True}, {"isExam": True}, {"isFullLengthReview": True}):
@@ -71,8 +68,8 @@ class WorkloadTests(unittest.TestCase):
 
     def test_required_tracker_is_dynamic(self):
         sheets = {name: [] for name in ["Daily Schedule", "Mistake Log", "Weekly Pattern Review", "High-Yield Mastery Checklist", "Lists", "22-Week Tracker"]}
-        with patch.object(g, "parse_xlsx_sheets", return_value=sheets), self.assertRaisesRegex(g.ValidationError, "20-Week Tracker"):
-            g.workbook_content({"prep_weeks": 20})
+        with patch.object(g, "parse_xlsx_sheets", return_value=sheets), self.assertRaisesRegex(g.ValidationError, "26-Week Tracker"):
+            g.workbook_content({"prep_weeks": 26})
 
     def test_section_totals_come_from_plan(self):
         rows = [{"practiceTarget": "7 B/B Section Bank questions", "date": "2026-10-20", "week": 8, "id": "2026-10-20"}]
