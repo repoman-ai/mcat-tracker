@@ -4,7 +4,7 @@ import { createDialogController } from "./dialog.js";
 import { loadSiteData } from "./data.js";
 import { exportCorruptRecovery } from "./export.js";
 import { navigate, startRouter } from "./router.js";
-import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName, saveState } from "./storage.js";
+import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName, saveState } from "./storage.js?v=20260922-3";
 import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js";
 import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js";
 import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js";

@@ -1,7 +1,7 @@
 import { clearEditorDraft, clearEditorDrafts } from "../editor-drafts.js";
 import { exportJSON, exportMistakeCSV, exportWorkbook } from "../export.js";
 import { dueEntries, isMasteryEvidence } from "../data.js";
-import { mergeStates, validateBackup } from "../storage.js";
+import { mergeStates, validateBackup } from "../storage.js?v=20260922-3";
 import {
   debounce,
   escapeAttr,

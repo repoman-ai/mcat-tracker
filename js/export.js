@@ -1,5 +1,5 @@
 import { isMasteryEvidence } from "./data.js";
-import { createBackup } from "./storage.js";
+import { createBackup } from "./storage.js?v=20260922-3";
 import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js";
 import {
   countPracticeQuestions,
