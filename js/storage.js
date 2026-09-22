@@ -40,12 +40,16 @@ export const MAX_DISPLAY_NAME_LENGTH = 32;
  * greeting compact.
  */
 export function sanitizeDisplayName(value) {
-  return String(value ?? "")
+  const normalized = String(value ?? "")
     .replace(/[\u0000-\u001f\u007f-\u009f]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, MAX_DISPLAY_NAME_LENGTH)
     .trim();
+  // Repeated-character strings are accidental keyboard input, not useful
+  // greetings. Drop them before they can become a giant heading or sync.
+  if (/^([\p{L}\p{N}])\1{7,}$/u.test(normalized)) return "";
+  return normalized;
 }
 
 function objectOr(value, fallback = {}) {

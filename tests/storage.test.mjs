@@ -86,7 +86,8 @@ assert.equal(mergedDeletion.tombstones.mistakes.gone, "2026-08-21T00:00:00.000Z"
 assert.equal(storage.defaultState().settings.displayName, "");
 assert.equal(storage.sanitizeDisplayName("  Alec  E  "), "Alec E");
 assert.equal(storage.sanitizeDisplayName("Alec\0\nE\t"), "Alec E");
-assert.equal(storage.sanitizeDisplayName("x".repeat(80)).length, storage.MAX_DISPLAY_NAME_LENGTH);
+assert.equal(storage.sanitizeDisplayName(`${"x".repeat(31)}y${"x".repeat(80)}`).length, storage.MAX_DISPLAY_NAME_LENGTH);
+assert.equal(storage.sanitizeDisplayName("W".repeat(100)), "");
 assert.equal(storage.sanitizeDisplayName(undefined), "");
 assert.equal(storage.normalizeState({ settings: { displayName: "  Alec " } }).settings.displayName, "Alec");
 const displayBackup = storage.createBackup(storage.normalizeState({ settings: { displayName: "  Alec  E  ", updatedAt: "2026-08-21T00:00:00.000Z" } }));

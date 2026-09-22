@@ -332,6 +332,7 @@ button.work-row__detail:hover { background: var(--canvas-blue); border-radius: .
 .filter-grid > .button, .log-filter-grid > .button { grid-column: 1 / -1; }
 .week-list { display: grid; gap: .8rem; }
 .week-card, .plan-day, .guide-section, .exam-card, .more-details { border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); overflow: hidden; }
+.today-greeting-name { display: inline-block; max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
 .week-card > summary, .plan-day > summary, .guide-section > summary, .exam-card > summary, .more-details > summary { display: flex; align-items: center; gap: .75rem; min-height: var(--touch); cursor: pointer; list-style: none; }
 summary::-webkit-details-marker { display: none; }
 .week-card > summary { padding: .9rem; }

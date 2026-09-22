@@ -51,6 +51,7 @@ assert.deepEqual(data.sectionBanks.map((bank) => bank.totalQuestions), [120, 120
 assert.equal(data.plan.question_targets.uworld_baseline, data.plan.weeks.reduce((sum, week) => sum + week.uworld_questions, 0));
 assert.match(renderPlan(context, {}), /182 dated rows · 26 Tuesday-Monday weeks/);
 assert.match(renderToday(context), /GC04/);
+assert.doesNotMatch(renderToday({ data, state: normalizeState({ settings: { displayName: "W".repeat(100) } }) }), /W{8}/);
 assert.match(renderGuide(context, {}), /Plan at a Glance/);
 assert.match(renderExams(context), /March 19 is the planning date/);
 assert.doesNotMatch(renderExams(context), /January 22 is the planning date|January 23 is the planning date/);
