@@ -9,7 +9,7 @@ const defaultFilters = {
   resource: "all",
   status: "all",
   dayType: "all",
-  currentWeekOnly: false,
+  currentWeekOnly: true,
 };
 
 const filters = { ...defaultFilters };
@@ -97,7 +97,12 @@ function pastDueSection(context, today, detail) {
 
 export function renderPlan(context, route, { isRouteChange = true } = {}) {
   const today = todayISO();
-  if (isRouteChange) Object.assign(filters, defaultFilters);
+  if (isRouteChange) {
+    Object.assign(filters, defaultFilters);
+    // Deep links need their dated row, and Past due explicitly means the
+    // complete queue. A normal Plan visit stays focused on one useful week.
+    if (route.detail) filters.currentWeekOnly = false;
+  }
   const currentWeek = scheduledWeekForDate(context.data, today) || 1;
   const phases = [...new Set(context.data.schedule.map((row) => row.phase))];
   const resources = [...new Set(context.data.schedule.flatMap((row) => row.resource.split(";").map((item) => item.trim())).filter(Boolean))].sort();
@@ -108,11 +113,12 @@ export function renderPlan(context, route, { isRouteChange = true } = {}) {
   const testRows = context.data.schedule.filter((row) => row.week === "TEST").filter((row) => rowMatches(row, context.state, currentWeek, today));
 
   const matchedCount = context.data.schedule.filter((row) => rowMatches(row, context.state, currentWeek, today)).length;
-  const filtered = Object.keys(defaultFilters).some((key) => filters[key] !== defaultFilters[key]);
+  const filtered = ["phase", "resource", "status", "dayType"].some((key) => filters[key] !== defaultFilters[key]);
+  const showingAllWeeks = !filters.currentWeekOnly;
   return `
-    <header class="view-header"><div><span class="eyebrow">${context.data.schedule.length} dated rows · ${context.data.plan.prep_weeks} ${escapeHTML(context.data.plan.week_boundary)} weeks</span><h1>Plan</h1><p>Your full schedule, with unfinished work kept in view. Expand a week or day for details.</p></div>
-      <div class="button-row"><button class="button button--primary" type="button" data-plan-jump>Jump to week ${currentWeek}</button><a class="button" href="#guide/week-by-week-plan">Plan guidance</a></div></header>
-    ${filtered ? `<div class="plan-filter-notice" role="status">Showing ${matchedCount} of ${context.data.schedule.length} scheduled days · Filters active <button class="button button--small" type="button" data-plan-reset>Show full schedule</button></div>` : ""}
+    <header class="view-header"><div><span class="eyebrow">${context.data.schedule.length} dated rows · ${context.data.plan.prep_weeks} ${escapeHTML(context.data.plan.week_boundary)} weeks</span><h1>Plan</h1><p>${showingAllWeeks ? "All weeks are visible. Expand a week or day for details." : `Week ${currentWeek} is in focus so the full plan stays easy to scan.`}</p></div>
+      <div class="button-row"><button class="button button--primary" type="button" data-plan-scope="${showingAllWeeks ? "current" : "all"}">${showingAllWeeks ? `Show week ${currentWeek}` : `Show all ${context.data.plan.prep_weeks} weeks`}</button><a class="button" href="#guide/week-by-week-plan">Plan guidance</a></div></header>
+    ${filtered ? `<div class="plan-filter-notice" role="status">Showing ${matchedCount} of ${context.data.schedule.length} scheduled days · Filters active <button class="button button--small" type="button" data-plan-reset>Reset filters</button></div>` : ""}
     ${route.detail === "past-due" ? pastDueSection(context, today, route.detail) : ""}
     <details class="plan-filters" id="plan-filters" ${filtered ? "open" : ""}><summary>Filter schedule · ${matchedCount} days</summary><section class="filter-panel" tabindex="-1" aria-labelledby="plan-filter-heading">
       <div><span class="eyebrow">Narrow the calendar</span><h2 id="plan-filter-heading">Schedule filters</h2><p class="filter-count">${matchedCount} of ${context.data.schedule.length} days</p></div>
@@ -125,7 +131,7 @@ export function renderPlan(context, route, { isRouteChange = true } = {}) {
 
       </div>
     </section></details>
-    <section class="week-list" aria-label="${context.data.plan.prep_weeks}-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p><button class="button" type="button" data-plan-reset>Show full schedule</button></div>`}</section>
+    <section class="week-list" aria-label="${context.data.plan.prep_weeks}-week study schedule">${weeksHTML || `<div class="empty-state"><h3>No days match these filters</h3><p>Reset one or more filters to bring the schedule back.</p><button class="button" type="button" data-plan-reset>Reset filters</button></div>`}</section>
     ${route.detail !== "past-due" ? pastDueSection(context, today, route.detail) : ""}
     <details class="plan-guidance" id="plan-arc"><summary>Phase overview and guidance</summary>${phaseMap(context.data, currentWeek)}</details>
     ${testRows.length ? `<section class="test-window-section"><div class="section-heading"><div><span class="eyebrow">Not a confirmed exam date</span><h2>Planning test date</h2></div><a href="#exams">Set registered date</a></div><p>March 19 is the planning date. The registered date setting controls the live countdown.</p><div class="plan-days">${testRows.map((row) => dayCard(row, context, row.date === route.detail, today)).join("")}</div></section>` : ""}`;
@@ -147,8 +153,16 @@ export function bindPlan(container, context, { isRouteChange = true } = {}) {
     const target = container.querySelector(`#week-${currentWeek}`);
     if (target) { target.open = true; focusTarget(target); }
   }));
+  container.querySelectorAll("[data-plan-scope]").forEach((button) => button.addEventListener("click", () => {
+    filters.currentWeekOnly = button.dataset.planScope !== "all";
+    context.rerender({ preserveView: false });
+  }));
   container.querySelectorAll("[data-plan-filter]").forEach((select) => {
-    select.addEventListener("change", () => { filters[select.dataset.planFilter] = select.value; filterChanged(); });
+    select.addEventListener("change", () => {
+      filters[select.dataset.planFilter] = select.value;
+      if (select.value !== "all") filters.currentWeekOnly = false;
+      filterChanged();
+    });
   });
   container.querySelector("[data-plan-current]")?.addEventListener("change", (event) => { filters.currentWeekOnly = event.currentTarget.checked; filterChanged(); });
   container.querySelectorAll("[data-plan-reset]").forEach((button) => button.addEventListener("click", () => { Object.assign(filters, defaultFilters); filterChanged(); }));

@@ -10,12 +10,13 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const tracked = new Set(execFileSync("git", ["ls-files", "--cached", "-z"], { cwd: root, encoding: "utf8" }).split("\0"));
 const visited = new Set();
 async function walk(file) {
-  assert.ok(tracked.has(file), `Module ${file} is not tracked/staged for deployment`);
-  if (visited.has(file)) return;
-  visited.add(file);
-  const source = await fs.readFile(path.join(root, file), "utf8");
+  const deployedFile = file.split("?", 1)[0];
+  assert.ok(tracked.has(deployedFile), `Module ${deployedFile} is not tracked/staged for deployment`);
+  if (visited.has(deployedFile)) return;
+  visited.add(deployedFile);
+  const source = await fs.readFile(path.join(root, deployedFile), "utf8");
   const imports = [...source.matchAll(/(?:\bfrom\s*|\bimport\s*(?:\(\s*)?)["'](\.[^"']+)["']/g)].map((match) => match[1]);
-  for (const imported of imports) await walk(path.posix.normalize(path.posix.join(path.posix.dirname(file), imported)));
+  for (const imported of imports) await walk(path.posix.normalize(path.posix.join(path.posix.dirname(deployedFile), imported)));
 }
 await walk("js/app.js");
 await walk("js/reset.js");

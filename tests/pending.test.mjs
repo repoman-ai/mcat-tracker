@@ -231,9 +231,9 @@ test("every Plan navigation resets manual filters; same-view saves keep them", (
     assert.deepEqual(ids(filtered), ["2026-09-22"]);
     assert.match(filtered, /Showing 1 of 182 scheduled days/);
     const full = renderPlan(context, { detail });
-    assert.equal(ids(full).length, 182);
+    assert.equal(ids(full).length, detail ? 182 : 7);
     assert.match(full, /data-assignment-details="2026-10-11"/);
-    assert.match(full, /class="deferred-label">Deferred/);
+    if (detail) assert.match(full, /class="deferred-label">Deferred/);
   }
 });
 

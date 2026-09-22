@@ -6,7 +6,7 @@ import { normalizeState, createBackup, validateBackup } from '../js/storage.js';
 import { bindEditorDrafts, clearEditorDrafts, draftConflicts } from '../js/editor-drafts.js';
 import { bindExams } from '../js/views/exams.js';
 import { bindLog, renderLog } from '../js/views/log.js';
-import { renderPlan } from '../js/views/plan.js';
+import { bindPlan, renderPlan } from '../js/views/plan.js';
 import { renderToday } from '../js/views/today.js';
 const raw = JSON.parse(await fs.readFile(new URL('../data/site-data.json',import.meta.url),'utf8'));
 globalThis.fetch=async()=>({ok:true,json:async()=>structuredClone(raw)});
@@ -59,13 +59,24 @@ test('focus backup accepts fractional minutes but rejects corrupt quantities and
   assert.throws(()=>validateBackup(createBackup(normalizeState({focusSessions:[{...session,startedAt:'nonsense'}]}))));
 });
 
-test('Plan orders current week first, retains all others in chronological order, and uses QBank totals',()=>{
+test('Plan focuses the current week, exposes all weeks on request, and uses QBank totals',()=>{
   const state=normalizeState({});
   window.location.search='?today=2026-10-20';
-  const html=renderPlan({data,state},{});
+  const context={data,state,rerender(){}};
+  const html=renderPlan(context,{});
   const weeks=[...html.matchAll(/id="week-(\d+)"/g)].map(match=>Number(match[1]));
-  assert.deepEqual(weeks,[5,...Array.from({length:26},(_,i)=>i+1).filter(w=>w!==5)]);
-  assert.match(html,/<strong>40<\/strong> QBank questions/);
+  assert.deepEqual(weeks,[5]);
+  assert.match(html,/Show all 26 weeks/);
+  assert.match(html,/<strong>20<\/strong> QBank questions/);
+  let toggle;
+  bindPlan({
+    querySelector:()=>null,
+    querySelectorAll:(selector)=>selector==='[data-plan-scope]'?[{dataset:{planScope:'all'},addEventListener:(_,handler)=>{toggle=handler;}}]:[],
+  },context,{isRouteChange:false});
+  toggle();
+  const all=renderPlan(context,{}, {isRouteChange:false});
+  assert.equal((all.match(/class="week-card"/g)||[]).length,26);
+  assert.match(all,/Show week 5/);
   window.location.search='?today=2026-09-03';
   assert.match(renderToday({data,state}),/data-view-key="today-milestone"/);
 });

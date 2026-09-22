@@ -8,11 +8,11 @@ import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName,
 import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js";
 import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js";
 import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js";
-import { renderToday, bindToday, leaveToday } from "./views/today.js";
-import { renderPlan, bindPlan } from "./views/plan.js";
-import { renderExams, bindExams } from "./views/exams.js";
+import { renderToday, bindToday, leaveToday } from "./views/today.js?v=20260922-2";
+import { renderPlan, bindPlan } from "./views/plan.js?v=20260922-2";
+import { renderExams, bindExams } from "./views/exams.js?v=20260922-2";
 import { renderLog, bindLog } from "./views/log.js";
-import { renderGuide, bindGuide } from "./views/guide.js";
+import { renderGuide, bindGuide } from "./views/guide.js?v=20260922-2";
 import { createStateUpdater } from "./state-actions.js";
 import { createToastController } from "./toast.js";
 import { captureViewState, scrollInstantly } from "./view-state.js";
