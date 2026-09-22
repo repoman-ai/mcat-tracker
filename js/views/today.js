@@ -116,8 +116,9 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
   const stopRule = row.stopRule || "";
   const heading = isScheduled ? "Today" : "Your next block";
   const timing = todayContext.state === "before-plan" ? `The plan begins ${formatDateLong(row.date)}. No catch-up is needed.` : todayContext.state === "gap" ? `No row is assigned today. Next block: ${formatDateLong(row.date)}.` : `${typeof row.week === "number" ? `Week ${row.week}` : "Test window"} · ${row.phase}`;
-  const greeting = state.settings.displayName
-    ? `${escapeHTML(heading)}, <span class="today-greeting-name" title="${escapeAttr(state.settings.displayName)}">${escapeHTML(state.settings.displayName)}</span>`
+  const displayName = /^([\p{L}\p{N}])\1{7,}$/u.test(state.settings.displayName || "") ? "" : state.settings.displayName;
+  const greeting = displayName
+    ? `${escapeHTML(heading)}, <span class="today-greeting-name" title="${escapeAttr(displayName)}">${escapeHTML(displayName)}</span>`
     : escapeHTML(heading);
   return `<header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(timing)}</span><h1>${greeting}</h1></div></header>
     ${todayTabs(completed.length)}
