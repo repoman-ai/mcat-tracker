@@ -9,7 +9,7 @@ import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initiali
 import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js";
 import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js?v=20260923-1";
 import { renderToday, bindToday, leaveToday } from "./views/today.js?v=20260923-1";
-import { renderPlan, bindPlan } from "./views/plan.js?v=20260923-1";
+import { renderPlan, bindPlan } from "./views/plan.js?v=20260923-2";
 import { renderExams, bindExams } from "./views/exams.js?v=20260923-1";
 import { renderLog, bindLog } from "./views/log.js";
 import { renderGuide, bindGuide } from "./views/guide.js?v=20260923-1";

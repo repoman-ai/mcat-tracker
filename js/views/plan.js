@@ -65,6 +65,7 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
   const open = week.week === currentWeek || matching.some((row) => row.date === detail);
   const workload = context.data.validation.weeklyChecks.find((check) => check.week === week.week);
   const estimate = workload ? `${(workload.estimatedLowMinutes / 60).toFixed(1)}–${(workload.estimatedHighMinutes / 60).toFixed(1)} hr` : "Not available";
+  const reserve = context.data.plan.buffer_policy?.week === week.week ? context.data.plan.buffer_policy : null;
   const warning = workload?.capacityRisk === "midpoint-over-budget"
     ? "Capacity risk: even the range midpoint exceeds the budget. Prioritize review, trim lower-priority volume, and replan if actual time confirms the overrun."
     : workload?.capacityRisk === "upper-over-budget"
@@ -79,6 +80,7 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
       </summary>
       <div class="week-card__body">
         <p class="muted">${escapeHTML(warning)} <a href="#guide/honest-time-templates">Budget and estimate rules</a></p>
+        ${reserve ? `<p class="guide-callout">Reserve at least ${escapeHTML(reserve.minimum_unassigned_minutes / 60)} hours for unfinished exam review or missed core work within the ${escapeHTML(week.planned_hours)}-hour ceiling. If current, stop early; do not add optional questions.</p>` : ""}
         <div class="week-targets"><span><strong>${rows.reduce((sum, row) => sum + countPracticeQuestions(row.practiceTarget), 0)}</strong> QBank questions</span><span><strong>${week.cars_passages}</strong> CARS passages</span>${week.exam_or_section_bank ? `<span><strong>${escapeHTML(week.exam_or_section_bank)}</strong> event</span>` : ""}</div>
         <div class="plan-days">${matching.map((row) => dayCard(row, context, row.date === detail, today)).join("")}</div>
       </div>

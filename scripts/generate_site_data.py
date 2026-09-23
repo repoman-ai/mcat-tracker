@@ -951,6 +951,10 @@ def main() -> int:
     guide = parse_guide()
     workbook = workbook_content(plan)
     schedule, validation = parse_schedule(chapter_index, plan)
+    if reserve := plan.get("buffer_policy"):
+        buffer_week = next(w for w in validation["weeklyChecks"] if w["week"] == reserve["week"])
+        if buffer_week["budgetMinutes"] - buffer_week["estimatedHighMinutes"] < reserve["minimum_unassigned_minutes"]:
+            fail("Protected catch-up capacity has been consumed by scheduled work")
     chapter_map_path = SOURCE_ROOT / "chapter-map.json"
     chapter_map = json.loads(chapter_map_path.read_text())
     if {c["chapter_id"] for c in chapter_map} != set(chapter_index) or len(chapter_map) != 83:

@@ -9,7 +9,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-09-29. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-01, 2026-10-06, 2026-10-20, 2026-11-10, 2026-12-17, 2027-01-14.
-- Related practice: 2026-09-29, 2026-10-01, 2026-10-20, 2026-11-10, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-09-29, 2026-10-01, 2026-10-20, 2026-11-10, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 88 days after first pass.
 
 ## Biology Ch. 2 - Reproduction
@@ -19,7 +19,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-27. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-30, 2026-12-04, 2026-12-18, 2027-01-12, 2027-02-09.
-- Related practice: 2026-11-27, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-27, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 29 days after first pass.
 
 ## Biology Ch. 3 - Embryogenesis and Development
@@ -29,7 +29,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-28. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-30, 2026-12-05, 2026-12-19, 2027-01-12, 2027-02-09.
-- Related practice: 2026-11-28, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-28, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 28 days after first pass.
 
 ## Biology Ch. 4 - The Nervous System
@@ -39,7 +39,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-07. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-09, 2026-11-14, 2026-11-28, 2026-12-19, 2027-01-19, 2027-02-13.
-- Related practice: 2026-11-07, 2026-11-09, 2026-11-14, 2026-11-28, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-07, 2026-11-09, 2026-11-28, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 49 days after first pass.
 
 ## Biology Ch. 5 - The Endocrine System
@@ -49,7 +49,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-09. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-11, 2026-11-16, 2026-12-01, 2026-12-22, 2027-01-20, 2027-02-15.
-- Related practice: 2026-11-09, 2026-11-11, 2026-11-16, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-09, 2026-11-11, 2026-11-16, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 47 days after first pass.
 
 ## Biology Ch. 6 - The Respiratory System
@@ -59,7 +59,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-12. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-14, 2026-11-19, 2026-12-03, 2026-12-24, 2027-01-21, 2027-02-18.
-- Related practice: 2026-11-12, 2026-11-14, 2026-11-19, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-12, 2026-11-19, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 44 days after first pass.
 
 ## Biology Ch. 7 - The Cardiovascular System
@@ -69,7 +69,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-13. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-16, 2026-11-20, 2026-12-04, 2026-12-29, 2027-01-27, 2027-02-23.
-- Related practice: 2026-11-13, 2026-11-16, 2026-11-20, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-13, 2026-11-16, 2026-11-20, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 43 days after first pass.
 
 ## Biology Ch. 8 - The Immune System
@@ -79,7 +79,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-15. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-17, 2026-12-22, 2027-01-05, 2027-01-26, 2027-02-24.
-- Related practice: 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 11 days after first pass.
 
 ## Biology Ch. 9 - The Digestive System
@@ -89,7 +89,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-21. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-23, 2026-11-28, 2026-12-12, 2027-01-04, 2027-02-01, 2027-02-27.
-- Related practice: 2026-11-21, 2026-11-23, 2026-11-28, 2026-11-30, 2026-12-12, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-23, 2026-11-28, 2026-11-30, 2026-12-12, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 35 days after first pass.
 
 ## Biology Ch. 10 - Homeostasis
@@ -99,7 +99,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-14. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-16, 2026-11-21, 2026-12-05, 2026-12-30, 2027-01-27, 2027-02-23.
-- Related practice: 2026-11-14, 2026-11-16, 2026-11-21, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-16, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 42 days after first pass.
 
 ## Biology Ch. 11 - The Musculoskeletal System
@@ -109,7 +109,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-16. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-18, 2026-12-23, 2027-01-06, 2027-01-27, 2027-02-25.
-- Related practice: 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 10 days after first pass.
 
 ## Biology Ch. 12 - Genetics and Evolution
@@ -119,7 +119,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-17. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-19, 2026-12-24, 2027-01-07, 2027-01-28, 2027-02-25.
-- Related practice: 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 9 days after first pass.
 
 ## Biochemistry Ch. 1 - Amino Acids, Peptides, and Proteins
@@ -129,7 +129,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-17. Planned, not completed.
 - Preview: 2026-09-28.
 - Retrieval: 2026-10-19, 2026-10-24, 2026-11-07, 2026-11-30, 2027-01-05, 2027-01-27.
-- Related practice: 2026-10-17, 2026-10-19, 2026-10-24, 2026-11-07, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-10-17, 2026-10-19, 2026-10-24, 2026-11-07, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 70 days after first pass.
 
 ## Biochemistry Ch. 2 - Enzymes
@@ -139,7 +139,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-21. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-23, 2026-10-28, 2026-11-11, 2026-12-03, 2027-01-06, 2027-01-29.
-- Related practice: 2026-10-21, 2026-10-23, 2026-10-28, 2026-11-11, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-10-21, 2026-10-23, 2026-10-28, 2026-11-11, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 66 days after first pass.
 
 ## Biochemistry Ch. 3 - Nonenzymatic Protein Function and Protein Analysis
@@ -149,7 +149,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-20. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-23, 2026-11-28, 2026-12-11, 2027-01-02, 2027-01-30, 2027-02-26.
-- Related practice: 2026-11-20, 2026-11-23, 2026-11-28, 2026-11-30, 2026-12-11, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-20, 2026-11-23, 2026-11-28, 2026-11-30, 2026-12-11, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 36 days after first pass.
 
 ## Biochemistry Ch. 4 - Carbohydrate Structure and Function
@@ -159,7 +159,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-26. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-28, 2026-11-02, 2026-11-16, 2026-12-08, 2027-01-13, 2027-02-02.
-- Related practice: 2026-10-26, 2026-10-28, 2026-11-02, 2026-11-16, 2026-11-30, 2026-12-08, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-10-26, 2026-10-28, 2026-11-02, 2026-11-16, 2026-11-30, 2026-12-08, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 61 days after first pass.
 
 ## Biochemistry Ch. 5 - Lipid Structure and Function
@@ -169,7 +169,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-03. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-05, 2026-11-10, 2026-11-24, 2026-12-16, 2027-01-18, 2027-02-10.
-- Related practice: 2026-11-03, 2026-11-05, 2026-11-10, 2026-11-24, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-03, 2026-11-05, 2026-11-10, 2026-11-24, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 53 days after first pass.
 
 ## Biochemistry Ch. 6 - DNA and Biotechnology
@@ -179,7 +179,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-24. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-27, 2026-12-01, 2026-12-15, 2027-01-05, 2027-02-02, 2027-03-02.
-- Related practice: 2026-11-24, 2026-11-27, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-24, 2026-11-27, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 32 days after first pass.
 
 ## Biochemistry Ch. 7 - RNA and the Genetic Code
@@ -189,7 +189,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-25. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-27, 2026-12-02, 2026-12-16, 2027-01-06, 2027-02-03, 2027-03-03.
-- Related practice: 2026-11-25, 2026-11-27, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-25, 2026-11-27, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 31 days after first pass.
 
 ## Biochemistry Ch. 8 - Biological Membranes
@@ -199,7 +199,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-04. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-06, 2026-11-11, 2026-11-25, 2026-12-17, 2027-01-18, 2027-02-11.
-- Related practice: 2026-11-04, 2026-11-06, 2026-11-11, 2026-11-25, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-11-04, 2026-11-06, 2026-11-11, 2026-11-25, 2026-11-30, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 52 days after first pass.
 
 ## Biochemistry Ch. 9 - Carbohydrate Metabolism I: Glycolysis, Glycogen, Gluconeogenesis, and the Pentose Phosphate Pathway
@@ -209,7 +209,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-08. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-10, 2026-12-15, 2026-12-31, 2027-01-19, 2027-02-16.
-- Related practice: 2026-12-08, 2026-12-10, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-08, 2026-12-10, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 18 days after first pass.
 
 ## Biochemistry Ch. 10 - Carbohydrate Metabolism II: Aerobic Respiration
@@ -219,7 +219,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-09. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-11, 2026-12-16, 2026-12-31, 2027-01-20, 2027-02-17.
-- Related practice: 2026-12-09, 2026-12-11, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-09, 2026-12-11, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 17 days after first pass.
 
 ## Biochemistry Ch. 11 - Lipid and Amino Acid Metabolism
@@ -229,7 +229,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-10. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-12, 2026-12-17, 2027-01-02, 2027-01-21, 2027-02-18.
-- Related practice: 2026-12-10, 2026-12-12, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-10, 2026-12-12, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 16 days after first pass.
 
 ## Biochemistry Ch. 12 - Bioenergetics and Regulation of Metabolism
@@ -239,7 +239,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-11. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-14, 2026-12-18, 2027-01-02, 2027-01-26, 2027-02-23.
-- Related practice: 2026-12-11, 2026-12-14, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-01-27, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
+- Related practice: 2026-12-11, 2026-12-14, 2026-12-22, 2026-12-29, 2026-12-30, 2027-01-12, 2027-01-13, 2027-01-26, 2027-02-02, 2027-02-09, 2027-02-10, 2027-02-23, 2027-02-24.
 - First scored exam: 2026-12-26; 15 days after first pass.
 
 ## General Chemistry Ch. 1 - Atomic Structure
@@ -249,7 +249,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: Before 2026-09-22 (exact date not recorded). Confirmed covered.
 - Preview: None.
 - Retrieval: 2026-09-22, 2026-09-23, 2026-10-06, 2026-10-27, 2026-11-24.
-- Related practice: 2026-09-22, 2026-09-23, 2026-10-27, 2026-11-24, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-22, 2026-09-23, 2026-10-27, 2026-11-24, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; original exposure predates this plan.
 
 ## General Chemistry Ch. 2 - The Periodic Table
@@ -259,7 +259,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: Before 2026-09-22 (exact date not recorded). Confirmed covered.
 - Preview: None.
 - Retrieval: 2026-09-22, 2026-09-23, 2026-10-06, 2026-10-27, 2026-12-04.
-- Related practice: 2026-09-22, 2026-09-23, 2026-10-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-22, 2026-09-23, 2026-10-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; original exposure predates this plan.
 
 ## General Chemistry Ch. 3 - Bonding and Chemical Interactions
@@ -269,7 +269,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: Before 2026-09-22 (exact date not recorded). Confirmed covered.
 - Preview: None.
 - Retrieval: 2026-09-22, 2026-09-23, 2026-10-06, 2026-10-27.
-- Related practice: 2026-09-22, 2026-09-23, 2026-10-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-22, 2026-09-23, 2026-10-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; original exposure predates this plan.
 
 ## General Chemistry Ch. 4 - Compounds and Stoichiometry
@@ -279,7 +279,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-09-22. Confirmed covered.
 - Preview: None.
 - Retrieval: 2026-09-24, 2026-09-29, 2026-10-13, 2026-11-03, 2026-12-05, 2027-01-06.
-- Related practice: 2026-09-22, 2026-09-24, 2026-09-25, 2026-09-28, 2026-09-29, 2026-10-13, 2026-11-03, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-22, 2026-09-24, 2026-09-25, 2026-09-28, 2026-09-29, 2026-10-13, 2026-11-03, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 95 days after first pass.
 
 ## General Chemistry Ch. 5 - Chemical Kinetics
@@ -289,7 +289,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-20. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-22, 2026-10-27, 2026-11-10, 2026-12-02, 2027-01-06, 2027-01-29.
-- Related practice: 2026-10-20, 2026-10-22, 2026-10-27, 2026-11-10, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-20, 2026-10-22, 2026-10-27, 2026-11-10, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 67 days after first pass.
 
 ## General Chemistry Ch. 6 - Equilibrium
@@ -299,7 +299,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-14. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-16, 2026-10-21, 2026-11-04, 2026-11-25, 2027-01-21.
-- Related practice: 2026-10-14, 2026-10-16, 2026-10-21, 2026-11-04, 2026-11-25, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-14, 2026-10-16, 2026-10-21, 2026-11-04, 2026-11-25, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 73 days after first pass.
 
 ## General Chemistry Ch. 7 - Thermochemistry
@@ -309,7 +309,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-27. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-29, 2026-11-03, 2026-11-17, 2026-12-09, 2027-01-14, 2027-02-02.
-- Related practice: 2026-10-27, 2026-10-29, 2026-11-03, 2026-11-17, 2026-12-07, 2026-12-09, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-27, 2026-10-29, 2026-11-03, 2026-11-17, 2026-12-07, 2026-12-09, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 60 days after first pass.
 
 ## General Chemistry Ch. 8 - The Gas Phase
@@ -319,7 +319,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-10. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-12, 2026-11-17, 2026-12-02, 2026-12-23, 2027-01-20, 2027-02-16.
-- Related practice: 2026-11-10, 2026-11-12, 2026-11-17, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-10, 2026-11-12, 2026-11-17, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 46 days after first pass.
 
 ## General Chemistry Ch. 9 - Solutions
@@ -329,7 +329,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-13. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-15, 2026-10-20, 2026-11-03, 2026-11-24, 2027-01-20.
-- Related practice: 2026-10-13, 2026-10-15, 2026-10-20, 2026-11-03, 2026-11-24, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-13, 2026-10-15, 2026-10-20, 2026-11-03, 2026-11-24, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 74 days after first pass.
 
 ## General Chemistry Ch. 10 - Acids and Bases
@@ -339,7 +339,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-15. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-17, 2026-10-22, 2026-11-05, 2026-11-27, 2027-01-21.
-- Related practice: 2026-10-15, 2026-10-17, 2026-10-22, 2026-11-05, 2026-11-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-15, 2026-10-17, 2026-10-22, 2026-11-05, 2026-11-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 72 days after first pass.
 
 ## General Chemistry Ch. 11 - Oxidation–Reduction Reactions
@@ -349,7 +349,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-22. Planned, not completed.
 - Preview: 2026-10-15.
 - Retrieval: 2026-10-24, 2026-10-29, 2026-11-12, 2026-12-03, 2027-01-07, 2027-01-30.
-- Related practice: 2026-10-22, 2026-10-24, 2026-10-29, 2026-11-12, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-22, 2026-10-24, 2026-10-29, 2026-11-12, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 65 days after first pass.
 
 ## General Chemistry Ch. 12 - Electrochemistry
@@ -359,7 +359,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-07. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-09, 2026-12-14, 2026-12-30, 2027-01-18, 2027-02-15.
-- Related practice: 2026-12-07, 2026-12-09, 2026-12-14, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-12-07, 2026-12-09, 2026-12-14, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 19 days after first pass.
 
 ## Behavioral Sciences Ch. 1 - Biology and Behavior
@@ -369,7 +369,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-19. Planned, not completed.
 - Preview: 2026-10-05.
 - Retrieval: 2026-10-21, 2026-10-26, 2026-11-10, 2026-12-01, 2027-01-05, 2027-01-28.
-- Related practice: 2026-10-19, 2026-10-21, 2026-10-26, 2026-11-10, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
+- Related practice: 2026-10-19, 2026-10-21, 2026-10-26, 2026-11-10, 2026-11-14, 2026-11-21, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
 - First scored exam: 2026-12-26; 68 days after first pass.
 
 ## Behavioral Sciences Ch. 2 - Sensation and Perception
@@ -389,7 +389,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-02. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-05, 2026-10-13, 2026-10-23, 2026-11-13, 2027-01-16.
-- Related practice: 2026-10-13, 2026-10-23, 2026-11-13, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
+- Related practice: 2026-10-13, 2026-10-23, 2026-11-13, 2026-11-14, 2026-11-21, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
 - First scored exam: 2026-12-26; 85 days after first pass.
 
 ## Behavioral Sciences Ch. 4 - Cognition, Consciousness, and Language
@@ -439,7 +439,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-02. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-04, 2026-11-09, 2026-11-24, 2026-12-15, 2027-01-16, 2027-02-10.
-- Related practice: 2026-11-02, 2026-11-04, 2026-11-09, 2026-11-24, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
+- Related practice: 2026-11-02, 2026-11-04, 2026-11-09, 2026-11-14, 2026-11-21, 2026-11-24, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
 - First scored exam: 2026-12-26; 54 days after first pass.
 
 ## Behavioral Sciences Ch. 9 - Social Interaction
@@ -449,7 +449,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-16. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-18, 2026-11-23, 2026-12-08, 2026-12-31, 2027-01-28, 2027-02-24.
-- Related practice: 2026-11-16, 2026-11-18, 2026-11-23, 2026-12-08, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
+- Related practice: 2026-11-16, 2026-11-18, 2026-11-21, 2026-11-23, 2026-12-08, 2026-12-21, 2027-01-04, 2027-01-16, 2027-01-18, 2027-01-19, 2027-01-30, 2027-02-01, 2027-02-13, 2027-02-15, 2027-02-27, 2027-03-01, 2027-03-02.
 - First scored exam: 2026-12-26; 40 days after first pass.
 
 ## Behavioral Sciences Ch. 10 - Social Thinking
@@ -609,7 +609,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-06. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-08, 2026-10-13, 2026-10-27, 2026-11-17, 2026-12-24, 2027-01-18.
-- Related practice: 2026-10-13, 2026-10-27, 2026-11-17, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-13, 2026-10-27, 2026-11-17, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 81 days after first pass.
 
 ## Physics and Math Ch. 2 - Work and Energy
@@ -619,7 +619,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-28. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-30, 2026-11-04, 2026-11-18, 2026-12-10, 2027-01-14, 2027-02-03.
-- Related practice: 2026-10-28, 2026-10-30, 2026-11-04, 2026-11-18, 2026-12-07, 2026-12-10, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-28, 2026-10-30, 2026-11-04, 2026-11-18, 2026-12-07, 2026-12-10, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 59 days after first pass.
 
 ## Physics and Math Ch. 3 - Thermodynamics
@@ -629,7 +629,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-29. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-31, 2026-11-05, 2026-11-19, 2026-12-10, 2027-01-15, 2027-02-04.
-- Related practice: 2026-10-29, 2026-10-31, 2026-11-05, 2026-11-19, 2026-12-07, 2026-12-10, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-29, 2026-10-31, 2026-11-05, 2026-11-19, 2026-12-07, 2026-12-10, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 58 days after first pass.
 
 ## Physics and Math Ch. 4 - Fluids
@@ -639,7 +639,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-11. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-13, 2026-11-18, 2026-12-03, 2026-12-23, 2027-01-21, 2027-02-17.
-- Related practice: 2026-11-11, 2026-11-13, 2026-11-18, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-11, 2026-11-13, 2026-11-18, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 45 days after first pass.
 
 ## Physics and Math Ch. 5 - Electrostatics and Magnetism
@@ -649,7 +649,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-05. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-07, 2026-11-12, 2026-11-27, 2026-12-17, 2027-01-19, 2027-02-11.
-- Related practice: 2026-11-05, 2026-11-07, 2026-11-12, 2026-11-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-05, 2026-11-07, 2026-11-12, 2026-11-27, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 51 days after first pass.
 
 ## Physics and Math Ch. 6 - Circuits
@@ -659,7 +659,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-06. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-09, 2026-11-13, 2026-11-28, 2026-12-18, 2027-01-19, 2027-02-12.
-- Related practice: 2026-11-06, 2026-11-09, 2026-11-13, 2026-11-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-06, 2026-11-09, 2026-11-13, 2026-11-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 50 days after first pass.
 
 ## Physics and Math Ch. 7 - Waves and Sound
@@ -669,7 +669,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-01. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-03, 2026-12-08, 2026-12-22, 2027-01-13, 2027-02-10.
-- Related practice: 2026-12-07, 2026-12-08, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-12-07, 2026-12-08, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 25 days after first pass.
 
 ## Physics and Math Ch. 8 - Light and Optics
@@ -679,7 +679,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-02. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-04, 2026-12-09, 2026-12-23, 2027-01-13, 2027-02-11.
-- Related practice: 2026-12-07, 2026-12-09, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-12-07, 2026-12-09, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 24 days after first pass.
 
 ## Physics and Math Ch. 9 - Atomic and Nuclear Phenomena
@@ -689,7 +689,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-04. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-07, 2026-12-11, 2026-12-29, 2027-01-15, 2027-02-12.
-- Related practice: 2026-12-07, 2026-12-11, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-12-07, 2026-12-11, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 22 days after first pass.
 
 ## Physics and Math Ch. 10 - Mathematics
@@ -699,7 +699,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: Before 2026-09-22 (exact date not recorded). Confirmed covered.
 - Preview: None.
 - Retrieval: 2026-09-22, 2026-09-23, 2026-10-06, 2026-10-28.
-- Related practice: 2026-09-22, 2026-09-23, 2026-09-25, 2026-09-28, 2026-10-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-22, 2026-09-23, 2026-09-25, 2026-09-28, 2026-10-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; original exposure predates this plan.
 
 ## Physics and Math Ch. 11 - Reasoning About the Design and Execution of Research
@@ -709,7 +709,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: Before 2026-09-22 (exact date not recorded). Confirmed covered.
 - Preview: None.
 - Retrieval: 2026-09-22, 2026-09-23, 2026-10-07, 2026-10-28.
-- Related practice: 2026-09-22, 2026-09-23, 2026-09-25, 2026-09-28, 2026-10-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-22, 2026-09-23, 2026-09-25, 2026-09-28, 2026-10-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; original exposure predates this plan.
 
 ## Organic Chemistry Ch. 1 - Nomenclature
@@ -719,7 +719,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-09-24. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-09-26, 2026-10-01, 2026-10-15, 2026-11-05, 2026-12-12, 2027-01-07.
-- Related practice: 2026-09-24, 2026-09-25, 2026-09-26, 2026-09-28, 2026-10-01, 2026-10-15, 2026-11-05, 2026-12-07, 2026-12-12, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-24, 2026-09-25, 2026-09-26, 2026-09-28, 2026-10-01, 2026-10-15, 2026-11-05, 2026-12-07, 2026-12-12, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 93 days after first pass.
 
 ## Organic Chemistry Ch. 2 - Isomers
@@ -729,7 +729,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-01. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-03, 2026-10-08, 2026-10-22, 2026-11-12, 2026-12-19, 2027-01-15.
-- Related practice: 2026-10-01, 2026-10-22, 2026-11-12, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-01, 2026-10-22, 2026-11-12, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 86 days after first pass.
 
 ## Organic Chemistry Ch. 3 - Bonding
@@ -739,7 +739,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-09-30. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-02, 2026-10-07, 2026-10-21, 2026-11-11, 2026-12-18, 2027-01-15.
-- Related practice: 2026-09-30, 2026-10-21, 2026-11-11, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-09-30, 2026-10-21, 2026-11-11, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 87 days after first pass.
 
 ## Organic Chemistry Ch. 4 - Analyzing Organic Reactions
@@ -749,7 +749,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-16. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-19, 2026-10-23, 2026-11-06, 2026-11-28, 2027-01-27.
-- Related practice: 2026-10-16, 2026-10-19, 2026-10-23, 2026-11-06, 2026-11-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-16, 2026-10-19, 2026-10-23, 2026-11-06, 2026-11-28, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 71 days after first pass.
 
 ## Organic Chemistry Ch. 5 - Alcohols
@@ -759,7 +759,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-23. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-26, 2026-10-30, 2026-11-13, 2026-12-04, 2027-01-07, 2027-01-30.
-- Related practice: 2026-10-23, 2026-10-26, 2026-10-30, 2026-11-13, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-23, 2026-10-26, 2026-10-30, 2026-11-13, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 64 days after first pass.
 
 ## Organic Chemistry Ch. 6 - Aldehydes and Ketones I: Electrophilicity and Oxidation–Reduction
@@ -769,7 +769,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-24. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-10-26, 2026-10-31, 2026-11-14, 2026-12-05, 2027-02-01.
-- Related practice: 2026-10-24, 2026-10-26, 2026-10-31, 2026-11-14, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-24, 2026-10-26, 2026-10-31, 2026-12-07, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 63 days after first pass.
 
 ## Organic Chemistry Ch. 7 - Aldehydes and Ketones II: Enolates
@@ -779,7 +779,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-17. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-19, 2026-11-24, 2026-12-08, 2026-12-31, 2027-01-29, 2027-02-24.
-- Related practice: 2026-11-17, 2026-11-19, 2026-11-24, 2026-12-07, 2026-12-08, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-17, 2026-11-19, 2026-11-24, 2026-12-07, 2026-12-08, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 39 days after first pass.
 
 ## Organic Chemistry Ch. 8 - Carboxylic Acids
@@ -789,7 +789,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-30. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-02, 2026-11-06, 2026-11-20, 2026-12-11, 2027-01-15, 2027-02-09.
-- Related practice: 2026-10-30, 2026-11-02, 2026-11-06, 2026-11-20, 2026-12-07, 2026-12-11, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-30, 2026-11-02, 2026-11-06, 2026-11-20, 2026-12-07, 2026-12-11, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 57 days after first pass.
 
 ## Organic Chemistry Ch. 9 - Carboxylic Acid Derivatives
@@ -799,7 +799,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-10-31. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-02, 2026-11-07, 2026-11-21, 2026-12-12, 2027-01-16, 2027-02-09.
-- Related practice: 2026-10-31, 2026-11-02, 2026-11-07, 2026-11-21, 2026-12-07, 2026-12-12, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-10-31, 2026-11-02, 2026-11-07, 2026-12-07, 2026-12-12, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 56 days after first pass.
 
 ## Organic Chemistry Ch. 10 - Nitrogen- and Phosphorus-Containing Compounds
@@ -809,7 +809,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-18. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-20, 2026-11-25, 2026-12-09, 2026-12-31, 2027-01-29, 2027-02-25.
-- Related practice: 2026-11-18, 2026-11-20, 2026-11-25, 2026-12-07, 2026-12-09, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-18, 2026-11-20, 2026-11-25, 2026-12-07, 2026-12-09, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 38 days after first pass.
 
 ## Organic Chemistry Ch. 11 - Spectroscopy
@@ -819,7 +819,7 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-12-05. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-12-07, 2026-12-12, 2026-12-29, 2027-01-16, 2027-02-13.
-- Related practice: 2026-12-07, 2026-12-12, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-12-07, 2026-12-12, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 21 days after first pass.
 
 ## Organic Chemistry Ch. 12 - Separations and Purifications
@@ -829,5 +829,5 @@ Evidence: local Kaplan chapter/subsection outlines only. No full chapter text wa
 - First exposure: 2026-11-19. Planned, not completed.
 - Preview: None.
 - Retrieval: 2026-11-21, 2026-11-27, 2026-12-10, 2027-01-02, 2027-01-30, 2027-02-25.
-- Related practice: 2026-11-19, 2026-11-21, 2026-11-27, 2026-12-07, 2026-12-10, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-01-29, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
+- Related practice: 2026-11-19, 2026-11-27, 2026-12-07, 2026-12-10, 2026-12-31, 2027-01-02, 2027-01-05, 2027-01-14, 2027-01-15, 2027-01-28, 2027-02-11, 2027-02-12, 2027-02-16, 2027-02-25, 2027-02-26.
 - First scored exam: 2026-12-26; 37 days after first pass.

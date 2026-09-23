@@ -12,10 +12,10 @@ Six chapters are confirmed: GC01–GC03 and PHY10–PHY11 before the plan, plus 
 
 | Area | Before | After and reason |
 | --- | --- | --- |
-| First scored full length | December 12; Organic Chemistry had not begun | December 26, five days after the first pass. PE2 moves January 2 → January 9; PE3–6 remain January 23, February 6, February 20 and March 6. Six scored exams now run every two weeks. October 10 remains an explicitly incomplete-content baseline. |
+| First scored full length | December 12; Organic Chemistry had not begun | December 26, five days after the first pass. PE2 moves January 2 → January 9; PE3–6 remain January 23, February 6, February 20 and March 6. Six scored exams now run every two weeks. October 10 remains an early progress diagnostic, not a cold pre-study baseline; no earlier timed full length was taken. |
 | Organic Chemistry | December 18–January 20, largely one late run | September 24–December 5, interspersed with linked topics. Functional groups and geometry precede proteins/sugars; acid/base precedes mechanisms; derivatives revisit peptides/lipids; waves/atomic absorption precede spectroscopy. |
 | End of first pass | January 20 | December 21, 30 days earlier and 88 days before the planning exam. First pass means checked objectives and targeted reading, not blanket mastery. No chapter removed. |
-| Broad question sets | Section Banks start week 7 on a rotating section queue | Start with small known-topic B/B and C/P sets in weeks 10–11, then P/S in week 13. Fully mixed sets follow the first pass. Defer/swap passages that require unseen topics within their section. |
+| Broad question sets | Section Banks start week 7 on a rotating section queue | Start P/S with six known-topic questions each in weeks 8–9 and eight in week 13; B/B and C/P begin weeks 10–11. Fully mixed sets follow the first pass. Defer/swap passages that require unseen topics within their section. |
 | Retention | General 10-minute recall advice without chapter dates | Every chapter has at least four dated recall encounters around +2/+7/+21/+42 days; selected later +70/+98 encounters. Up to five short prompts in the existing 30-minute maintenance ceiling. Intervals shift around protected days. |
 | Workload | Week 1–2 and exam-week upper estimates exceeded ceilings; untested chapters defaulted to Questions first | Explicit Full read foundations, Objectives + checks first passes, separately costed CARS strategy workshops and previews. All revised upper estimates fit. Heavy chapters may still need the documented replacement/repair rule. |
 
@@ -58,27 +58,33 @@ Hours are estimates, not observed completion times. The before figures below use
 | 5 | 2026-10-20–2026-10-26 | 7.1–13.2 / 17 | 10.4–16.6 / 17 | GC05, BCH02, GC11, OC05, OC06, BCH04, CARS05 | 22 min |
 | 6 | 2026-10-27–2026-11-02 | 7.1–13.2 / 17 | 10.0–15.7 / 17 | GC07, PHY02, PHY03, OC08, OC09, PS08, CARS06 | 77 min |
 | 7 | 2026-11-03–2026-11-09 | 8.8–15.8 / 17 | 10.2–15.9 / 17 | BCH05, BCH08, PHY05, PHY06, BIO04, BIO05, CARS07 | 66 min |
-| 8 | 2026-11-10–2026-11-16 | 8.4–15.2 / 17 | 10.1–15.7 / 17 | GC08, PHY04, BIO06, BIO07, BIO10, PS09, CARS08 | 77 min |
-| 9 | 2026-11-17–2026-11-23 | 8.4–15.2 / 17 | 10.0–15.7 / 17 | OC07, OC10, OC12, BCH03, BIO09, PS05, CARS09 | 77 min |
+| 8 | 2026-11-10–2026-11-16 | 8.4–15.2 / 17 | 10.6–16.5 / 17 | GC08, PHY04, BIO06, BIO07, BIO10, PS09, CARS08 | 29 min |
+| 9 | 2026-11-17–2026-11-23 | 8.4–15.2 / 17 | 10.5–16.5 / 17 | OC07, OC10, OC12, BCH03, BIO09, PS05, CARS09 | 29 min |
 | 10 | 2026-11-24–2026-11-30 | 7.2–13.7 / 17 | 10.9–16.4 / 17 | BCH06, BCH07, BIO02, BIO03, PS10, CARS10 | 38 min |
 | 11 | 2026-12-01–2026-12-07 | 8.4–15.2 / 17 | 10.9–16.2 / 17 | PHY07, PHY08, PS02, PHY09, OC11, GC12, CARS11 | 45 min |
 | 12 | 2026-12-08–2026-12-14 | 18.0–23.8 / 20 | 10.9–16.1 / 17 | BCH09, BCH10, BCH11, BCH12, PS04, PS06, CARS12 | 55 min |
-| 13 | 2026-12-15–2026-12-21 | 7.9–14.4 / 17 | 10.4–15.5 / 17 | BIO08, BIO11, BIO12, PS07, PS11, PS12 | 90 min |
-| 14 | 2026-12-22–2026-12-28 | 6.5–12.5 / 17 | 16.3–19.4 / 20 | AAMC Practice Exam 1 2026-12-26; review next two days | 34 min |
-| 15 | 2026-12-29–2027-01-04 | 18.0–23.8 / 20 | 8.9–13.6 / 17 | Use errors to select targeted repair; keep retrieval current | 203 min |
-| 16 | 2027-01-05–2027-01-11 | 7.9–14.4 / 17 | 16.3–19.4 / 20 | AAMC Practice Exam 2 2027-01-09; review next two days | 34 min |
-| 17 | 2027-01-12–2027-01-18 | 7.9–14.4 / 17 | 9.3–14.0 / 17 | Use errors to select targeted repair; keep retrieval current | 178 min |
-| 18 | 2027-01-19–2027-01-25 | 18.0–23.8 / 20 | 16.3–19.4 / 20 | AAMC Practice Exam 3 2027-01-23; review next two days | 34 min |
-| 19 | 2027-01-26–2027-02-01 | 6.4–12.0 / 13 | 8.6–12.8 / 13 | Use errors to select targeted repair; keep retrieval current | 10 min |
-| 20 | 2027-02-02–2027-02-08 | 17.7–23.3 / 20 | 15.9–19.4 / 20 | AAMC Practice Exam 4 2027-02-06; review next two days | 34 min |
-| 21 | 2027-02-09–2027-02-15 | 6.4–12.0 / 13 | 8.1–12.8 / 13 | Use errors to select targeted repair; keep retrieval current | 10 min |
-| 22 | 2027-02-16–2027-02-22 | 17.7–23.3 / 20 | 15.8–19.4 / 20 | AAMC Practice Exam 5 2027-02-20; review next two days | 34 min |
-| 23 | 2027-02-23–2027-03-01 | 6.4–12.0 / 13 | 8.0–12.8 / 13 | Use errors to select targeted repair; keep retrieval current | 10 min |
-| 24 | 2027-03-02–2027-03-08 | 17.7–23.3 / 20 | 15.8–19.4 / 20 | AAMC Practice Exam 6 2027-03-06; review next two days | 34 min |
-| 25 | 2027-03-09–2027-03-15 | 4.5–9.0 / 8 | 4.0–7.6 / 8 | Use errors to select targeted repair; keep retrieval current | 22 min |
-| 26 | 2027-03-16–2027-03-22 | 1.5–4.5 / 3 | 1.2–2.2 / 3 | Use errors to select targeted repair; keep retrieval current | 46 min |
+| 13 | 2026-12-15–2026-12-21 | 7.9–14.4 / 17 | 9.4–13.9 / 17 | BIO08, BIO11, BIO12, PS07, PS11, PS12 | 186 min |
+| 14 | 2026-12-22–2026-12-28 | 6.5–12.5 / 17 | 16.3–19.4 / 20 | 0 chapter blocks; 0 UWorld; 10 B/B SB; 3 CARS; AAMC PE1 + two review days | 34 min |
+| 15 | 2026-12-29–2027-01-04 | 18.0–23.8 / 20 | 10.2–15.8 / 17 | 0 chapter blocks; 41 UWorld; 24 B/B SB, 16 C/P SB, 16 P/S SB; 3 CARS | 69 min |
+| 16 | 2027-01-05–2027-01-11 | 7.9–14.4 / 17 | 16.3–19.4 / 20 | 0 chapter blocks; 0 UWorld; 10 C/P SB; 3 CARS; AAMC PE2 + two review days | 34 min |
+| 17 | 2027-01-12–2027-01-18 | 7.9–14.4 / 17 | 10.7–16.3 / 17 | 0 chapter blocks; 34 UWorld; 16 B/B SB, 24 C/P SB, 16 P/S SB; 5 CARS | 44 min |
+| 18 | 2027-01-19–2027-01-25 | 18.0–23.8 / 20 | 16.3–19.4 / 20 | 0 chapter blocks; 0 UWorld; 10 P/S SB; 3 CARS; AAMC PE3 + two review days | 34 min |
+| 19 | 2027-01-26–2027-02-01 | 6.4–12.0 / 13 | 5.9–8.4 / 13 | 0 chapter blocks; 0 UWorld; 8 B/B SB, 8 C/P SB, 16 P/S SB; 3 CARS; reserve at least 4 hours for catch-up; otherwise stop early | 278 min |
+| 20 | 2027-02-02–2027-02-08 | 17.7–23.3 / 20 | 15.9–19.4 / 20 | 0 chapter blocks; 0 UWorld; 10 B/B SB; 3 CARS; AAMC PE4 + two review days | 34 min |
+| 21 | 2027-02-09–2027-02-15 | 6.4–12.0 / 13 | 8.1–12.8 / 13 | 0 chapter blocks; 20 UWorld; 16 B/B SB, 16 C/P SB, 16 P/S SB; 3 CARS | 10 min |
+| 22 | 2027-02-16–2027-02-22 | 17.7–23.3 / 20 | 15.8–19.4 / 20 | 0 chapter blocks; 0 UWorld; 10 C/P SB; 3 CARS; AAMC PE5 + two review days | 34 min |
+| 23 | 2027-02-23–2027-03-01 | 6.4–12.0 / 13 | 8.0–12.8 / 13 | 0 chapter blocks; 20 UWorld; 16 B/B SB, 16 C/P SB, 16 P/S SB; 3 CARS | 10 min |
+| 24 | 2027-03-02–2027-03-08 | 17.7–23.3 / 20 | 15.8–19.4 / 20 | 0 chapter blocks; 0 UWorld; 10 P/S SB; 3 CARS; AAMC PE6 + two review days | 34 min |
+| 25 | 2027-03-09–2027-03-15 | 4.5–9.0 / 8 | 4.0–7.6 / 8 | 0 chapter blocks; 0 UWorld; 0 SB; 4 CARS | 22 min |
+| 26 | 2027-03-16–2027-03-22 | 1.5–4.5 / 3 | 1.2–2.2 / 3 | 0 chapter blocks; 0 UWorld; 0 SB; 2 CARS | 46 min |
 
-Weeks 1, 2, 3, 4, 5, 10, 14, 16, 18, 19, 20, 21, 22, 23, 24, 25 have less than 45 minutes of headroom at the high estimate. Do not add optional material there. If full-length review takes more than 7.5 hours, finish it in the next repair/practice block and move that block’s questions into spare capacity; never cut the protected review days. If several first-pass chapters need 2–3-hour full reads, December 21 will need replanning. Finishing every chapter deeply by that date cannot be guaranteed within these ceilings.
+Weeks 1, 2, 3, 4, 5, 8, 9, 10, 14, 16, 17, 18, 20, 21, 22, 23, 24, 25 have less than 45 minutes of headroom at the high estimate. Do not add optional material there. If full-length review takes more than 7.5 hours, finish it in the next repair/practice block and move that block’s questions into spare capacity; never cut the protected review days. If several first-pass chapters need 2–3-hour full reads, December 21 will need replanning. Finishing every chapter deeply by that date cannot be guaranteed within these ceilings.
+
+## Deliberate catch-up capacity
+
+Week 19 (January 26–February 1) now schedules 32 Section Bank questions, three CARS passages and retrieval, with zero new UWorld questions. Its high estimate is 8 hours 22 minutes against a 13-hour ceiling: 4 hours 38 minutes remain unassigned. Reserve at least four hours for unfinished full-length review or missed core work; if current, stop early. Twenty UWorld questions and sixteen Section Bank questions were moved into weeks 15 and 17, whose high estimates remain within their 17-hour ceilings. This absorbs a limited setback, not an entire lost 13-hour week. March 19 remains a planning date, not a confirmed booked seat.
+
+The feedback review and exact before/after counts are in FEEDBACK_REVIEW.md. Weekly summaries now show all question sources and CARS, including week 3.
 
 ## Constraints and verification
 
@@ -92,4 +98,4 @@ The full chapter-level audit is in `CHAPTER_MAP.md`, `chapter-map.json` and `cha
 
 ### Workspace file inventory
 
-(no extension): 31, .12: 2, .cfg: 1, .csh: 1, .css: 1, .csv: 13, .docx: 13, .exe: 6, .fish: 1, .h: 79, .html: 4, .ico: 1, .jpeg: 1, .js: 32, .json: 24, .log: 5, .md: 23, .mjs: 26, .ndjson: 4, .patch: 1, .pdf: 4, .pem: 1, .plist: 1, .png: 120, .ps1: 1, .pxd: 16, .pxi: 26, .py: 554, .pyx: 2, .rels: 2, .rng: 1, .so: 7, .sql: 2, .svg: 1, .toml: 1, .ts: 5, .txt: 13, .typed: 13, .webmanifest: 1, .xlsx: 20, .xml: 18, .xsl: 7
+(no extension): 31, .12: 2, .cfg: 1, .csh: 1, .css: 1, .csv: 15, .docx: 15, .exe: 6, .fish: 1, .h: 79, .html: 4, .ico: 1, .jpeg: 1, .js: 32, .json: 29, .log: 7, .md: 30, .mjs: 27, .ndjson: 5, .patch: 1, .pdf: 5, .pem: 1, .plist: 1, .png: 145, .ps1: 1, .pxd: 16, .pxi: 26, .py: 558, .pyx: 2, .rels: 2, .rng: 1, .so: 7, .sql: 2, .svg: 1, .toml: 1, .ts: 5, .txt: 13, .typed: 13, .webmanifest: 1, .xlsx: 22, .xml: 18, .xsl: 7

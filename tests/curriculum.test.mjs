@@ -6,6 +6,25 @@ import { normalizeState, createBackup, validateBackup } from '../js/storage.js';
 const data=JSON.parse(await fs.readFile(new URL('../data/site-data.json',import.meta.url),'utf8'));
 const byDate=new Map(data.schedule.map(r=>[r.date,r]));
 const exposure=new Map(data.chapterMap.map(c=>[c.chapter_id,c.first_exposure]));
+test('feedback fixes preserve practice totals and protect a real light week',()=>{
+ const sb=(week,section)=>data.sectionBanks.filter(b=>!section||b.section===section).flatMap(b=>b.assignments).filter(a=>byDate.get(a.date).week===week).reduce((n,a)=>n+a.questions,0);
+ assert.equal(sb(11),20); assert.equal(sb(13),8);
+ assert.equal(sb(8),6); assert.equal(sb(9),6);
+ assert.match(byDate.get('2026-11-14').practiceTarget,/6 P\/S Section Bank/);
+ assert.match(byDate.get('2026-11-21').practiceTarget,/6 P\/S Section Bank/);
+ assert.equal(sb(15),56); assert.equal(sb(17),56); assert.equal(sb(19),32);
+ const light=data.validation.weeklyChecks.find(w=>w.week===19);
+ assert.ok(light.budgetMinutes-light.estimatedHighMinutes>=240);
+ assert.equal(data.plan.weeks[18].uworld_questions,0);
+ assert.equal(data.plan.weeks.reduce((n,w)=>n+w.uworld_questions,0),222);
+ assert.deepEqual(data.sectionBanks.map(b=>b.totalQuestions),[120,120,120]);
+ assert.equal(data.plan.diagnostic_context.prior_timed_full_length,false);
+ assert.match(byDate.get('2026-10-10').sourceNotes,/not a cold pre-study baseline/);
+ for(const week of [3,11,13]) {
+  const m=data.plan.weeks[week-1].milestone;
+  assert.match(m,/chapter blocks/); assert.match(m,/UWorld/); assert.match(m,/SB/); assert.match(m,/CARS/);
+ }
+});
 test('all chapters have ordered prerequisites, dated recall and introduced-topic practice',()=>{
  assert.equal(data.chapterMap.length,83);
  assert.equal(new Set(data.chapterMap.map(c=>c.chapter_id)).size,83);
