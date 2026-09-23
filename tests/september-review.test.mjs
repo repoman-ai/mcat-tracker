@@ -68,7 +68,12 @@ test("weekly completion celebrates actual tasks and rest never becomes study deb
 test("Today exposes heavy exam-week budgets without adding quotas or moving assignments", () => {
   window.location.search = "?today=2026-10-10";
   const before = JSON.stringify(data.schedule);
-  const html = renderToday({ data, state: normalizeState({}) });
+  const riskData = structuredClone(data);
+  // The revised calendar fits; a synthetic overrun still exercises risk UI.
+  const check = riskData.validation.weeklyChecks.find(w => w.week === 3);
+  check.estimatedLowMinutes = 1180; check.estimatedHighMinutes = 1300;
+  check.capacityRisk = "midpoint-over-budget";
+  const html = renderToday({ data: riskData, state: normalizeState({}) });
   assert.match(html, /20-hour weekly ceiling/);
   assert.match(html, /Even the midpoint exceeds/);
   assert.match(html, /Protect exam review and rest/);

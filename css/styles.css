@@ -219,7 +219,7 @@ input:user-invalid, textarea:user-invalid, select:user-invalid { border-color: #
 .focus-controls output { min-width: 92px; color: var(--ink-strong); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.7rem; font-weight: 800; }
 
 /* Three complete preview rows; the full backlog lives above the Plan schedule. */
-.today-tabs { display: flex; gap: .45rem; margin-bottom: .7rem; }
+.today-tabs { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .7rem; }
 .today-tabs a { display: inline-flex; align-items: center; gap: .5rem; min-height: var(--touch); padding: .45rem .85rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--paper); color: var(--muted); font-size: .85rem; font-weight: 750; text-decoration: none; }
 .today-tabs a[aria-current] { background: var(--ink-strong); border-color: var(--ink-strong); color: #fff; }
 .today-tabs span { min-width: 1.5rem; text-align: center; border-radius: 1rem; background: var(--teal-soft); color: #285f47; font-size: .75rem; }

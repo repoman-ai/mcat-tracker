@@ -77,6 +77,9 @@ REQUIRED_SCHEDULE_FIELDS = {
     "weekly_milestone",
     "status",
     "notes",
+    "retrieval_ids",
+    "practice_chapter_ids",
+    "preview_ids",
 }
 
 
@@ -478,6 +481,8 @@ def parse_int(value: str, field: str, row_number: int) -> int:
 # Each chapter token is a separate block. Operational blocks include maintenance;
 # question costs include answering AND review, never an additional review block.
 MODE_MINUTES = {
+    "strategy workshop": (30, 45),
+    "repair and retrieval": (15, 30),
     "full read": (90, 135),
     "objectives + checks": (50, 80),
     "questions first": (30, 55),
@@ -504,7 +509,7 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
     if "exam if officially scheduled" in modes:
         return {"lowMinutes": 450, "highMinutes": 480, "label": "If registered: ~7.5-8 hr", "basis": "Conditional placeholder, not a booked exam; otherwise rest. Excluded from preparation totals.", "conditional": True}
     if row["isRest"]:
-        return {"lowMinutes": 0, "highMinutes": 30, "label": "Rest day", "basis": "Optional light maintenance only"}
+        return {"lowMinutes": 0, "highMinutes": 0, "label": "Rest day", "basis": "Protected rest; no required maintenance"}
     if row["isExam"]:
         return {"lowMinutes": 450, "highMinutes": 480, "label": "~7.5-8 hr", "basis": "Full-length under test conditions"}
     if row["isFullLengthReview"]:
@@ -515,6 +520,11 @@ def infer_workload(row: dict[str, Any]) -> dict[str, Any]:
     if row["chapterIds"]:
         low += 15
         high += 30
+        low += max(0, 5 * len(row.get("retrievalIds", [])) - 15)
+    # Brief previews are not chapter completion and must not be free work.
+    low += 10 * len(row.get("previewIds", []))
+    high += 10 * len(row.get("previewIds", []))
+    low = max(low, 5 * len(row.get("retrievalIds", [])))
 
     practice = row["practiceTarget"]
     for count in re.findall(r"(\d+)\s+UWorld(?:\s+(?:topic|science))?\s+questions?", practice, flags=re.I):
@@ -636,6 +646,10 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             "weeklyFocus": raw["weekly_focus"],
             "resource": raw["resource"],
             "chapterIds": chapter_ids,
+            "retrievalIds": [p.strip() for p in raw.get("retrieval_ids", "").split(";") if p.strip()],
+            "previewIds": [p.strip() for p in raw.get("preview_ids", "").split(";") if p.strip()],
+            "practiceChapterIds": [p.strip() for p in raw.get("practice_chapter_ids", "").split(";") if p.strip()],
+            "confirmedChapterIds": [c for c in chapter_ids if plan.get("confirmed_chapter_completions", {}).get(c) == raw["date"]],
             "chapters": [chapter_index[chapter_id] for chapter_id in chapter_ids if chapter_id in chapter_index],
             "assignment": raw["assignment"],
             "mode": raw["mode"],
@@ -857,7 +871,7 @@ def build_mode_definitions(plan: dict[str, Any], guide: dict[str, Any]) -> list[
         ("Practice / retrieval", "Use questions, spaced retrieval, and the mistake log to choose the next repair target. Count deeply reviewed work, not screens completed."),
         ("Section Bank / review", "Complete the named questions and retry the key idea for incorrect, flagged, and guessed-correct answers before reading the explanation. Review time is included in the per-question estimate; only 15-30 minutes of maintenance is added."),
         ("Light retrieval", "Use only short, confidence-building retrieval. Stop broad content work and protect sleep during the taper."),
-        ("Rest", "Rest is planned work. Optional Anki maintenance may stay brief, but there is no catch-up quota."),
+        ("Rest", "Protect the full rest day. No assigned studying, cards, questions or catch-up quota."),
         ("Rest / logistics", "Protect recovery and complete only the named logistics task. Do not turn the block into an unplanned study marathon."),
         ("Logistics", "Complete only the named checklist, route, ID or food task in 20-45 minutes. This is a short task, not a zero-work rest day."),
         ("Exam if officially scheduled", "This is a placeholder window only. Treat it as test day only after the registered AAMC date is entered."),
@@ -909,13 +923,13 @@ This map shows where every authoritative source component appears. `data/site-da
 - Duplicate dates: {validation['duplicateDates']}
 - Missing dates: {validation['missingDates']}
 - Week boundaries: {validation['weekBoundary']}
-- Remaining Kaplan assignments resolved: {validation['chapterAssignments']}; prior covered chapters: 5; chapter catalog: 83; unknown IDs: 0
+- Dated Kaplan chapter blocks: {validation['chapterAssignments']} (includes completed GC04 retrieval); five other chapters covered before this plan; chapter catalog: 83; unknown IDs: 0
 - Plan weeks reconciled: {validation['numericWeeks']} / {validation['numericWeeks']}
 - Full-length events: {validation['fullLengthEvents']}
 - Section Bank questions: {validation['sectionBankQuestions']}
-- Workload: every mode explicitly costed; every week's low estimate within its budget; upper/midpoint risks shown in Plan
+- Workload: every mode explicitly costed; every week's upper estimate within its budget; estimates and available margin shown in Plan
 - Mastery topics: 40
-- Meaningful guide sections mapped: 9 / 9, plus plan overview and source links
+- All 12 authoritative guide sections mapped, plus the searchable 83-chapter map
 """
     CONTENT_MAP_PATH.write_text(content, encoding="utf-8")
 
@@ -937,6 +951,30 @@ def main() -> int:
     guide = parse_guide()
     workbook = workbook_content(plan)
     schedule, validation = parse_schedule(chapter_index, plan)
+    chapter_map_path = SOURCE_ROOT / "chapter-map.json"
+    chapter_map = json.loads(chapter_map_path.read_text())
+    if {c["chapter_id"] for c in chapter_map} != set(chapter_index) or len(chapter_map) != 83:
+        fail("Chapter map must account for all 83 chapters exactly once")
+    exposures = {c["chapter_id"]: c["first_exposure"] for c in chapter_map}
+    map_blocks = [{"type": "paragraph", "text": "All 83 chapters. Links use the available subsection outlines, not full chapter text. Dates describe planned first exposure and sampled retrieval, not mastery. Practice dates identify matching topic pools, not exact vendor question IDs."}]
+    for item in chapter_map:
+        map_blocks.extend([
+            {"type": "heading", "level": 3, "text": item["chapter_id"] + " — " + item["title"]},
+            {"type": "paragraph", "text": "Prerequisites: " + (", ".join(item["prerequisites"]) or "prior coursework only") + ". " + item["link_rationale"]},
+            {"type": "paragraph", "text": "First pass: " + item["first_exposure"] + ". Retrieval: " + ", ".join(item["retrieval_dates"]) + ". Practice: " + ", ".join(item["practice_dates"]) + ". First scored exam: " + item["first_scored_exam"] + "."},
+        ])
+    guide["sections"].append({"id": "chapter-map", "title": "13. Chapter prerequisites and retrieval dates", "blocks": map_blocks})
+    for row in schedule:
+        if (row["isRest"] or row["isExam"] or row["isFullLengthReview"]) and (row["retrievalIds"] or row["previewIds"]):
+            fail(f"Protected day has extra retrieval/preview: {row['date']}")
+        if len(row["retrievalIds"]) > 5:
+            fail("Retrieval exceeds the maintenance allowance")
+        for cid in row["retrievalIds"] + row["previewIds"] + row["practiceChapterIds"]:
+            if cid not in chapter_index:
+                fail(f"Unknown linked chapter {cid}")
+        for cid in row["practiceChapterIds"]:
+            if cid not in plan["prior_chapter_ids"] and exposures[cid] > row["date"]:
+                fail(f"Practice precedes first exposure: {cid} on {row['date']}")
     exams = derive_exams(schedule, plan)
     section_banks = derive_section_banks(schedule, plan)
     phase_map = derive_phase_map(plan)
@@ -961,7 +999,7 @@ def main() -> int:
         }
     )
 
-    source_paths = [SCHEDULE_PATH, PLAN_PATH, CHAPTERS_PATH, GUIDE_PATH, WORKBOOK_PATH, README_PATH]
+    source_paths = [SCHEDULE_PATH, PLAN_PATH, CHAPTERS_PATH, GUIDE_PATH, WORKBOOK_PATH, README_PATH, chapter_map_path]
     payload = {
         "schemaVersion": 1,
         "sourceProvenance": [
@@ -972,6 +1010,7 @@ def main() -> int:
         "phaseMap": phase_map,
         "studyModes": mode_definitions,
         "chapters": chapters,
+        "chapterMap": chapter_map,
         "schedule": schedule,
         "exams": exams,
         "sectionBanks": section_banks,

@@ -98,6 +98,8 @@ export function assignmentTasks(row) {
     if (/^no\b/i.test(target) || (row.isExam && /full[- ]length exam/i.test(target))) return;
     tasks.push({ id: `practice:${index}`, label: `Complete ${target}`, meta: "Practice + review" });
   });
+  if (row.retrievalIds?.length) tasks.push({ id: "retrieval:scheduled", label: `Recall ${row.retrievalIds.join(", ")}`, meta: "About 5 min each, within maintenance" });
+  if (row.previewIds?.length) tasks.push({ id: "preview:scheduled", label: `Preview ${row.previewIds.join(", ")}`, meta: "10 min each; orientation, not chapter completion" });
   return tasks;
 }
 
@@ -125,7 +127,7 @@ export function withDailyTask(state, row, taskId, complete) {
     ...state,
     daily: {
       ...state.daily,
-      [row.id]: { ...existing, status, completedTasks, updatedAt: dailyTimestamp(existing) },
+      [row.id]: { ...existing, status, completedTasks, curriculumRevision: "2026-09-23", updatedAt: dailyTimestamp(existing) },
     },
   };
 }
@@ -140,6 +142,7 @@ export function withDailyCompletion(state, row, complete) {
       [row.id]: {
         ...existing,
         status: complete ? "complete" : "not-started",
+        curriculumRevision: "2026-09-23",
         completedTasks,
         updatedAt: dailyTimestamp(existing),
       },

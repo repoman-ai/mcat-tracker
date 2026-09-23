@@ -122,6 +122,8 @@ export function taskChecklist(row, state) {
   if (!total) return "";
   const daily = state.daily[row.id] || {};
   return `<section class="task-checklist" aria-label="Checklist for ${escapeAttr(row.assignment)}">
+    ${daily.updatedAt && !daily.curriculumRevision && (daily.status === "complete" || Object.values(daily.completedTasks || {}).some(Boolean)) ? '<p class="form-hint">The schedule was revised September 23. Your saved progress and notes remain. Recheck changed assignments before treating this revised block as finished.</p>' : ''}
+    ${row.confirmedChapterIds?.length ? `<p class="form-hint">Previously covered: ${escapeHTML(row.confirmedChapterIds.join(", "))}. This block is retrieval; questions and CARS still need their own check-off.</p>` : ''}
     <header><div><span class="eyebrow">Block checklist</span><h3>${total} ${total === 1 ? "step" : "steps"}</h3></div><strong>${completed}/${total} done</strong></header>
     <ul>${tasks.map((task) => {
       const checked = daily.status === "complete" || daily.completedTasks?.[task.id] === true;
@@ -204,6 +206,7 @@ export function assignmentDetailHTML(row, data, state) {
       </section>
       ${isStudyRow(row) ? `<div class="button-row">${completionButton(row, state, { focusPrefix: "detail-complete" })}<span class="status-badge status-badge--${escapeAttr(daily.status || "not-started")}">${escapeHTML(statusLabel(daily.status))}</span></div>` : ""}
       ${taskChecklist(row, state)}
+      ${(row.chapterIds?.length || row.retrievalIds?.length) ? `<p><a href="#guide/chapter-map">Chapter prerequisites, topic links and retrieval dates</a></p>` : ''}
       <form class="inline-editor" novalidate data-draft-form="day-${escapeAttr(row.id)}" data-day-form="${escapeAttr(row.id)}">
         <h4>Your record for this day</h4><p class="form-hint">Counts are optional. QBank questions exclude CARS passages and full-length exams. Leave blank if unrecorded. Unfinished edits are kept in this tab.</p>
         <p class="muted">Deferred keeps this day unfinished, with its original date. Resume it whenever you are ready.</p>

@@ -10,7 +10,7 @@ import {
   plural,
   todayISO,
   uniqueId,
-} from "../utils.js?v=20260922-6";
+} from "../utils.js?v=20260923-1";
 import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js";
 
 // Completion and sync rerender Today. Keep one timer across those renders so

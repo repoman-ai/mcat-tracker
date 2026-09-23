@@ -24,17 +24,16 @@ for (const week of data.validation.weeklyChecks) {
   assert.equal(week.estimatedHighMinutes, rows.reduce((sum, row) => sum + (row.estimatedWorkload.conditional ? 0 : row.estimatedWorkload.highMinutes), 0));
   assert.ok(week.estimatedLowMinutes <= week.budgetMinutes, `Week ${week.week} exceeds its budget`);
 }
-for (let week = 7; week <= 24; week++) {
-  const rows = data.schedule.filter((row) => row.week === week);
-  assert.equal(rows.reduce((sum, row) => sum + Number(row.practiceTarget.match(/(\d+) (?:B\/B|C\/P|P\/S) Section Bank/)?.[1] || 0), 0), 20);
-  assert.equal(rows.filter((row) => row.isSectionBank).length, 2);
+for (const week of data.validation.weeklyChecks) {
+  assert.ok(week.estimatedHighMinutes <= week.budgetMinutes, `Week ${week.week} high estimate exceeds budget`);
 }
+assert.deepEqual(data.sectionBanks.map(bank => bank.totalQuestions), [120, 120, 120]);
 for (const bank of data.sectionBanks) for (const block of bank.assignments) {
-  assert.equal(block.questions, 10);
+  assert.ok([8, 10, 20].includes(block.questions));
   const row = data.index.scheduleByDate.get(block.date);
   assert.ok(!row.isExam && !row.isFullLengthReview && !row.isRest);
 }
-assert.equal(data.sectionBanks.flatMap((bank) => bank.assignments).map((item) => item.date).sort().at(-1), "2027-03-03");
+assert.equal(data.sectionBanks.flatMap(bank => bank.assignments).map(item => item.date).sort().at(-1), "2027-03-02");
 for (const row of data.schedule.filter((item) => item.isRest || item.isFullLengthReview)) {
   assert.equal(row.carsPassages, 0);
   assert.equal(row.practiceTarget, "");

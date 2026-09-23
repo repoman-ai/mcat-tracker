@@ -30,10 +30,10 @@ This map shows where every authoritative source component appears. `data/site-da
 - Duplicate dates: 0
 - Missing dates: 0
 - Week boundaries: Tuesday-Monday
-- Remaining Kaplan assignments resolved: 78; prior covered chapters: 5; chapter catalog: 83; unknown IDs: 0
+- Dated Kaplan chapter blocks: 78 (includes completed GC04 retrieval); five other chapters covered before this plan; chapter catalog: 83; unknown IDs: 0
 - Plan weeks reconciled: 26 / 26
 - Full-length events: 7
 - Section Bank questions: 360
-- Workload: every mode explicitly costed; every week's low estimate within its budget; upper/midpoint risks shown in Plan
+- Workload: every mode explicitly costed; every week's upper estimate within its budget; estimates and available margin shown in Plan
 - Mastery topics: 40
-- Meaningful guide sections mapped: 9 / 9, plus plan overview and source links
+- All 12 authoritative guide sections mapped, plus the searchable 83-chapter map

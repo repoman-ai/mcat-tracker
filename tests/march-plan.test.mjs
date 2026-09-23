@@ -26,7 +26,7 @@ assert.equal(scheduledWeekForDate(data, "2026-09-29"), 2);
 assert.equal(scheduledWeekForDate(data, "2027-03-19"), 26);
 assert.equal(getTodayContext(data, "2027-03-23").state, "after-plan");
 
-assert.deepEqual(data.exams.map((exam) => exam.plannedDate), ["2026-10-10", "2026-12-12", "2027-01-02", "2027-01-23", "2027-02-06", "2027-02-20", "2027-03-06"]);
+assert.deepEqual(data.exams.map((exam) => exam.plannedDate), ["2026-10-10", "2026-12-26", "2027-01-09", "2027-01-23", "2027-02-06", "2027-02-20", "2027-03-06"]);
 assert.deepEqual(data.exams[0].reviewAssignmentIds, ["2026-10-11", "2026-10-12"]);
 for (const exam of data.exams) {
   const row = data.index.scheduleByDate.get(exam.plannedDate);
@@ -52,7 +52,7 @@ const assigned = data.schedule.flatMap((row) => row.chapterIds);
 assert.equal(assigned.length, 78);
 assert.equal(new Set(assigned).size, 78);
 assert.deepEqual(new Set([...assigned, ...data.plan.prior_chapter_ids]), new Set(data.chapters.map((chapter) => chapter.id)));
-assert.equal(data.schedule.filter((row) => row.chapterIds.length).at(-1).date, "2027-01-20");
+assert.equal(data.schedule.filter((row) => row.chapterIds.length).at(-1).date, "2026-12-21");
 assert.deepEqual(data.sectionBanks.map((bank) => bank.totalQuestions), [120, 120, 120]);
 assert.equal(data.plan.question_targets.uworld_baseline, data.plan.weeks.reduce((sum, week) => sum + week.uworld_questions, 0));
 assert.match(renderPlan(context, {}), /182 dated rows · 26 Tuesday-Monday weeks/);

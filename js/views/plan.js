@@ -1,8 +1,8 @@
 import { focusTarget } from "../view-state.js";
-import { parseRoute } from "../router.js?v=20260922-6";
+import { parseRoute } from "../router.js?v=20260923-1";
 import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js";
 import { taskProgress } from "../daily.js";
-import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20260922-6";
+import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20260923-1";
 import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js";
 
 const defaultFilters = {

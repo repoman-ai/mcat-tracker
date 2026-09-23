@@ -4,11 +4,11 @@ A private, local-first, phone-first MCAT study tracker generated from the author
 
 ## March 2027 plan
 
-The dated plan runs September 22, 2026 through March 22, 2027, with March 19 as the planning exam date. The unscored diagnostic is Saturday, October 10, and six scored AAMC full lengths follow from December through March. Each exam has two protected review days. Five covered chapters are documented locally; the remaining assignments finish their first pass in January. The additional chapter recently completed can be marked in the tracker once identified.
+The dated plan runs September 22, 2026 through March 22, 2027, with March 19 as the planning exam date. The unscored diagnostic is Saturday, October 10, and six scored AAMC full lengths follow from December through March. Each exam has two protected review days. Six covered chapters are documented, including General Chemistry 4 completed September 22. Organic Chemistry starts September 24, and the planned first pass ends December 21. Scored exams run every two weeks December 26–March 6.
 
 The current guide comes from `study-guide.json`; `MCAT_Study_Plan_2026-09-22.docx` is the matching Word copy. The standalone XLSX contains the 182-day schedule and 26-week tracker. It supplies mistake-log fields and mastery topics to the website; website exports add current browser/cloud progress.
 
-The September 22 review protects Friday before every full-length exam and checks that all 26 weeks contain a rest day. The diagnostic week's 10 UWorld questions are redistributed across Tuesday–Thursday; question totals, chapter dates, exam dates, and review days are preserved. Today now credits individual completed steps in weekly momentum, links directly to each day, and surfaces weekly workload risk. A registered exam date different from the plan displays an explicit schedule-alignment warning. See [the review record](REVIEW_2026-09-22.md).
+The September 23 revision audits all 26 weeks and all 83 chapters. It replaces the fixed chapter queue with prerequisite-based topic sequences, dated retrieval and topic-matched practice. All high workload estimates fit the ceilings; narrow margins and repair rules remain explicit. Read [the curriculum audit](CURRICULUM_AUDIT.md) and [the chapter map](CHAPTER_MAP.md). Guide also includes a searchable chapter map. Existing date IDs, local/cloud records and stable chapter checklist IDs remain; previously checked revised assignments carry a recheck notice.
 
 No build step, no framework. Plain HTML, CSS, and ES modules. It always saves locally, and after you unlock it with a PIN it keeps the same progress on your phone and your computer.
 
@@ -54,21 +54,22 @@ The generator reads only these files from the parent directory:
 - `plan.json`
 - `kaplan-mcat-books.md`
 - `study-guide.json`
+- `chapter-map.json`
 - `MCAT_520_Plus_Mistake_Log.xlsx`
 
 It refuses to write output unless the sources pass every integrity check: the complete date range declared in `plan.json` (currently 182 continuous dated rows), no duplicate or missing dates, 26 Tuesday–Monday weeks, all 83 chapter IDs accounted for across covered and assigned chapters, weekly CARS and UWorld totals matching `plan.json`, seven Saturday full-lengths with two review days each, 120 core Section Bank questions per science section, and complete guide/mastery coverage.
 
 Files in `archive/` are superseded versions and are **not** sources.
 
-Opening weeks use small reviewed practice sets and three CARS passages each. Full-lengths contribute nine CARS passages. Thanksgiving, Christmas, and New Year's Day are protected rest days. Weekly totals are reconciled at generation time.
+Opening weeks use small reviewed practice sets and three CARS passages each. GC04 is a confirmed prior exposure on its original date; its retrieval and practice are still scheduled. Full-lengths contribute nine CARS passages. Thanksgiving, Christmas, and New Year's Day are protected rest days. Weekly totals are reconciled at generation time.
 
 ### Workload review
 
 Weekly hours are capacity ceilings; inferred durations are advisory ranges. Generation fails when a week's low estimate exceeds its budget. Plan shows upper-bound risk when slower reading or review could exceed capacity. No estimate is clamped to a week number. Mode costs are explicit, unknown modes fail, and question costs include answer review.
 
-The core plan has 222 UWorld science questions and 360 Section Bank questions. Another 240 Section Bank questions remain optional reserve and never become overdue. Weeks 7–24 include two 10-question Section Bank blocks each. A scheduled CARS passage comes from the UWorld QBank, but its questions are tracked separately from science-question volume. The October diagnostic and six official AAMC exams are scheduled.
+The core plan has 222 UWorld science questions and 360 Section Bank questions. Another 240 Section Bank questions remain optional reserve and never become overdue. Section Banks begin with introduced-topic blocks in weeks 10, 11 and 13. Thereafter, exam weeks have 10 questions and intervening weeks have 48 mixed questions. Every section still totals 120. A scheduled CARS passage comes from the UWorld QBank, but its questions are tracked separately from science-question volume. The October diagnostic and six official AAMC exams are scheduled.
 
-Every weekly low estimate fits its ceiling. Upper estimates remain visible because unfamiliar chapters can take longer. Prioritize answer review, reduce new volume, and replan after two actual overruns. Existing history remains preserved; backup import distinguishes current-plan records from history.
+Every weekly high estimate fits its ceiling. Rest days have zero required work; short previews cost an explicit ten minutes each. Upper estimates remain visible because unfamiliar chapters can take longer. Prioritize answer review, reduce new volume, and replan after two actual overruns. Existing history remains preserved; backup import distinguishes current-plan records from history.
 
 Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`.
 
