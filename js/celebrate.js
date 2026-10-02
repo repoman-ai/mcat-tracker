@@ -1,5 +1,5 @@
-import { isStudyRow, weekRows } from "./data.js";
-import { todayISO } from "./utils.js";
+import { isStudyRow, weekRows } from "./data.js?v=20261002-1";
+import { todayISO } from "./utils.js?v=20261002-1";
 
 export function reducedMotion(setting, systemReduced = false) {
   return setting === "on" || (setting !== "off" && systemReduced);

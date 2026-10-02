@@ -1,9 +1,9 @@
-import { focusTarget } from "../view-state.js";
-import { parseRoute } from "../router.js?v=20260923-1";
-import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js";
-import { taskProgress } from "../daily.js";
-import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20260923-1";
-import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js";
+import { focusTarget } from "../view-state.js?v=20261002-1";
+import { parseRoute } from "../router.js?v=20261002-1";
+import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js?v=20261002-1";
+import { taskProgress } from "../daily.js?v=20261002-1";
+import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20261002-1";
+import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js?v=20261002-1";
 
 const defaultFilters = {
   phase: "all",
@@ -66,6 +66,9 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
   const workload = context.data.validation.weeklyChecks.find((check) => check.week === week.week);
   const estimate = workload ? `${(workload.estimatedLowMinutes / 60).toFixed(1)}–${(workload.estimatedHighMinutes / 60).toFixed(1)} hr` : "Not available";
   const reserve = context.data.plan.buffer_policy?.week === week.week ? context.data.plan.buffer_policy : null;
+  const practiceParts = rows.flatMap((row) => String(row.practiceTarget || "").split(";"));
+  const uworld = practiceParts.filter((part) => /UWorld science/i.test(part)).reduce((sum, part) => sum + countPracticeQuestions(part), 0);
+  const sectionBank = practiceParts.filter((part) => /Section Bank/i.test(part)).reduce((sum, part) => sum + countPracticeQuestions(part), 0);
   const warning = workload?.capacityRisk === "midpoint-over-budget"
     ? "Capacity risk: even the range midpoint exceeds the budget. Prioritize review, trim lower-priority volume, and replan if actual time confirms the overrun."
     : workload?.capacityRisk === "upper-over-budget"
@@ -75,13 +78,13 @@ function weekCard(week, rows, context, currentWeek, detail, today) {
     <details class="week-card" ${open ? "open" : ""} id="week-${week.week}">
       <summary>
         <div class="week-number"><span>Week</span><strong>${week.week}</strong></div>
-        <div class="week-summary"><span class="eyebrow">${escapeHTML(week.phase)} · ${week.planned_hours} planned hours</span><h3>${escapeHTML(week.focus)}</h3><p>${escapeHTML(week.milestone)}</p><p>Advisory estimate: ${escapeHTML(estimate)}${workload?.capacityRisk === "midpoint-over-budget" ? " · Capacity risk" : ""}</p></div>
+        <div class="week-summary"><span class="eyebrow">${escapeHTML(week.phase)} · ${week.planned_hours}-hour ceiling</span><h3>${escapeHTML(week.focus)}</h3><p>${escapeHTML(week.milestone)}</p></div>
         <div class="week-score"><strong>${completed}/${studyDays}</strong><span>days</span></div><span class="disclosure-icon" aria-hidden="true">⌄</span>
       </summary>
       <div class="week-card__body">
-        <p class="muted">${escapeHTML(warning)} <a href="#guide/honest-time-templates">Budget and estimate rules</a></p>
+        <p class="muted">Estimated work: ${escapeHTML(estimate)}, including answer review. ${escapeHTML(warning)} <a href="#guide/honest-time-templates">Budget and estimate rules</a></p>
         ${reserve ? `<p class="guide-callout">Reserve at least ${escapeHTML(reserve.minimum_unassigned_minutes / 60)} hours for unfinished exam review or missed core work within the ${escapeHTML(week.planned_hours)}-hour ceiling. If current, stop early; do not add optional questions.</p>` : ""}
-        <div class="week-targets"><span><strong>${rows.reduce((sum, row) => sum + countPracticeQuestions(row.practiceTarget), 0)}</strong> QBank questions</span><span><strong>${week.cars_passages}</strong> CARS passages</span>${week.exam_or_section_bank ? `<span><strong>${escapeHTML(week.exam_or_section_bank)}</strong> event</span>` : ""}</div>
+        <div class="week-targets"><span><strong>${uworld + sectionBank}</strong> QBank questions (${uworld} UWorld science + ${sectionBank} Section Bank)</span><span><strong>${week.cars_passages}</strong> CARS passages${rows.some((row) => row.isExam) ? " (including the exam)" : ""}</span>${week.exam_or_section_bank ? `<span><strong>${escapeHTML(week.exam_or_section_bank)}</strong> event</span>` : ""}</div>
         <div class="plan-days">${matching.map((row) => dayCard(row, context, row.date === detail, today)).join("")}</div>
       </div>
     </details>`;

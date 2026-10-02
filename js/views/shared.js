@@ -1,9 +1,9 @@
-import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js";
-import { enableSwipeComplete } from "../gestures.js";
-import { captureViewState } from "../view-state.js";
-import { getModeDetails, isStudyRow, modeLabel } from "../data.js";
-import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount } from "../daily.js";
-import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js";
+import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261002-1";
+import { enableSwipeComplete } from "../gestures.js?v=20261002-1";
+import { captureViewState } from "../view-state.js?v=20261002-1";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261002-1";
+import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount } from "../daily.js?v=20261002-1";
+import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261002-1";
 
 export function statusLabel(status = "not-started") {
   return {
@@ -273,7 +273,9 @@ export function bindAssignmentDetail(scope, context) {
         ? Object.fromEntries(assignmentTasks(row).map((task) => [task.id, status === "complete"])) : existing.completedTasks;
       context.updateState({ ...context.state, daily: { ...context.state.daily, [id]: {
         ...withDailyStatus(context.state, id, status).daily[id],
-        ...(completedTasks ? { completedTasks } : {}), actualQuestions, actualCars, notes: form.elements.notes.value,
+        ...(completedTasks ? { completedTasks } : {}),
+        ...(["complete", "not-started"].includes(status) ? { curriculumRevision: "2026-09-23" } : {}),
+        actualQuestions, actualCars, notes: form.elements.notes.value,
       } } }, { success: "Day saved", onSaved: () => { clearEditorDraft(`day-${id}`); if (typeof scope.close === "function") scope.close(); } });
     });
   });

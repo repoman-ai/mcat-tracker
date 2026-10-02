@@ -5,7 +5,13 @@ index, live application, and Supabase project before continuing.
 
 ## March 2027 plan — current
 
-The active 26-week schedule runs September 22, 2026 through March 22, 2027, with March 19 as the planning MCAT date. The October 10 AAMC unscored diagnostic and six scored official full lengths each have two protected review days. The first pass of assigned chapters ends January 20; five prior covered chapters are documented. The user's additional completed chapter is not identified in the local source files yet. The static site reads regenerated `data/site-data.json`, and the parent workspace holds the matching schedule, guide, Word file, and workbook. See the parent `README.md` and current `CONTENT_MAP.md` for source and validation details.
+The active 26-week schedule runs September 22, 2026 through March 22, 2027, with March 19 as the planning MCAT date. All 83 chapters finish their first pass by December 21. GC01–03 and PHY10–11 were previously covered; GC04 was confirmed completed September 22, without inferring any question completion. Organic Chemistry starts September 24. October 10 is an early progress diagnostic, not a cold baseline: the user confirmed no earlier timed full length. The six scored full lengths are December 26, January 9/23, February 6/20 and March 6. Each has Friday rest and two protected review days.
+
+Core targets are 222 UWorld science questions, 360 Section Bank questions (120 per section), and 167 CARS passages including 63 in full lengths. Another 240 Section Bank questions remain optional. Weeks 11 and 13 have Section Bank practice despite zero UWorld science questions. P/S Section Bank starts November 14. Week 19 reserves at least four hours within its 13-hour ceiling. All weekly upper estimates fit; actual overruns still require replacing lower-priority work with review.
+
+The curriculum and feedback revisions were published in commits 44f5d74 and a6995e8. Parent schedule, guide, Word document, workbook and chapter map are updated. See CURRICULUM_AUDIT.md and FEEDBACK_REVIEW.md for rationale and source limits (chapter/subsection outlines only, no full chapter text). SITE_SANITY_2026-10-02.md records the subsequent website checks. Saved date IDs, notes, task progress and actual counts remain in the existing storage schema.
+
+The notes below are historical snapshots, not outstanding implementation requests or the current schedule.
 
 ## Earlier implementation notes
 
@@ -31,9 +37,7 @@ coverage in `tests/gestures.test.mjs`.
 
 ## UI/UX audit implementation — September 3, 2026
 
-Read [IMPLEMENTATION_HANDOFF_2026-09-03.md](IMPLEMENTATION_HANDOFF_2026-09-03.md) first for the current
-local changes, verification, limits, and continuation prompt. The core revised audit plan is implemented
-in the working tree, not published. It supersedes older descriptions below of Today’s layout, eager
+Historical reference: [IMPLEMENTATION_HANDOFF_2026-09-03.md](IMPLEMENTATION_HANDOFF_2026-09-03.md). That audit was subsequently published; its continuation prompt is not an outstanding task. It supersedes older descriptions below of Today’s layout, eager
 Plan editors, timer behavior, and Undo restoring old timestamps. Current Undo preserves prior values
 with a fresh timestamp; actual counts remain independent of checklist completion.
 

@@ -80,6 +80,7 @@ export function assignmentTasks(row) {
       const parts = row.assignment.split(/\s+\+\s+|;\s+/).map((label, index) => ({ label: label.trim(), index })).filter(({ label }) => label);
       const actionable = parts.filter(({ label }) => {
         if (/^stop (?:broad studying|early)$/i.test(label)) return false;
+        if (/^leave catch-up capacity unassigned$/i.test(label)) return false;
         if (/section bank$/i.test(label) && /section bank/i.test(row.practiceTarget || "")) return false;
         if (/^light cars$/i.test(label) && /cars passage/i.test(row.practiceTarget || "")) return false;
         return true;

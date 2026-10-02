@@ -1,5 +1,5 @@
-import { deriveCredentialPassword, derivePassword, normalizeEmail } from "./pin.js";
-import { isEmailIdentifier, normalizeLoginIdentifier, validateLoginUsername } from "./username.js";
+import { deriveCredentialPassword, derivePassword, normalizeEmail } from "./pin.js?v=20261002-1";
+import { isEmailIdentifier, normalizeLoginIdentifier, validateLoginUsername } from "./username.js?v=20261002-1";
 
 export const GENERIC_AUTH_ERROR = "That email or username and PIN combination did not match. Check both and try again.";
 

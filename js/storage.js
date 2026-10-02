@@ -1,6 +1,6 @@
-import { parseActualCount } from "./daily.js";
-import { focusMinutes } from "./focus-timer.js";
-import { APP_VERSION, uniqueId } from "./utils.js";
+import { parseActualCount } from "./daily.js?v=20261002-1";
+import { focusMinutes } from "./focus-timer.js?v=20261002-1";
+import { APP_VERSION, uniqueId } from "./utils.js?v=20261002-1";
 
 export const STORAGE_KEY = "mcatMomentum.state.v2";
 export const SCHEMA_VERSION = 3;

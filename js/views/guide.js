@@ -1,6 +1,6 @@
-import { focusTarget } from "../view-state.js";
-import { debounce, escapeAttr, escapeHTML, safeExternalUrl } from "../utils.js";
-import { emptyState } from "./shared.js";
+import { focusTarget, scrollInstantly } from "../view-state.js?v=20261002-1";
+import { debounce, escapeAttr, escapeHTML, safeExternalUrl } from "../utils.js?v=20261002-1";
+import { emptyState } from "./shared.js?v=20261002-1";
 
 let guideQuery = "";
 
@@ -51,6 +51,17 @@ function sectionMatches(section, query) {
 
 function matchingBlocks(section, query) {
   if (!query) return section.blocks;
+  if (section.id === "chapter-map") {
+    // A chapter's title, prerequisites and dates form one record. Matching a
+    // single paragraph would either orphan the dates or hide them entirely.
+    const groups = [];
+    for (const block of section.blocks) {
+      if (block.type === "heading" || !groups.length) groups.push([]);
+      groups.at(-1).push(block);
+    }
+    const matches = groups.filter((group) => group.some((block) => blockText(block).toLowerCase().includes(query.toLowerCase())));
+    return matches.length ? matches.flat() : section.blocks;
+  }
   const matches = section.blocks.filter((block) => blockText(block).toLowerCase().includes(query.toLowerCase()));
   return matches.length ? matches : section.blocks;
 }
@@ -59,9 +70,9 @@ export function renderGuide(context, route, { isRouteChange = true } = {}) {
   if (isRouteChange) guideQuery = "";
   const query = guideQuery.trim();
   const sections = context.data.guide.sections.filter((section) => sectionMatches(section, query));
-  return `<header class="view-header"><div><span class="eyebrow">Complete meaningful content from the study guide</span><h1>Guide</h1><p>Search the operating rules, phases, time templates, exam guidance, decision rules, registration, and source links.</p></div><a class="button" href="#today">Back to Today</a></header>
-    <section class="guide-search-panel"><label class="guide-search">Search guide<input type="search" data-guide-search data-view-focus="guide-search" value="${escapeAttr(guideQuery)}" placeholder="Try “CARS,” “March,” “full-length review”…"><span role="status">${sections.length} matching section${sections.length === 1 ? "" : "s"}</span></label></section>
-    ${guideQuery ? '<button class="button button--quiet" type="button" data-guide-clear>Clear search</button>' : `<section class="guide-context-cards" aria-label="Frequently needed guidance"><a href="#guide/operating-rules"><span>When you sit down</span><strong>Operating rules</strong></a><a href="#guide/full-length-and-section-bank-schedule"><span>Before an exam</span><strong>Full-length + SB schedule</strong></a><a href="#guide/readiness-check"><span>At the evidence checkpoint</span><strong>Readiness check</strong></a><a href="#guide/registration-and-resource-controls"><span>After registration</span><strong>Date + resources</strong></a></section>`}
+  return `<header class="view-header"><div><span class="eyebrow">Your study reference</span><h1>Guide</h1><p>Search chapter IDs and topics, prerequisites, review dates, time budgets, exam guidance, and source links.</p></div><a class="button" href="#today">Back to Today</a></header>
+    <section class="guide-search-panel"><label class="guide-search">Search guide<input type="search" data-guide-search data-view-focus="guide-search" value="${escapeAttr(guideQuery)}" placeholder="Try “PS03,” “CARS,” “full-length review”…"><span role="status">${sections.length} matching section${sections.length === 1 ? "" : "s"}</span></label></section>
+    ${guideQuery ? '<button class="button button--quiet" type="button" data-guide-clear>Clear search</button>' : `<section class="guide-context-cards" aria-label="Frequently needed guidance"><a href="#guide/chapter-map"><span>Chapter order + spaced review</span><strong>Chapter map</strong></a><a href="#guide/operating-rules"><span>When you sit down</span><strong>Operating rules</strong></a><a href="#guide/full-length-and-section-bank-schedule"><span>Before an exam</span><strong>Full-length + SB schedule</strong></a><a href="#guide/readiness-check"><span>At the evidence checkpoint</span><strong>Readiness check</strong></a><a href="#guide/registration-and-resource-controls"><span>After registration</span><strong>Date + resources</strong></a></section>`}
     <section class="guide-sections" aria-label="Study guide content">${sections.length ? sections.map((section, index) => `<details class="guide-section" id="guide-section-${escapeAttr(section.id)}" data-guide-section="${escapeAttr(section.id)}" ${route.detail === section.id || (guideQuery && index === 0) ? "open" : ""}><summary><span>${escapeHTML(section.title)}</span><span class="disclosure-icon" aria-hidden="true">⌄</span></summary><article>${matchingBlocks(section, query).map((block) => renderBlock(block, query)).join("")}</article></details>`).join("") : emptyState("No guide results", `Nothing matched “${guideQuery}”. Try a broader term.`)}</section>
 `;
 }
@@ -69,7 +80,15 @@ export function renderGuide(context, route, { isRouteChange = true } = {}) {
 export function bindGuide(container, context, route, { isRouteChange = true } = {}) {
   const search = container.querySelector("[data-guide-search]");
   let composing = false;
-  const searchChanged = debounce(() => { if (composing || !search.isConnected) return; guideQuery = search.value; context.rerender(); }, 250);
+  const searchChanged = debounce(() => {
+    if (composing || !search.isConnected) return;
+    guideQuery = search.value;
+    context.rerender();
+    // Search is sticky: retaining a deep chapter-map scroll position can hide
+    // the first matching record even while the search box remains on screen.
+    const view = container.ownerDocument?.defaultView;
+    if (view) scrollInstantly(view);
+  }, 250);
   search?.addEventListener("compositionstart", () => { composing = true; });
   search?.addEventListener("compositionend", () => { composing = false; searchChanged(); });
   search?.addEventListener("input", searchChanged);
