@@ -8,8 +8,8 @@
     },
     {
       "file": "plan.json",
-      "sha256": "a12c3aebdd067d847dca56693f4d4e67a156281ca998a16f2194b6b2ca90b0e6",
-      "bytes": 17817
+      "sha256": "6a185fcadfa41cfbf44bbe79704ca43230e3937dd39d34757a053cc577c85ed4",
+      "bytes": 17903
     },
     {
       "file": "kaplan-mcat-books.md",
@@ -55,7 +55,7 @@
       "uworld_evidence_driven_range": "Core 336 reviewed science questions from October 7. Two sets per content week, generally 15-24 questions weekly. Increase only if actual answer review and content fit the unchanged ceiling.",
       "section_bank": 360,
       "section_bank_reserve": 240,
-      "cars_ramp": "Three reviewed passages per week at first, then four to five; a full length adds nine passages.",
+      "cars_ramp": "Three to four reviewed passages outside exams in most weeks; five in week 17. Each full length adds nine passages. No extra passage quota during the October restart/diagnostic week.",
       "section_bank_by_section": {
         "B/B": 120,
         "C/P": 120,
@@ -582,25 +582,25 @@
       "id": "full-read",
       "name": "Full read",
       "summary": "Use for likely-dead foundations; complete objectives, concept checks, short closed-book summary, then questions.",
-      "whenToUse": "Use the diagnostic confidence rule in the plan.",
-      "requiredOutput": "Use for likely-dead foundations; complete objectives, concept checks, short closed-book summary, then questions.",
-      "completeInstructions": "Use for likely-dead foundations; complete objectives, concept checks, short closed-book summary, then questions."
+      "whenToUse": "Unfamiliar foundation",
+      "requiredOutput": "Objectives, checks, closed-book summary, then questions",
+      "completeInstructions": "Use for likely-dead foundations; complete objectives, concept checks, short closed-book summary, then questions. Unfamiliar foundation Objectives, checks, closed-book summary, then questions"
     },
     {
       "id": "objectives-checks",
       "name": "Objectives + checks",
       "summary": "Read objectives/summary, complete checks, then reread only gaps exposed by recall or questions.",
-      "whenToUse": "Use the diagnostic confidence rule in the plan.",
-      "requiredOutput": "Read objectives/summary, complete checks, then reread only gaps exposed by recall or questions.",
-      "completeInstructions": "Read objectives/summary, complete checks, then reread only gaps exposed by recall or questions."
+      "whenToUse": "Rusty but partly familiar",
+      "requiredOutput": "Checks first, then reread exposed gaps",
+      "completeInstructions": "Read objectives/summary, complete checks, then reread only gaps exposed by recall or questions. Rusty but partly familiar Checks first, then reread exposed gaps"
     },
     {
       "id": "questions-first",
       "name": "Questions first",
       "summary": "Attempt questions/passages first, then use the chapter only for exposed gaps.",
-      "whenToUse": "Use the diagnostic confidence rule in the plan.",
-      "requiredOutput": "Attempt questions/passages first, then use the chapter only for exposed gaps.",
-      "completeInstructions": "Attempt questions/passages first, then use the chapter only for exposed gaps."
+      "whenToUse": "Familiar topic or strategy",
+      "requiredOutput": "Passages or questions, then targeted text",
+      "completeInstructions": "Attempt questions/passages first, then use the chapter only for exposed gaps. Familiar topic or strategy Passages or questions, then targeted text"
     },
     {
       "id": "rapid-review",

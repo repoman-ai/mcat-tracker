@@ -839,7 +839,10 @@ def find_guide_mode_table(guide: dict[str, Any]) -> dict[str, dict[str, str]]:
     result: dict[str, dict[str, str]] = {}
     for section in guide["sections"]:
         for block in section["blocks"]:
-            if block["type"] != "table" or block["headers"][:3] != ["Mode", "When to use", "Required output"]:
+            if block["type"] != "table" or block["headers"][:3] not in (
+                ["Mode", "When to use", "Required output"],
+                ["Study mode", "Use it when", "Finish with"],
+            ):
                 continue
             for row in block["rows"]:
                 if len(row) >= 3:

@@ -1,4 +1,4 @@
-import { normalizeEmail } from "./pin.js?v=20261007-1";
+import { normalizeEmail } from "./pin.js?v=20261007-2";
 
 // Shared by the normal sign-in client and the recovery-page client. Using the
 // same key lets a recovery session replace any stale signed-out session cleanly.

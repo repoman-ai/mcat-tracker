@@ -71,6 +71,8 @@ The core plan has 336 UWorld science questions, grouped into two reviewed sets p
 
 Every weekly high estimate fits its ceiling. Rest days have zero required work; short previews cost an explicit ten minutes each. Upper estimates remain visible because unfamiliar chapters can take longer. Prioritize answer review, reduce new volume, and replan after two actual overruns. Existing history remains preserved; backup import distinguishes current-plan records from history.
 
+Editing one checklist step or saving notes on an older completed day keeps the revision notice. After reviewing all revised steps, confirm the checklist in the day record or explicitly complete the day. Counts and notes are preserved, including zero counts and imported records without timestamps.
+
 Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`.
 
 ### Planned exam date

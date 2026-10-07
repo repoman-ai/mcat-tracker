@@ -1,9 +1,9 @@
-import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-1";
-import { enableSwipeComplete } from "../gestures.js?v=20261007-1";
-import { captureViewState } from "../view-state.js?v=20261007-1";
-import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-1";
-import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount, CURRICULUM_REVISION } from "../daily.js?v=20261007-1";
-import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-1";
+import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-2";
+import { enableSwipeComplete } from "../gestures.js?v=20261007-2";
+import { captureViewState } from "../view-state.js?v=20261007-2";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-2";
+import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount, CURRICULUM_REVISION, needsCurriculumRecheck } from "../daily.js?v=20261007-2";
+import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-2";
 
 export function statusLabel(status = "not-started") {
   return {
@@ -122,7 +122,7 @@ export function taskChecklist(row, state) {
   if (!total) return "";
   const daily = state.daily[row.id] || {};
   return `<section class="task-checklist" aria-label="Checklist for ${escapeAttr(row.assignment)}">
-    ${daily.updatedAt && daily.curriculumRevision !== CURRICULUM_REVISION && (daily.status === "complete" || Object.values(daily.completedTasks || {}).some(Boolean)) ? '<p class="form-hint">The schedule was revised October 7. Your saved progress and notes remain. Recheck changed assignments before treating this revised block as finished.</p>' : ''}
+    ${needsCurriculumRecheck(daily) ? '<p class="form-hint">The schedule was revised October 7. Your saved progress and notes remain. Recheck changed assignments before treating this revised block as finished. Confirm the revised checklist in your day record after reviewing each step.</p>' : ''}
     ${row.confirmedChapterIds?.length ? `<p class="form-hint">Previously covered: ${escapeHTML(row.confirmedChapterIds.join(", "))}. This block is retrieval; questions and CARS still need their own check-off.</p>` : ''}
     <header><div><span class="eyebrow">Block checklist</span><h3>${total} ${total === 1 ? "step" : "steps"}</h3></div><strong>${completed}/${total} done</strong></header>
     <ul>${tasks.map((task) => {
@@ -218,6 +218,7 @@ export function assignmentDetailHTML(row, data, state) {
           <label>Recorded CARS passages<input name="actualCars" data-detail-cars data-assignment-id="${escapeAttr(row.id)}" type="number" min="0" step="1" inputmode="numeric" value="${escapeAttr(daily.actualCars ?? "")}" placeholder="Planned: ${row.carsPassages || 0}"></label>
         </div>
         <label>Notes<textarea name="notes" data-detail-notes data-assignment-id="${escapeAttr(row.id)}" rows="4" placeholder="What clicked? What needs repair?">${escapeHTML(daily.notes || "")}</textarea></label>
+        ${needsCurriculumRecheck(daily) ? '<label class="check-control"><input type="checkbox" name="confirmRevision"><span>I have rechecked the revised checklist. My selected status reflects the current assignments.</span></label>' : ''}
         <p class="form-error" data-day-error role="alert"></p><div class="button-row"><button class="button button--primary" type="submit" data-save-day="${escapeAttr(row.id)}">Save day</button><button class="button button--quiet" type="button" data-use-planned>Use planned amounts: ${countPracticeQuestions(row.practiceTarget)} questions, ${row.carsPassages || 0} CARS</button></div>
       </form>
       <details class="assignment-reference" data-view-key="reference-${escapeAttr(row.id)}"><summary>Assignment reference and study guidance</summary>
@@ -269,12 +270,14 @@ export function bindAssignmentDetail(scope, context) {
       const existing = context.state.daily[id] || {};
       const row = context.data.index.scheduleByDate.get(id);
       const status = form.elements.status.value;
-      const completedTasks = ["complete", "not-started"].includes(status)
+      const acknowledge = !needsCurriculumRecheck(existing) || form.elements.confirmRevision?.checked
+        || status === "not-started" || (status === "complete" && existing.status !== "complete");
+      const completedTasks = acknowledge && ["complete", "not-started"].includes(status)
         ? Object.fromEntries(assignmentTasks(row).map((task) => [task.id, status === "complete"])) : existing.completedTasks;
       context.updateState({ ...context.state, daily: { ...context.state.daily, [id]: {
         ...withDailyStatus(context.state, id, status).daily[id],
         ...(completedTasks ? { completedTasks } : {}),
-        ...(["complete", "not-started"].includes(status) ? { curriculumRevision: CURRICULUM_REVISION } : {}),
+        ...(acknowledge && (["complete", "not-started"].includes(status) || form.elements.confirmRevision?.checked) ? { curriculumRevision: CURRICULUM_REVISION } : {}),
         actualQuestions, actualCars, notes: form.elements.notes.value,
       } } }, { success: "Day saved", onSaved: () => { clearEditorDraft(`day-${id}`); if (typeof scope.close === "function") scope.close(); } });
     });

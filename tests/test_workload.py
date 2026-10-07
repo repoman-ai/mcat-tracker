@@ -18,6 +18,16 @@ def row(**changes):
 
 
 class WorkloadTests(unittest.TestCase):
+    def test_current_and_legacy_guide_mode_tables_supply_execution_details(self):
+        for headers in (["Mode", "When to use", "Required output"],
+                        ["Study mode", "Use it when", "Finish with"]):
+            with self.subTest(headers=headers):
+                guide = {"sections": [{"blocks": [{"type": "table", "headers": headers,
+                    "rows": [["Full read", "Unfamiliar foundation", "Closed-book summary"]]}]}]}
+                modes = g.build_mode_definitions({"study_modes": {"Full read": "Read foundations"}}, guide)
+                self.assertEqual(modes[0]["whenToUse"], "Unfamiliar foundation")
+                self.assertEqual(modes[0]["requiredOutput"], "Closed-book summary")
+
     def test_daily_notes_are_used_without_stale_stop_excerpts(self):
         self.assertEqual(g.TODAY_STOP_RULES, {})
         self.assertEqual(g.stop_rule_for(dict(date="2026-09-22", notes="Review every answer")), "")
