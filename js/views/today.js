@@ -1,3 +1,4 @@
+import { motivationContext } from "../motivation.js?v=20261007-3";
 import { createFocusTimer, focusMinutes } from "../focus-timer.js?v=20261007-2";
 import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js?v=20261007-2";
 import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261007-2";
@@ -117,7 +118,24 @@ export function dayTitle(row) {
   return subjects.length ? subjects.join(" + ") : row.assignment;
 }
 
-export function renderToday(context, route = {}, { isRouteChange = true } = {}) {
+function studyMessage(context, today, isRouteChange) {
+  const eligibility = motivationContext(context.data, context.state, today);
+  const message = context.motivation?.get(eligibility, today, { revisit: isRouteChange });
+  if (!message) return "";
+  if (message.dismissed) return `<div class="study-message-restore"><button class="button button--quiet" type="button" data-restore-study-message data-view-focus="study-message">Show study message</button></div>`;
+  const label = message.section === "motivation" ? "Credit where it's due" : "";
+  const countdownLabel = ([11, 12].includes(message.phraseId) || String(message.phraseId).startsWith("early-"))
+    ? `<span class="study-message__countdown">${eligibility.days} days · ${eligibility.registered ? "registered exam" : "planning date"}</span>` : "";
+  const heading = label || countdownLabel
+    ? `<div class="study-message__heading">${label ? `<span class="eyebrow"><span aria-hidden="true">✦</span> ${escapeHTML(label)}</span>` : ""}${countdownLabel}</div>` : "";
+  return `<aside class="study-message study-message--${message.section}${heading ? "" : " study-message--no-heading"}" aria-label="Study message" data-study-message ${focus.timer ? "hidden" : ""}>
+    ${heading}<button class="button button--quiet study-message__dismiss" type="button" data-dismiss-study-message data-view-focus="study-message" aria-label="Hide study messages for today" title="Hide for today">×</button>
+    <p>${escapeHTML(message.text)}</p>
+    <button class="study-message__action" type="button" data-go-to-study data-view-focus="go-to-study">Today's block <span aria-hidden="true">↓</span></button>
+  </aside>`;
+}
+
+export function renderToday(context, route = {}, { isRouteChange = true, revisit = false } = {}) {
   const { data, state } = context;
   const today = todayISO();
   const completed = completedRows(data, state);
@@ -147,7 +165,8 @@ export function renderToday(context, route = {}, { isRouteChange = true } = {}) 
   const greeting = displayName
     ? `${escapeHTML(heading)}, <span class="today-greeting-name" title="${escapeAttr(displayName)}">${escapeHTML(displayName)}</span>`
     : escapeHTML(heading);
-  return `<header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(timing)}</span><h1>${greeting}</h1></div></header>
+  return `${studyMessage(context, today, isRouteChange || revisit)}
+    <header class="view-header today-header"><div><span class="eyebrow">${escapeHTML(timing)}</span><h1>${greeting}</h1></div></header>
     ${todayTabs(completed.length)}
     ${catchUpSection(pending, state, today)}
     <div class="today-grid"><div class="today-main">
@@ -194,11 +213,30 @@ export function bindToday(container, context, route = { detail: "" }) {
     context.openQuickLog(row);
   });
 
+  container.querySelector("[data-go-to-study]")?.addEventListener("click", () => {
+    const assignment = container.querySelector("#today-assignment");
+    assignment?.scrollIntoView({ block: "start", behavior: "instant" });
+    assignment?.focus({ preventScroll: true });
+  });
+
+  container.querySelector("[data-dismiss-study-message]")?.addEventListener("click", () => {
+    context.motivation.dismiss(todayISO());
+    context.rerender();
+    container.querySelector("[data-restore-study-message]")?.focus({ preventScroll: true });
+  });
+  container.querySelector("[data-restore-study-message]")?.addEventListener("click", () => {
+    context.motivation.restore();
+    context.rerender();
+    container.querySelector("[data-dismiss-study-message]")?.focus({ preventScroll: true });
+  });
+
   const clock = container.querySelector("[data-focus-clock]");
   const toggle = container.querySelector("[data-focus-toggle]");
   const finish = container.querySelector("[data-focus-finish]");
   if (clock && toggle && finish) {
     focus.paint = () => {
+      const message = container.querySelector("[data-study-message]");
+      if (message) message.hidden = Boolean(focus.timer);
       clock.value = `${String(Math.floor(elapsedClock.remaining / 60)).padStart(2, "0")}:${String(elapsedClock.remaining % 60).padStart(2, "0")}`;
       clock.textContent = clock.value;
       toggle.textContent = elapsedClock.remaining === 0 ? "Save block" : focus.timer ? "Pause" : focus.startedAt ? "Resume" : "Start";

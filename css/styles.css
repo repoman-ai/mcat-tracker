@@ -861,3 +861,23 @@ html[data-reduce-motion="on"] *, html[data-reduce-motion="on"] *::before, html[d
 
 .draft-conflict { margin-bottom: 1rem; overflow-wrap: anywhere; }
 .draft-conflict dd { margin: .25rem 0 .75rem; white-space: pre-wrap; font-size: .85rem; }
+
+/* First thing on Today: strong contrast and readable, headline-size copy. */
+.study-message { position: relative; --message-accent: #ffcb83; min-width: 0; margin-bottom: 1.25rem; padding: 1.15rem 1.25rem .9rem; border: 1px solid #30434c; border-top: 5px solid var(--message-accent); border-radius: 1.15rem; background: #233842; color: #fffaf1; box-shadow: 0 8px 22px rgba(20, 40, 50, .14); }
+.study-message--motivation { --message-accent: #afe5bf; border-color: #2e5549; border-top-color: var(--message-accent); background: #1d4034; }
+.study-message__heading { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .75rem; padding-right: 2.7rem; position: relative; margin-bottom: .75rem; min-height: 32px; }
+.study-message__heading .eyebrow { margin: 0; color: var(--message-accent); font-size: .72rem; letter-spacing: .09em; }
+.study-message__countdown { color: #f7f1e4; border: 1px solid rgba(255, 250, 241, .3); border-radius: 999px; padding: .2rem .55rem; font-size: .72rem; }
+.study-message__dismiss { position: absolute; top: .75rem; right: .85rem; width: 44px; min-height: 44px; padding: 0; color: #fffaf1; font-size: 1.5rem; }
+.study-message__dismiss:hover { background: rgba(255, 255, 255, .12); color: #fff; }
+.study-message p { max-width: 1050px; margin: 0; color: #fffaf1; font-size: clamp(1.2rem, 2.3vw, 1.8rem); font-weight: 700; line-height: 1.4; letter-spacing: -.015em; overflow-wrap: anywhere; }
+.study-message--no-heading p { padding-right: 2.7rem; }
+.study-message__action { display: inline-flex; align-items: center; gap: .65rem; min-height: 44px; margin-top: .75rem; padding: .4rem 0; border: 0; background: transparent; color: var(--message-accent); font-size: .82rem; font-weight: 750; }
+.study-message__action:hover { color: #fff; }
+.study-message__action span { font-size: 1.1rem; }
+.study-message-restore { margin-bottom: .75rem; }
+.study-message-restore .button { min-height: 44px; padding: .3rem .15rem; font-size: .8rem; font-weight: 650; }
+@media (max-width: 699px) {
+  .study-message { padding: .9rem 1rem .7rem; margin-bottom: 1rem; }
+  .study-message__heading { margin-bottom: .55rem; }
+}

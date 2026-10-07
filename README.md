@@ -26,6 +26,20 @@ On touch devices, the same visible controls also have optional shortcuts: pull d
 refresh, swipe between Today and Completed, swipe an unfinished row right to complete it, and drag a
 mobile detail sheet down to close it. None of these gestures is required to use the tracker.
 
+### Study messages
+
+Today opens with a prominent, dismissible message **above the Today heading, tabs, backlog and assignment**. A dark panel, warm accent and large bold copy make it one of the first things visible. Encouragement uses a dark green panel. **Today’s block** jumps directly to the checklist. Before recorded work it draws from the pressure pool; after a saved checklist step, positive practice count, in-progress/complete day or positive saved focus session, it draws from the encouragement pool. Work recorded today on a past-due assignment counts, too. Rest days, unconfirmed test windows, dates outside the plan, Completed and other views stay quiet. A running focus timer hides the note until paused or finished.
+
+A message stays stable through saves, refreshes, quick returns and reloads. Selection refreshes on the next day, a change in eligible context, or a return to Today after at least four hours since selection. **Hide for today** survives reloads and subsequent study progress. **Show study message** restores it; the next day also restores visibility. There are no interrupting popups, automatic animations, or shuffle buttons.
+
+The phrase and kicker pools live in `js/motivation.js`. The original phrase IDs and gaps are preserved. Three approved additions use `early-a`, `early-b`, and `early-c` and insert `{days}` from the exam countdown. They are eligible only above 90 days; original countdown phrases #11–12 are eligible at 1–90 days. The registered date takes precedence; otherwise the displayed countdown explicitly says **planning date**. #8 is eligible only with no saved study work anywhere; #15 requires a streak of at least two scheduled study dates with saved work (planned rest does not break it). #29 is excluded once today's assignment is complete.
+
+Rotation independently prioritizes least-used eligible phrases and kickers, spaces similar themes when possible, and prevents consecutive reuse of the same phrase or ending—even across an intervening message without a kicker. Phrase-specific endings stay with their original phrase. The disappointment ending cannot follow #37 or #41. Optional kickers attach about half the time to #9–13; encouragement never gets a kicker.
+
+Message history and dismissal live only in this browser's `mcatMomentum.motivation.v1` local storage. They do not change study records, generate cloud writes, or enter progress backups; different devices have independent rotation histories. Storage errors degrade to in-memory history.
+
+Editorial overlaps reviewed: #37/#41/the disappointment kicker repeat identical wording; #1/#18/#36 share scrolling; #2/#9 share reluctance; #14/#24/#26 share stacking sessions. All were retained by approval and spaced by theme. #4 retains the supplied fixed $325 amount and may merit a future wording review. The approved edit to #39 changes only 515 to 520 to match the tracker's score goal. Original wording is otherwise preserved; new wording requires approval.
+
 ### The five views
 
 | View | What it holds |
@@ -252,6 +266,7 @@ reset.html            email-link landing page for choosing a new PIN
 setup.html            one-time account key calculator (never deployed data)
 css/styles.css        mobile-first styles, one stylesheet
 js/app.js             bootstrap, routing glue, sync chrome, unlock gate
+js/motivation.js      approved phrase pools, context guards and local rotation
 js/data.js            loads and indexes site-data.json
 js/storage.js         versioned local state, migration, merge, backups
 js/account-auth.js    email/username unlock + retryable credential migration

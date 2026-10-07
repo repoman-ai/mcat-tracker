@@ -1,3 +1,4 @@
+import { createMotivationController } from "./motivation.js?v=20261007-3";
 import { bindEditorDrafts } from "./editor-drafts.js?v=20261007-2";
 import { createCelebrationController } from "./celebrate.js?v=20261007-2";
 import { createDialogController } from "./dialog.js?v=20261007-2";
@@ -8,7 +9,7 @@ import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName,
 import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js?v=20261007-2";
 import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js?v=20261007-2";
 import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js?v=20261007-2";
-import { renderToday, bindToday, leaveToday } from "./views/today.js?v=20261007-2";
+import { renderToday, bindToday, leaveToday } from "./views/today.js?v=20261007-6";
 import { renderPlan, bindPlan } from "./views/plan.js?v=20261007-2";
 import { renderExams, bindExams } from "./views/exams.js?v=20261007-2";
 import { renderLog, bindLog } from "./views/log.js?v=20261007-2";
@@ -42,6 +43,10 @@ const lockEmailField = lockScreen.querySelector("[data-lock-email-field]");
 
 const showToast = createToastController(toast, document);
 const celebration = createCelebrationController(document, window);
+// Some private-browsing modes deny even access to the storage property.
+let motivationStorage;
+try { motivationStorage = window.localStorage; } catch {}
+const motivation = createMotivationController({ storage: motivationStorage });
 
 const appDialog = createDialogController(dialog, { document, view: window });
 const openDialog = (options) => appDialog.open(options);
@@ -335,6 +340,7 @@ function clearQuickLogPrefill() {
 const context = {
   data: null,
   state: null,
+  motivation,
   quickLogPrefill: null,
   updateState,
   navigate,
@@ -386,7 +392,7 @@ function updateNav(view) {
   });
 }
 
-function renderCurrent({ preserveView = true, routeChange = false } = {}) {
+function renderCurrent({ preserveView = true, routeChange = false, revisit = false } = {}) {
   if (!data || !state) return;
   const cleanups = viewCleanups;
   viewCleanups = [];
@@ -415,7 +421,7 @@ function renderCurrent({ preserveView = true, routeChange = false } = {}) {
       // Give every route a focus destination; specific binders may refine it.
       root.focus({ preventScroll: true });
     }
-    if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute, { isRouteChange: !sameRoute }); bindToday(root, context, currentRoute); }
+    if (currentRoute.view === "today") { setDocumentTitle(currentRoute.detail === "completed" ? "Completed" : "Today"); root.innerHTML = renderToday(context, currentRoute, { isRouteChange: !sameRoute, revisit }); bindToday(root, context, currentRoute); }
     else if (currentRoute.view === "plan") { setDocumentTitle("Plan"); root.innerHTML = renderPlan(context, currentRoute, { isRouteChange: !sameRoute }); afterRestore = bindPlan(root, context, { isRouteChange: !sameRoute }); }
     else if (currentRoute.view === "exams") { setDocumentTitle("Exams"); root.innerHTML = renderExams(context, currentRoute); bindExams(root, context, currentRoute); }
     else if (currentRoute.view === "log") { setDocumentTitle("Log + repair"); root.innerHTML = renderLog(context, currentRoute, { isRouteChange: !sameRoute }); bindLog(root, context, currentRoute); }
@@ -477,7 +483,7 @@ document.querySelector(".skip-link")?.addEventListener("click", (event) => {
   event.preventDefault(); root.focus({ preventScroll: true }); root.scrollIntoView({ block: "start", behavior: "instant" });
 });
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && data && state && displayedDate !== todayISO()) {
-    displayedDate = todayISO(); renderCurrent();
+  if (!document.hidden && data && state && (displayedDate !== todayISO() || currentRoute.view === "today")) {
+    displayedDate = todayISO(); renderCurrent({ revisit: true });
   }
 });
