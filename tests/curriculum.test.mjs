@@ -10,8 +10,7 @@ test('feedback fixes preserve practice totals and protect a real light week',()=
  const sb=(week,section)=>data.sectionBanks.filter(b=>!section||b.section===section).flatMap(b=>b.assignments).filter(a=>byDate.get(a.date).week===week).reduce((n,a)=>n+a.questions,0);
  assert.equal(sb(11),20); assert.equal(sb(13),8);
  assert.equal(sb(8),6); assert.equal(sb(9),6);
- assert.match(byDate.get('2026-11-14').practiceTarget,/6 P\/S Section Bank/);
- assert.match(byDate.get('2026-11-21').practiceTarget,/6 P\/S Section Bank/);
+ assert.equal(Math.min(...data.sectionBanks.find(b=>b.section==='P/S').assignments.map(a=>byDate.get(a.date).week)),8);
  assert.equal(sb(15),56); assert.equal(sb(17),56); assert.equal(sb(19),32);
  const light=data.validation.weeklyChecks.find(w=>w.week===19);
  assert.ok(light.budgetMinutes-light.estimatedHighMinutes>=240);

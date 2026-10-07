@@ -52,7 +52,7 @@ test('saving old complete-day notes requires an explicit recheck to acknowledge 
   submit({preventDefault(){}});
   assert.equal(saved.daily[r.id].actualQuestions,7);
   assert.equal(saved.daily[r.id].notes,'Edited');
-  assert.equal(saved.daily[r.id].curriculumRevision,checked?'2026-10-07':'2026-09-23');
+  assert.equal(saved.daily[r.id].curriculumRevision,checked?'2026-10-07-audit':'2026-09-23');
   if(!checked)assert.deepEqual(saved.daily[r.id].completedTasks,state.daily[r.id].completedTasks);
  }
 });

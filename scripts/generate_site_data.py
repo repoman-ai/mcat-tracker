@@ -650,7 +650,7 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             "retrievalIds": [p.strip() for p in raw.get("retrieval_ids", "").split(";") if p.strip()],
             "previewIds": [p.strip() for p in raw.get("preview_ids", "").split(";") if p.strip()],
             "practiceChapterIds": [p.strip() for p in raw.get("practice_chapter_ids", "").split(";") if p.strip()],
-            "confirmedChapterIds": [c for c in chapter_ids if plan.get("confirmed_chapter_completions", {}).get(c) == raw["date"]],
+            "confirmedChapterIds": [c for c in chapter_ids if c in plan.get("confirmed_covered_chapter_ids", []) or plan.get("confirmed_chapter_completions", {}).get(c) == raw["date"]],
             "chapters": [chapter_index[chapter_id] for chapter_id in chapter_ids if chapter_id in chapter_index],
             "assignment": raw["assignment"],
             "mode": raw["mode"],
@@ -965,6 +965,18 @@ def main() -> int:
     if {c["chapter_id"] for c in chapter_map} != set(chapter_index) or len(chapter_map) != 83:
         fail("Chapter map must account for all 83 chapters exactly once")
     exposures = {c["chapter_id"]: c["first_exposure"] for c in chapter_map}
+    confirmed = set(plan.get("confirmed_covered_chapter_ids", plan["prior_chapter_ids"])) | set(plan.get("confirmed_chapter_completions", {}))
+    assigned_dates = {cid: row["date"] for row in schedule for cid in row["chapterIds"]}
+    prerequisites = {c["chapter_id"]: c["prerequisites"] for c in chapter_map}
+    resume_date = plan.get("resume", {}).get("date", plan["plan_start"])
+    for item in chapter_map:
+        cid = item["chapter_id"]
+        if cid not in confirmed and (cid not in assigned_dates or assigned_dates[cid] < resume_date):
+            fail(f"Unread chapter must have an active reading date: {cid}")
+        for dep in item["prerequisites"]:
+            if dep not in confirmed and exposures[dep] >= item["first_exposure"]:
+                fail(f"Prerequisite must be read before {cid}: {dep}")
+    section_prefixes = {"B/B": ("BIO", "BCH"), "C/P": ("GC", "OC", "PHY"), "P/S": ("PS",)}
     map_blocks = [{"type": "paragraph", "text": "All 83 chapters. Links use the available subsection outlines, not full chapter text. Dates describe planned first exposure and sampled retrieval, not mastery. Practice dates identify matching topic pools, not exact vendor question IDs."}]
     for item in chapter_map:
         map_blocks.extend([
@@ -984,6 +996,24 @@ def main() -> int:
         for cid in row["practiceChapterIds"]:
             if cid not in plan["prior_chapter_ids"] and exposures[cid] > row["date"]:
                 fail(f"Practice precedes first exposure: {cid} on {row['date']}")
+        for cid in row["retrievalIds"]:
+            if cid not in confirmed and exposures[cid] >= row["date"]:
+                fail(f"Recall must follow reading: {cid} on {row['date']}")
+        scopes = {}
+        if re.search(r"\d+ UWorld science questions?", row["practiceTarget"]):
+            scopes["UWorld science"] = [c for c in row["practiceChapterIds"] if not c.startswith("CARS")]
+        for _, section in re.findall(r"(\d+) (B/B|C/P|P/S) Section Bank questions", row["practiceTarget"]):
+            scopes[f"{section} Section Bank"] = [c for c in row["practiceChapterIds"] if c.startswith(section_prefixes[section])]
+        if row["carsPassages"] and not row["isExam"]:
+            scopes["CARS"] = [c for c in row["practiceChapterIds"] if c.startswith("CARS")]
+        if any(not ids for source, ids in scopes.items() if source != "CARS"):
+            fail(f"Practice block has no introduced topics for its section: {row['date']}")
+        deps = sorted(set(dep for cid in row["chapterIds"] for dep in prerequisites[cid]) - set(row["chapterIds"]))
+        candidates = set(row["retrievalIds"] + row["practiceChapterIds"] + row["chapterIds"] + deps)
+        row["practiceScopes"] = scopes
+        row["prerequisiteChapterIds"] = deps
+        row["confirmedCoveredChapterIds"] = sorted(candidates & confirmed)
+        row["chapterCompletionRefs"] = {cid: assigned_dates[cid] for cid in sorted(candidates - confirmed) if cid in assigned_dates}
     exams = derive_exams(schedule, plan)
     section_banks = derive_section_banks(schedule, plan)
     phase_map = derive_phase_map(plan)

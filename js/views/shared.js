@@ -1,9 +1,9 @@
-import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-2";
-import { enableSwipeComplete } from "../gestures.js?v=20261007-2";
-import { captureViewState } from "../view-state.js?v=20261007-2";
-import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-9";
-import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, recordStudyActivity, parseActualCount, CURRICULUM_REVISION, needsCurriculumRecheck } from "../daily.js?v=20261007-7";
-import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-7";
+import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-10";
+import { enableSwipeComplete } from "../gestures.js?v=20261007-10";
+import { captureViewState } from "../view-state.js?v=20261007-10";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-10";
+import { assignmentTasks, taskCompleted, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, recordStudyActivity, parseActualCount, CURRICULUM_REVISION, needsCurriculumRecheck, readyChapters, readyPracticeScopes } from "../daily.js?v=20261007-10";
+import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-10";
 
 export function statusLabel(status = "not-started") {
   return {
@@ -121,13 +121,17 @@ export function taskChecklist(row, state) {
   const { tasks, completed, total } = taskProgress(row, state);
   if (!total) return "";
   const daily = state.daily[row.id] || {};
+  const recall = readyChapters(row, state, row.retrievalIds);
+  const prerequisites = readyChapters(row, state, row.prerequisiteChapterIds);
   return `<section class="task-checklist" aria-label="Checklist for ${escapeAttr(row.assignment)}">
     ${needsCurriculumRecheck(daily) ? '<p class="form-hint">The schedule was revised October 7. Your saved progress and notes remain. Recheck changed assignments before treating this revised block as finished. Confirm the revised checklist in your day record after reviewing each step.</p>' : ''}
     ${row.confirmedChapterIds?.length ? `<p class="form-hint">Previously covered: ${escapeHTML(row.confirmedChapterIds.join(", "))}. This block is retrieval; questions and CARS still need their own check-off.</p>` : ''}
+    ${prerequisites.waiting.length ? `<p class="form-hint">Read these prerequisites first: ${escapeHTML(prerequisites.waiting.join(", "))}. Record their chapter completion before starting this block.</p>` : ''}
+    ${recall.waiting.length ? `<p class="form-hint">Recall waits for reading: ${escapeHTML(recall.waiting.join(", "))}. These topics are not included in today's recall step until their chapter completion is recorded.</p>` : ''}
     <header><div><span class="eyebrow">Block checklist</span><h3>${total} ${total === 1 ? "step" : "steps"}</h3></div><strong>${completed}/${total} done</strong></header>
     <ul>${tasks.map((task) => {
-      const checked = daily.status === "complete" || daily.completedTasks?.[task.id] === true;
-      return `<li><button class="task-check ${checked ? "is-checked" : ""}" type="button" data-toggle-task="${escapeAttr(task.id)}" data-task-assignment="${escapeAttr(row.id)}" data-view-focus="task-${escapeAttr(row.id)}-${escapeAttr(task.id)}" aria-pressed="${checked}" aria-label="${checked ? "Reopen" : "Mark done"}: ${escapeAttr(task.label)}"><span class="task-check__box" aria-hidden="true">${checked ? "✓" : ""}</span><span><strong>${escapeHTML(task.label)}</strong>${task.meta !== modeLabel(row.mode) && task.meta !== "Practice + review" ? `<small>${escapeHTML(task.meta)}</small>` : ""}</span></button></li>`;
+      const checked = taskCompleted(task, daily);
+      return `<li><button class="task-check ${checked ? "is-checked" : ""}" type="button" ${task.blocked ? "disabled" : ""} data-toggle-task="${escapeAttr(task.id)}" data-task-assignment="${escapeAttr(row.id)}" data-view-focus="task-${escapeAttr(row.id)}-${escapeAttr(task.id)}" aria-pressed="${checked}" aria-label="${checked ? "Reopen" : "Mark done"}: ${escapeAttr(task.label)}"><span class="task-check__box" aria-hidden="true">${checked ? "✓" : ""}</span><span><strong>${escapeHTML(task.label)}</strong>${task.blocked ? "<small>Read and record a matching chapter before these questions.</small>" : ""}${task.meta !== modeLabel(row.mode) && task.meta !== "Practice + review" ? `<small>${escapeHTML(task.meta)}</small>` : ""}</span></button></li>`;
     }).join("")}</ul>
   </section>`;
 }
@@ -140,10 +144,10 @@ export function bindTaskChecklist(container, context) {
       event.preventDefault();
       const row = context.data.index.scheduleByDate.get(button.dataset.taskAssignment);
       if (!row) return;
-      const task = assignmentTasks(row).find((item) => item.id === button.dataset.toggleTask);
-      if (!task) return;
+      const task = assignmentTasks(row, context.state).find((item) => item.id === button.dataset.toggleTask);
+      if (!task || task.blocked) return;
       const current = context.state.daily[row.id] || {};
-      const wasComplete = current.status === "complete" || current.completedTasks?.[task.id] === true;
+      const wasComplete = taskCompleted(task, current);
       const previousRecord = context.state.daily[row.id] ? structuredClone(context.state.daily[row.id]) : null;
       const next = withDailyTask(context.state, row, task.id, !wasComplete);
       const origin = button.closest?.("dialog") ? "dialog" : button.closest?.(".today-action") ? "today" : "plan";
@@ -223,6 +227,7 @@ export function assignmentDetailHTML(row, data, state) {
         <p class="form-error" data-day-error role="alert"></p><div class="button-row"><button class="button button--primary" type="submit" data-save-day="${escapeAttr(row.id)}">Save day</button><button class="button button--quiet" type="button" data-use-planned>Use planned amounts: ${countPracticeQuestions(row.practiceTarget)} questions, ${row.carsPassages || 0} CARS</button></div>
       </form>
       <details class="assignment-reference" data-view-key="reference-${escapeAttr(row.id)}"><summary>Assignment reference and study guidance</summary>
+      ${Object.entries(readyPracticeScopes(row, state)).map(([source, readiness]) => `<p class="form-hint"><strong>${escapeHTML(source)}</strong> · Ready topics: ${escapeHTML(readiness.ready.join(", ") || (source === "CARS" ? "Passage practice can begin before strategy chapters" : "Read and record a matching chapter first"))}.${readiness.waiting.length ? ` Scheduled topics still waiting for reading: ${escapeHTML(readiness.waiting.join(", "))}.` : ''}</p>`).join('')}
       <dl class="detail-list detail-list--grid">
         <div><dt>Resource</dt><dd>${escapeHTML(row.resource || "No resource required")}</dd></div>
         <div><dt>Mode</dt><dd>${escapeHTML(modeLabel(row.mode))}</dd></div>
@@ -277,7 +282,7 @@ export function bindAssignmentDetail(scope, context) {
         ? Object.fromEntries(assignmentTasks(row).map((task) => [task.id, status === "complete"])) : existing.completedTasks;
       context.updateState({ ...context.state, daily: { ...context.state.daily, [id]: recordStudyActivity(existing, {
         ...withDailyStatus(context.state, id, status).daily[id],
-        ...(completedTasks ? { completedTasks } : {}),
+        ...(completedTasks ? { completedTasks, ...(["complete", "not-started"].includes(status) && acknowledge ? { completedRecallChapterIds: status === "complete" ? [...(row.retrievalIds || [])] : [] } : {}) } : {}),
         ...(acknowledge && (["complete", "not-started"].includes(status) || form.elements.confirmRevision?.checked) ? { curriculumRevision: CURRICULUM_REVISION } : {}),
         actualQuestions, actualCars, notes: form.elements.notes.value,
       }) } }, { success: "Day saved", onSaved: () => { clearEditorDraft(`day-${id}`); if (typeof scope.close === "function") scope.close(); } });

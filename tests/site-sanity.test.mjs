@@ -70,7 +70,7 @@ test('explicit day-form completion acknowledges revised tasks without fabricatin
     assert.equal(record.actualQuestions, 0);
     assert.equal(record.actualCars, '');
     assert.equal(record.notes, 'Keep this note');
-    assert.equal(record.curriculumRevision, status === 'in-progress' ? undefined : '2026-10-07');
+    assert.equal(record.curriculumRevision, status === 'in-progress' ? undefined : '2026-10-07-audit');
     assert.equal(record.completedTasks['chapter:PS03'], status !== 'not-started');
   }
 });

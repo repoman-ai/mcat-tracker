@@ -1,6 +1,6 @@
-import { isMasteryEvidence } from "./data.js?v=20261007-9";
-import { createBackup } from "./storage.js?v=20261007-7";
-import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js?v=20261007-7";
+import { isMasteryEvidence } from "./data.js?v=20261007-10";
+import { createBackup } from "./storage.js?v=20261007-10";
+import { assignmentTasks, taskCompleted, taskProgress, recordedCounts } from "./daily.js?v=20261007-10";
 import {
   countPracticeQuestions,
   csvCell,
@@ -9,7 +9,7 @@ import {
   percent,
   todayISO,
   topCounts,
-} from "./utils.js?v=20261007-7";
+} from "./utils.js?v=20261007-10";
 
 function exportFields(data) { return [...data.workbook.mistakeLog.fieldDefinitions, { key: "captureStatus", label: "Capture Status", type: "text" }, { key: "masteryTopicId", label: "Mastery Topic ID", type: "text" }]; }
 
@@ -80,7 +80,7 @@ function dailyRows(data, state) {
   return data.schedule.map((row) => {
     const user = state.daily[row.id] || {};
     const progress = taskProgress(row, state);
-    const finished = assignmentTasks(row).filter((task) => user.status === "complete" || user.completedTasks?.[task.id]).map((task) => task.label);
+    const finished = assignmentTasks(row, state).filter((task) => taskCompleted(task, user)).map((task) => task.label);
     return [
       makeDateFromISO(row.date), row.day, row.week, row.phase, row.weeklyFocus,
       row.resource, row.chapterIds.join("; "), row.assignment, row.mode,

@@ -1,6 +1,6 @@
-import { focusTarget, scrollInstantly } from "../view-state.js?v=20261007-2";
-import { debounce, escapeAttr, escapeHTML, safeExternalUrl } from "../utils.js?v=20261007-7";
-import { emptyState } from "./shared.js?v=20261007-9";
+import { focusTarget, scrollInstantly } from "../view-state.js?v=20261007-10";
+import { debounce, escapeAttr, escapeHTML, safeExternalUrl } from "../utils.js?v=20261007-10";
+import { emptyState } from "./shared.js?v=20261007-10";
 
 let guideQuery = "";
 

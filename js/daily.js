@@ -1,5 +1,23 @@
 /** Daily records sync last-write-wins per day, including completion and undo. */
-export const CURRICULUM_REVISION = "2026-10-07";
+export const CURRICULUM_REVISION = "2026-10-07-audit";
+
+/** Planned exposure is not evidence of reading. No saved records are mutated. */
+export function chapterCompleted(row, state, chapterId) {
+  if (!state || !row.chapterCompletionRefs) return true; // Static plan / legacy row.
+  if (row.confirmedCoveredChapterIds?.includes(chapterId)) return true;
+  const date = row.chapterCompletionRefs[chapterId];
+  const record = date && state.daily[date];
+  return record?.curriculumRevision === CURRICULUM_REVISION
+    && (record.status === "complete" || record.completedTasks?.[`chapter:${chapterId}`] === true);
+}
+
+export function readyChapters(row, state, ids = []) {
+  return { ready: ids.filter(id => chapterCompleted(row, state, id)), waiting: ids.filter(id => !chapterCompleted(row, state, id)) };
+}
+
+export function readyPracticeScopes(row, state) {
+  return Object.fromEntries(Object.entries(row.practiceScopes || {}).map(([source, ids]) => [source, readyChapters(row, state, ids)]));
+}
 
 export function needsCurriculumRecheck(record = {}) {
   return record.curriculumRevision !== CURRICULUM_REVISION
@@ -79,7 +97,7 @@ function taskVerb(mode = "") {
 }
 
 /** Build stable, human-sized steps from one generated schedule row. */
-export function assignmentTasks(row) {
+export function assignmentTasks(row, state) {
   if (!row || row.isRest || row.isTestWindow) return [];
   const modes = String(row.mode || "").split(";").map((item) => item.trim()).filter(Boolean);
   const tasks = (row.chapters || []).map((chapter, index) => ({
@@ -116,29 +134,42 @@ export function assignmentTasks(row) {
     // An exam is already represented by the assignment itself; its descriptive
     // target and explicit "no quota" notes are not extra pieces of work.
     if (/^no\b/i.test(target) || (row.isExam && /full[- ]length exam/i.test(target))) return;
-    tasks.push({ id: `practice:${index}`, label: `Complete ${target}`, meta: "Practice + review" });
+    const source = Object.keys(row.practiceScopes || {}).find(key => target.includes(key));
+    const waiting = source && source !== "CARS" && !readyChapters(row, state, row.practiceScopes[source]).ready.length;
+    tasks.push({ id: `practice:${index}`, label: `Complete ${target}`, meta: "Practice + review", ...(waiting ? { blocked: true } : {}) });
   });
-  if (row.retrievalIds?.length) tasks.push({ id: "retrieval:scheduled", label: `Recall ${row.retrievalIds.join(", ")}`, meta: "About 5 min each, within maintenance" });
+  const recall = readyChapters(row, state, row.retrievalIds).ready;
+  if (recall.length) tasks.push({ id: "retrieval:scheduled", label: `Recall ${recall.join(", ")}`, chapterIds: recall, meta: "About 5 min each, within maintenance" });
   if (row.previewIds?.length) tasks.push({ id: "preview:scheduled", label: `Preview ${row.previewIds.join(", ")}`, meta: "10 min each; orientation, not chapter completion" });
   return tasks;
 }
 
+/** A checked recall step covers only the topics eligible when it was checked. */
+export function taskCompleted(task, record = {}) {
+  if (!(record.status === "complete" || record.completedTasks?.[task.id] === true)) return false;
+  if (task.id === "retrieval:scheduled" && Array.isArray(record.completedRecallChapterIds)) {
+    return task.chapterIds.every(id => record.completedRecallChapterIds.includes(id));
+  }
+  return true;
+}
+
 export function taskProgress(row, state) {
-  const tasks = assignmentTasks(row);
+  const tasks = assignmentTasks(row, state);
   const daily = state.daily[row.id] || {};
-  const completed = tasks.filter((task) => daily.status === "complete" || daily.completedTasks?.[task.id] === true).length;
+  const completed = tasks.filter((task) => taskCompleted(task, daily)).length;
   return { tasks, completed, total: tasks.length };
 }
 
 export function withDailyTask(state, row, taskId, complete) {
   const existing = state.daily[row.id] || {};
-  const tasks = assignmentTasks(row);
+  const tasks = assignmentTasks(row, state);
+  if (!tasks.some(task => task.id === taskId) || (complete && tasks.find(task => task.id === taskId)?.blocked)) return state;
   const completedTasks = Object.fromEntries(tasks.map((task) => [
     task.id,
-    task.id === taskId ? complete : existing.status === "complete" || existing.completedTasks?.[task.id] === true,
+    task.id === taskId ? complete : taskCompleted(task, existing),
   ]));
   const completed = tasks.filter((task) => completedTasks[task.id]).length;
-  const status = tasks.length && completed === tasks.length
+  const status = tasks.length && completed === tasks.length && !readyChapters(row, state, row.retrievalIds).waiting.length
     ? "complete"
     : completed > 0 || existing.status === "in-progress"
       ? "in-progress"
@@ -148,7 +179,9 @@ export function withDailyTask(state, row, taskId, complete) {
     daily: {
       ...state.daily,
       // One edited step cannot acknowledge the other steps of a revised day.
-      [row.id]: recordStudyActivity(existing, { ...existing, status, completedTasks, curriculumRevision: needsCurriculumRecheck(existing) ? existing.curriculumRevision : CURRICULUM_REVISION, updatedAt: dailyTimestamp(existing) }),
+      [row.id]: recordStudyActivity(existing, { ...existing, status, completedTasks,
+        ...(taskId === "retrieval:scheduled" ? { completedRecallChapterIds: complete ? tasks.find(task => task.id === taskId).chapterIds : [] } : {}),
+        curriculumRevision: needsCurriculumRecheck(existing) ? existing.curriculumRevision : CURRICULUM_REVISION, updatedAt: dailyTimestamp(existing) }),
     },
   };
 }
@@ -165,6 +198,7 @@ export function withDailyCompletion(state, row, complete) {
         status: complete ? "complete" : "not-started",
         curriculumRevision: CURRICULUM_REVISION,
         completedTasks,
+        completedRecallChapterIds: complete ? [...(row.retrievalIds || [])] : [],
         updatedAt: dailyTimestamp(existing),
       }),
     },

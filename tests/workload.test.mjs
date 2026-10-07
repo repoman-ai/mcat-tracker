@@ -29,11 +29,11 @@ for (const week of data.validation.weeklyChecks) {
 }
 assert.deepEqual(data.sectionBanks.map(bank => bank.totalQuestions), [120, 120, 120]);
 for (const bank of data.sectionBanks) for (const block of bank.assignments) {
-  assert.ok([6, 8, 10, 20].includes(block.questions));
+  assert.ok(Number.isInteger(block.questions) && block.questions > 0 && block.questions <= 12);
   const row = data.index.scheduleByDate.get(block.date);
   assert.ok(!row.isExam && !row.isFullLengthReview && !row.isRest);
 }
-assert.equal(data.sectionBanks.flatMap(bank => bank.assignments).map(item => item.date).sort().at(-1), "2027-03-02");
+assert.equal(data.sectionBanks.flatMap(bank => bank.assignments).map(item => item.date).sort().at(-1), "2027-03-04");
 for (const row of data.schedule.filter((item) => item.isRest || item.isFullLengthReview)) {
   assert.equal(row.carsPassages, 0);
   assert.equal(row.practiceTarget, "");

@@ -1,5 +1,5 @@
-import { bindEditorDrafts } from "./editor-drafts.js?v=20261007-2";
-import { enableSheetDismiss } from "./gestures.js?v=20261007-2";
+import { bindEditorDrafts } from "./editor-drafts.js?v=20261007-10";
+import { enableSheetDismiss } from "./gestures.js?v=20261007-10";
 
 /**
  * The one modal sheet the whole app shares. Opening, closing, and clearing run

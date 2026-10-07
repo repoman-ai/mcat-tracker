@@ -1,8 +1,8 @@
-import { motivationContext } from "../motivation.js?v=20261007-9";
-import { createFocusTimer, focusMinutes } from "../focus-timer.js?v=20261007-2";
-import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js?v=20261007-2";
-import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261007-9";
-import { recordedCounts, taskProgress } from "../daily.js?v=20261007-7";
+import { motivationContext } from "../motivation.js?v=20261007-10";
+import { createFocusTimer, focusMinutes } from "../focus-timer.js?v=20261007-10";
+import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js?v=20261007-10";
+import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261007-10";
+import { recordedCounts, taskProgress } from "../daily.js?v=20261007-10";
 import {
   daysBetween,
   escapeAttr,
@@ -11,8 +11,8 @@ import {
   plural,
   todayISO,
   uniqueId,
-} from "../utils.js?v=20261007-7";
-import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js?v=20261007-9";
+} from "../utils.js?v=20261007-10";
+import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js?v=20261007-10";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.

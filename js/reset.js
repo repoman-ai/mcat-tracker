@@ -1,7 +1,7 @@
-import { AUTH_STORAGE_KEY, rememberEmail, rememberedEmail } from "./auth-storage.js?v=20261007-2";
-import { deriveRecoveryPassword } from "./account-auth.js?v=20261007-2";
-import { normalizeEmail } from "./pin.js?v=20261007-2";
-import { SYNC_CONFIG } from "./sync-config.js?v=20261007-2";
+import { AUTH_STORAGE_KEY, rememberEmail, rememberedEmail } from "./auth-storage.js?v=20261007-10";
+import { deriveRecoveryPassword } from "./account-auth.js?v=20261007-10";
+import { normalizeEmail } from "./pin.js?v=20261007-10";
+import { SYNC_CONFIG } from "./sync-config.js?v=20261007-10";
 
 const loadingView = document.querySelector("[data-reset-loading]");
 const resetView = document.querySelector("[data-reset-form]");
