@@ -16,7 +16,7 @@ test('feedback fixes preserve practice totals and protect a real light week',()=
  const light=data.validation.weeklyChecks.find(w=>w.week===19);
  assert.ok(light.budgetMinutes-light.estimatedHighMinutes>=240);
  assert.equal(data.plan.weeks[18].uworld_questions,0);
- assert.equal(data.plan.weeks.reduce((n,w)=>n+w.uworld_questions,0),222);
+ assert.equal(data.plan.weeks.reduce((n,w)=>n+w.uworld_questions,0),336);
  assert.deepEqual(data.sectionBanks.map(b=>b.totalQuestions),[120,120,120]);
  assert.equal(data.plan.diagnostic_context.prior_timed_full_length,false);
  assert.match(byDate.get('2026-10-10').sourceNotes,/not a cold pre-study baseline/);
@@ -45,7 +45,7 @@ test('all chapters have ordered prerequisites, dated recall and introduced-topic
  assert.equal(exposure.get('OC01'),'2026-09-24');
  assert.equal(data.plan.first_pass_end,'2026-12-21');
  assert.ok(data.schedule.filter(r=>r.chapterIds.length).every(r=>r.date<data.exams[1].plannedDate));
- assert.equal(data.schedule.reduce((n,r)=>n+r.carsPassages,0),167);
+ assert.equal(data.schedule.reduce((n,r)=>n+r.carsPassages,0),145);
  assert.equal(data.plan.additional_completed_chapter_to_identify,0);
  assert.deepEqual(data.plan.confirmed_chapter_completions,{GC04:'2026-09-22'});
 });

@@ -1,14 +1,14 @@
-import { GENERIC_AUTH_ERROR, migrateLoginCredential, unlockWithIdentifier } from "./account-auth.js?v=20261002-1";
-import { AUTH_STORAGE_KEY, rememberIdentifier } from "./auth-storage.js?v=20261002-1";
-import { mergeStates, normalizeState, SCHEMA_VERSION } from "./storage.js?v=20261002-1";
-import { SYNC_CONFIG } from "./sync-config.js?v=20261002-1";
-import { validateLoginUsername } from "./username.js?v=20261002-1";
+import { GENERIC_AUTH_ERROR, migrateLoginCredential, unlockWithIdentifier } from "./account-auth.js?v=20261007-1";
+import { AUTH_STORAGE_KEY, rememberIdentifier } from "./auth-storage.js?v=20261007-1";
+import { mergeStates, normalizeState, SCHEMA_VERSION } from "./storage.js?v=20261007-1";
+import { SYNC_CONFIG } from "./sync-config.js?v=20261007-1";
+import { validateLoginUsername } from "./username.js?v=20261007-1";
 
 const SYNC_DELAY = 900;
 const POLL_INTERVAL = 60_000;
 
 /** The identifier used on this device is cached here. A username is never resolved to email in storage. */
-export { rememberedIdentifier } from "./auth-storage.js?v=20261002-1";
+export { rememberedIdentifier } from "./auth-storage.js?v=20261007-1";
 
 /**
  * True when this browser holds Supabase auth material. Used so a device that

@@ -18,8 +18,7 @@ const empty = () => normalizeState({});
 test("chapter and practice work become stable, understandable checklist steps", () => {
   assert.deepEqual(assignmentTasks(row).map(({ id, label }) => ({ id, label })), [
     { id: "chapter:GC04", label: "Work through GC04 · Compounds and Stoichiometry" },
-    { id: "practice:0", label: "Complete 2 UWorld science questions" },
-    { id: "practice:1", label: "Complete 1 CARS passage from UWorld QBank" },
+    { id: "practice:0", label: "Complete 1 CARS passage from UWorld QBank" },
     { id: "retrieval:scheduled", label: "Recall GC01, GC02, GC03, PHY10, PHY11" },
   ]);
   assert.deepEqual(assignmentTasks(data.index.scheduleByDate.get("2026-10-10")).map((task) => task.id), ["assignment:0"]);
@@ -39,19 +38,19 @@ test("partial steps persist, start the day, and the final step completes it", ()
   const tasks = assignmentTasks(row);
   state = withDailyTask(state, row, tasks[0].id, true);
   assert.equal(state.daily[row.id].status, "in-progress");
-  assert.deepEqual(taskProgress(row, state), { tasks, completed: 1, total: 4 });
+  assert.deepEqual(taskProgress(row, state), { tasks, completed: 1, total: 3 });
   for (const task of tasks.slice(1)) state = withDailyTask(state, row, task.id, true);
   assert.equal(state.daily[row.id].status, "complete");
-  assert.equal(taskProgress(row, state).completed, 4);
+  assert.equal(taskProgress(row, state).completed, 3);
   state = withDailyTask(state, row, tasks[1].id, false);
   assert.equal(state.daily[row.id].status, "in-progress");
-  assert.equal(taskProgress(row, state).completed, 3);
+  assert.equal(taskProgress(row, state).completed, 2);
 });
 
 test("whole-day completion and reopening update every step without erasing notes", () => {
   const state = normalizeState({ daily: { [row.id]: { status: "in-progress", notes: "keep this", completedTasks: { "chapter:GC04": true } } } });
   const completed = withDailyCompletion(state, row, true);
-  assert.equal(taskProgress(row, completed).completed, 4);
+  assert.equal(taskProgress(row, completed).completed, 3);
   assert.equal(completed.daily[row.id].notes, "keep this");
   const reopened = withDailyCompletion(completed, row, false);
   assert.equal(taskProgress(row, reopened).completed, 0);
@@ -61,11 +60,11 @@ test("whole-day completion and reopening update every step without erasing notes
 test("Today, assignment details, and Plan all expose the same progress", () => {
   const state = withDailyTask(empty(), row, "chapter:GC04", true);
   const checklist = taskChecklist(row, state);
-  assert.match(checklist, /1\/4 done/);
+  assert.match(checklist, /1\/3 done/);
   assert.match(checklist, /aria-pressed="true"[^>]*aria-label="Reopen: Work through GC04/);
   assert.match(renderToday({ data, state }), /Block checklist/);
   assert.match(renderToday({ data, state }), /Guardrails for today/);
-  assert.match(renderPlan({ data, state }, {}), /class="plan-day__progress">1\/4 steps/);
+  assert.match(renderPlan({ data, state }, {}), /class="plan-day__progress">1\/3 steps/);
   assert.doesNotMatch(renderPlan({ data, state }, {}), /<textarea/);
   assert.match(assignmentDetailHTML(row, data, state), /Guardrails for this block/);
 });

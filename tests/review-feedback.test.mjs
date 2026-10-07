@@ -67,7 +67,7 @@ test('Plan focuses the current week, exposes all weeks on request, and uses QBan
   const weeks=[...html.matchAll(/id="week-(\d+)"/g)].map(match=>Number(match[1]));
   assert.deepEqual(weeks,[5]);
   assert.match(html,/Show all 26 weeks/);
-  assert.match(html,/<strong>12<\/strong> QBank questions/);
+  assert.match(html,/<strong>20<\/strong> QBank questions/);
   let toggle;
   bindPlan({
     querySelector:()=>null,

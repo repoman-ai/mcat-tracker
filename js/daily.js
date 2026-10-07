@@ -1,4 +1,5 @@
 /** Daily records sync last-write-wins per day, including completion and undo. */
+export const CURRICULUM_REVISION = "2026-10-07";
 export function restoredDailyRecord(previous, current, now = Date.now()) {
   // A reversal is a NEW edit. Monotonic even when two clicks share a millisecond.
   const timestamp = Math.max(now, (Date.parse(current?.updatedAt) || 0) + 1);
@@ -128,7 +129,7 @@ export function withDailyTask(state, row, taskId, complete) {
     ...state,
     daily: {
       ...state.daily,
-      [row.id]: { ...existing, status, completedTasks, curriculumRevision: "2026-09-23", updatedAt: dailyTimestamp(existing) },
+      [row.id]: { ...existing, status, completedTasks, curriculumRevision: CURRICULUM_REVISION, updatedAt: dailyTimestamp(existing) },
     },
   };
 }
@@ -143,7 +144,7 @@ export function withDailyCompletion(state, row, complete) {
       [row.id]: {
         ...existing,
         status: complete ? "complete" : "not-started",
-        curriculumRevision: "2026-09-23",
+        curriculumRevision: CURRICULUM_REVISION,
         completedTasks,
         updatedAt: dailyTimestamp(existing),
       },

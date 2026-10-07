@@ -1,4 +1,4 @@
-import { todayISO } from "./utils.js?v=20261002-1";
+import { todayISO } from "./utils.js?v=20261007-1";
 
 let cachedData;
 

@@ -15,7 +15,7 @@ const data = await loadSiteData();
 
 test('chapter search retains the matching chapter title, prerequisites and dates', async () => {
   const chapterMap = data.guide.sections.find(section => section.id === 'chapter-map');
-  for (const query of ['PS03', 'First pass: 2026-10-02']) {
+  for (const query of ['PS03', 'First pass: 2026-10-07']) {
     let input, html;
     const search = { value: query, isConnected: true, addEventListener(name, callback) { if (name === 'input') input = callback; } };
     const context = { data: { guide: { sections: [chapterMap] } }, rerender() { html = renderGuide(context, {}, { isRouteChange: false }); } };
@@ -24,7 +24,7 @@ test('chapter search retains the matching chapter title, prerequisites and dates
     await new Promise(resolve => setTimeout(resolve, 300));
     const text = html.replace(/<[^>]*>/g, '');
     assert.match(text, /PS03 — Behavioral Sciences Ch. 3/);
-    assert.match(text, /First pass: 2026-10-02\. Retrieval:/);
+    assert.match(text, /First pass: 2026-10-07\. Retrieval:/);
     assert.match(text, /Prerequisites:/);
     assert.match(text, /Practice:/);
   }
@@ -40,11 +40,11 @@ test('buffer instructions are not required tasks and existing task IDs stay stab
 });
 
 test('weekly capacity, visible estimate and question sources remain distinct', () => {
-  for (const [date, week, sb] of [['2026-12-01', 11, 20], ['2026-12-15', 13, 8], ['2027-01-26', 19, 32]]) {
+  for (const [date, week, uw, sb] of [['2026-12-01', 11, 12, 20], ['2026-12-15', 13, 24, 8], ['2027-01-26', 19, 0, 32]]) {
     window.location.search = `?today=${date}`;
     const html = renderPlan({ data, state: normalizeState({}) }, {});
     assert.match(html, new RegExp(`id="week-${week}"`));
-    assert.match(html, new RegExp(`0 UWorld science \\+ ${sb} Section Bank`));
+    assert.match(html, new RegExp(`${uw} UWorld science \\+ ${sb} Section Bank`));
     assert.match(html, /-hour ceiling/);
     assert.match(html, /week-card__body">\s*<p class="muted">Estimated work:/);
     if (week === 19) assert.match(html, /Reserve at least 4 hours/);
@@ -52,7 +52,7 @@ test('weekly capacity, visible estimate and question sources remain distinct', (
 });
 
 test('explicit day-form completion acknowledges revised tasks without fabricating question counts', () => {
-  const row = data.index.scheduleByDate.get('2026-10-02');
+  const row = data.index.scheduleByDate.get('2026-10-07');
   for (const status of ['complete', 'not-started', 'in-progress']) {
     let submit, saved;
     const form = {
@@ -70,7 +70,7 @@ test('explicit day-form completion acknowledges revised tasks without fabricatin
     assert.equal(record.actualQuestions, 0);
     assert.equal(record.actualCars, '');
     assert.equal(record.notes, 'Keep this note');
-    assert.equal(record.curriculumRevision, status === 'in-progress' ? undefined : '2026-09-23');
+    assert.equal(record.curriculumRevision, status === 'in-progress' ? undefined : '2026-10-07');
     assert.equal(record.completedTasks['chapter:PS03'], status !== 'not-started');
   }
 });

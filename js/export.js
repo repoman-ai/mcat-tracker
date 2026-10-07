@@ -1,6 +1,6 @@
-import { isMasteryEvidence } from "./data.js?v=20261002-1";
-import { createBackup } from "./storage.js?v=20261002-1";
-import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js?v=20261002-1";
+import { isMasteryEvidence } from "./data.js?v=20261007-1";
+import { createBackup } from "./storage.js?v=20261007-1";
+import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js?v=20261007-1";
 import {
   countPracticeQuestions,
   csvCell,
@@ -9,7 +9,7 @@ import {
   percent,
   todayISO,
   topCounts,
-} from "./utils.js?v=20261002-1";
+} from "./utils.js?v=20261007-1";
 
 function exportFields(data) { return [...data.workbook.mistakeLog.fieldDefinitions, { key: "captureStatus", label: "Capture Status", type: "text" }, { key: "masteryTopicId", label: "Mastery Topic ID", type: "text" }]; }
 

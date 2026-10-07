@@ -1,7 +1,7 @@
-import { createFocusTimer, focusMinutes } from "../focus-timer.js?v=20261002-1";
-import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js?v=20261002-1";
-import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261002-1";
-import { recordedCounts, taskProgress } from "../daily.js?v=20261002-1";
+import { createFocusTimer, focusMinutes } from "../focus-timer.js?v=20261007-1";
+import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js?v=20261007-1";
+import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261007-1";
+import { recordedCounts, taskProgress } from "../daily.js?v=20261007-1";
 import {
   daysBetween,
   escapeAttr,
@@ -10,8 +10,8 @@ import {
   plural,
   todayISO,
   uniqueId,
-} from "../utils.js?v=20261002-1";
-import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js?v=20261002-1";
+} from "../utils.js?v=20261007-1";
+import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js?v=20261007-1";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.

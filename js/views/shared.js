@@ -1,9 +1,9 @@
-import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261002-1";
-import { enableSwipeComplete } from "../gestures.js?v=20261002-1";
-import { captureViewState } from "../view-state.js?v=20261002-1";
-import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261002-1";
-import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount } from "../daily.js?v=20261002-1";
-import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261002-1";
+import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-1";
+import { enableSwipeComplete } from "../gestures.js?v=20261007-1";
+import { captureViewState } from "../view-state.js?v=20261007-1";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-1";
+import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount, CURRICULUM_REVISION } from "../daily.js?v=20261007-1";
+import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-1";
 
 export function statusLabel(status = "not-started") {
   return {
@@ -122,7 +122,7 @@ export function taskChecklist(row, state) {
   if (!total) return "";
   const daily = state.daily[row.id] || {};
   return `<section class="task-checklist" aria-label="Checklist for ${escapeAttr(row.assignment)}">
-    ${daily.updatedAt && !daily.curriculumRevision && (daily.status === "complete" || Object.values(daily.completedTasks || {}).some(Boolean)) ? '<p class="form-hint">The schedule was revised September 23. Your saved progress and notes remain. Recheck changed assignments before treating this revised block as finished.</p>' : ''}
+    ${daily.updatedAt && daily.curriculumRevision !== CURRICULUM_REVISION && (daily.status === "complete" || Object.values(daily.completedTasks || {}).some(Boolean)) ? '<p class="form-hint">The schedule was revised October 7. Your saved progress and notes remain. Recheck changed assignments before treating this revised block as finished.</p>' : ''}
     ${row.confirmedChapterIds?.length ? `<p class="form-hint">Previously covered: ${escapeHTML(row.confirmedChapterIds.join(", "))}. This block is retrieval; questions and CARS still need their own check-off.</p>` : ''}
     <header><div><span class="eyebrow">Block checklist</span><h3>${total} ${total === 1 ? "step" : "steps"}</h3></div><strong>${completed}/${total} done</strong></header>
     <ul>${tasks.map((task) => {
@@ -274,7 +274,7 @@ export function bindAssignmentDetail(scope, context) {
       context.updateState({ ...context.state, daily: { ...context.state.daily, [id]: {
         ...withDailyStatus(context.state, id, status).daily[id],
         ...(completedTasks ? { completedTasks } : {}),
-        ...(["complete", "not-started"].includes(status) ? { curriculumRevision: "2026-09-23" } : {}),
+        ...(["complete", "not-started"].includes(status) ? { curriculumRevision: CURRICULUM_REVISION } : {}),
         actualQuestions, actualCars, notes: form.elements.notes.value,
       } } }, { success: "Day saved", onSaved: () => { clearEditorDraft(`day-${id}`); if (typeof scope.close === "function") scope.close(); } });
     });

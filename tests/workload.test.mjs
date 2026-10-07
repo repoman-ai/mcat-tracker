@@ -16,7 +16,7 @@ assert.equal("generatedAt" in raw, false);
 assert.equal(getModeDetails(data, "Rapid review; rapid review; Rapid review").length, 1);
 assert.equal(modeLabel("Full read; Questions first; Full read"), "Full read; Questions first");
 assert.match(renderPlan({ data, state: normalizeState({}) }, {}), /Estimated work:.*including answer review/);
-assert.equal(data.plan.question_targets.uworld_baseline, 222);
+assert.equal(data.plan.question_targets.uworld_baseline, 336);
 assert.equal(data.plan.question_targets.section_bank, 360);
 for (const week of data.validation.weeklyChecks) {
   const rows = data.schedule.filter((row) => row.week === week.week);
