@@ -1,9 +1,9 @@
 import { focusTarget } from "../view-state.js?v=20261007-2";
 import { parseRoute } from "../router.js?v=20261007-2";
-import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js?v=20261007-7";
+import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js?v=20261007-9";
 import { taskProgress } from "../daily.js?v=20261007-7";
 import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20261007-7";
-import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js?v=20261007-7";
+import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js?v=20261007-9";
 
 const defaultFilters = {
   phase: "all",
@@ -47,7 +47,7 @@ function dayCard(row, context, forceOpen, today) {
     <details class="plan-day plan-day--${escapeAttr(row.dayType)} ${row.date === today ? "is-today" : ""}" data-assignment-details="${escapeAttr(row.id)}" data-view-key="day-${escapeAttr(row.id)}" ${forceOpen ? "open" : ""}>
       <summary>
         <div class="date-tile"><span>${escapeHTML(row.day)}</span><strong>${escapeHTML(formatDate(row.date, { weekday: undefined, month: "short" }).replace(/^\w+,\s*/, ""))}</strong></div>
-        <div class="plan-day__main"><div class="plan-day__meta">${row.date === today ? '<span class="today-label">Today</span>' : ""}${status === "deferred" ? '<span class="deferred-label">Deferred</span>' : ""}${isPastDue(row, context.state, today) ? '<span class="past-due-label">Past due</span>' : ""}<span>${escapeHTML(row.resource || row.dayType.replaceAll("-", " "))}</span>${row.chapterIds.length ? `<span>${escapeHTML(row.chapterIds.join(" · "))}</span>` : ""}</div><h4>${escapeHTML(row.assignment)}</h4><p>${steps.total ? `<strong class="plan-day__progress">${steps.completed}/${steps.total} steps</strong> · ` : ""}${escapeHTML(row.practiceTargetDisplay || (row.isRest ? "Protected rest" : "No practice quota"))}</p></div>
+        <div class="plan-day__main"><div class="plan-day__meta">${row.date === today ? '<span class="today-label">Today</span>' : ""}${row.isHistoricalAssignment ? '<span>Earlier schedule history</span>' : ""}${status === "deferred" ? '<span class="deferred-label">Deferred</span>' : ""}${isPastDue(row, context.state, today) ? '<span class="past-due-label">Past due</span>' : ""}<span>${escapeHTML(row.resource || row.dayType.replaceAll("-", " "))}</span>${row.chapterIds.length ? `<span>${escapeHTML(row.chapterIds.join(" · "))}</span>` : ""}</div><h4>${escapeHTML(row.assignment)}</h4><p>${steps.total ? `<strong class="plan-day__progress">${steps.completed}/${steps.total} steps</strong> · ` : ""}${escapeHTML(row.practiceTargetDisplay || (row.isRest ? "Protected rest" : "No practice quota"))}</p></div>
         ${isStudyRow(row) ? completionButton(row, context.state, { compact: true }) : `<span class="status-badge status-badge--${escapeAttr(status)}">${escapeHTML(statusLabel(status))}</span>`}
         <span class="disclosure-icon" aria-hidden="true">⌄</span>
       </summary>

@@ -1,4 +1,4 @@
-import { isStudyRow } from "./data.js?v=20261007-7";
+import { isStudyRow } from "./data.js?v=20261007-9";
 import { daysBetween, toISODate } from "./utils.js?v=20261007-7";
 
 // Original copy is verbatim except the approved 515 → 520 change in #39.

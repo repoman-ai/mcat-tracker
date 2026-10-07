@@ -89,6 +89,8 @@ Every weekly high estimate fits its ceiling. Rest days have zero required work; 
 
 Editing one checklist step or saving notes on an older completed day keeps the revision notice. After reviewing all revised steps, confirm the checklist in the day record or explicitly complete the day. Counts and notes are preserved, including zero counts and imported records without timestamps.
 
+The October 7 restart makes earlier dated assignments schedule history. They remain visible and editable, with all saved records retained, but do not appear in Today or Plan as past due. This does not mark them complete. Unfinished assignments on or after the restart date still become past due normally.
+
 Regeneration is byte-reproducible for unchanged sources. `sourceProvenance` hashes identify inputs; no wall-clock timestamp is written. The workbook must contain the tracker sheet named by `prep_weeks`; exam dates and total/per-section SB targets come from `plan.json`.
 
 ### Planned exam date

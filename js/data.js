@@ -65,8 +65,9 @@ export function isStudyRow(row) {
 }
 
 export function isPastDue(row, state, today = todayISO()) {
-  // Deferred means later, not done. Only an explicit completion clears work.
-  return isStudyRow(row) && row.date < today && state.daily[row.id]?.status !== "complete";
+  // A restart retires earlier dated assignments without claiming completion.
+  // Deferred work in the active plan remains due until explicitly completed.
+  return isStudyRow(row) && !row.isHistoricalAssignment && row.date < today && state.daily[row.id]?.status !== "complete";
 }
 
 export function pendingRows(data, state, today = todayISO()) {

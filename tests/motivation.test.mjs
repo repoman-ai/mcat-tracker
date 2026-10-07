@@ -189,7 +189,10 @@ test("Today leads with the prominent message before its header and backlog, and 
   const messagePosition = html.indexOf("data-study-message");
   assert.ok(messagePosition >= 0);
   assert.ok(messagePosition < html.indexOf('class="view-header today-header"'));
-  assert.ok(messagePosition < html.indexOf('class="catchup-card"'));
+  assert.doesNotMatch(html, /class="catchup-card"/); // No backlog before today's restart.
+  const backlogData = {...data, schedule:data.schedule.map(row=>row.date === "2026-10-06" ? {...row,isHistoricalAssignment:false} : row)};
+  const backlogHTML = renderToday({...context,data:backlogData});
+  assert.ok(backlogHTML.indexOf("data-study-message") < backlogHTML.indexOf('class="catchup-card"'));
   assert.ok(messagePosition < html.indexOf('id="today-assignment"'));
   assert.match(html, /data-go-to-study/);
   assert.match(html, /Hide study messages for today/);

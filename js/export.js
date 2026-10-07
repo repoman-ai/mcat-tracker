@@ -1,4 +1,4 @@
-import { isMasteryEvidence } from "./data.js?v=20261007-7";
+import { isMasteryEvidence } from "./data.js?v=20261007-9";
 import { createBackup } from "./storage.js?v=20261007-7";
 import { assignmentTasks, taskProgress, recordedCounts } from "./daily.js?v=20261007-7";
 import {

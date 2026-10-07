@@ -8068,6 +8068,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 70,
         "highMinutes": 107,
@@ -8141,6 +8142,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 70,
         "highMinutes": 97,
@@ -8218,6 +8220,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -8285,6 +8288,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 45,
         "highMinutes": 75,
@@ -8327,6 +8331,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 15,
         "highMinutes": 30,
@@ -8367,6 +8372,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -8411,6 +8417,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 25,
         "highMinutes": 40,
@@ -8489,6 +8496,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -8559,6 +8567,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -8630,6 +8639,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -8673,6 +8683,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 15,
         "highMinutes": 30,
@@ -8715,6 +8726,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 15,
         "highMinutes": 30,
@@ -8755,6 +8767,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -8797,6 +8810,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 25,
         "highMinutes": 40,
@@ -8843,6 +8857,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": true,
       "estimatedWorkload": {
         "lowMinutes": 25,
         "highMinutes": 30,
@@ -8911,6 +8926,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 69,
         "highMinutes": 117,
@@ -8994,6 +9010,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 69,
         "highMinutes": 117,
@@ -9034,6 +9051,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -9074,6 +9092,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -9115,6 +9134,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -9156,6 +9176,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -9257,6 +9278,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 155,
@@ -9331,6 +9353,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 112,
         "highMinutes": 188,
@@ -9407,6 +9430,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 175,
@@ -9489,6 +9513,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 108,
         "highMinutes": 181,
@@ -9568,6 +9593,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 165,
@@ -9608,6 +9634,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -9692,6 +9719,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -9764,6 +9792,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 202,
@@ -9841,6 +9870,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 165,
@@ -9914,6 +9944,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 202,
@@ -9986,6 +10017,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -10058,6 +10090,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -10098,6 +10131,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -10194,6 +10228,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 155,
@@ -10288,6 +10323,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 138,
         "highMinutes": 216,
@@ -10364,6 +10400,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -10442,6 +10479,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -10511,6 +10549,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -10583,6 +10622,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 113,
         "highMinutes": 194,
@@ -10623,6 +10663,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -10720,6 +10761,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 100,
         "highMinutes": 155,
@@ -10800,6 +10842,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 133,
         "highMinutes": 216,
@@ -10885,6 +10928,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 138,
         "highMinutes": 216,
@@ -10967,6 +11011,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 110,
         "highMinutes": 165,
@@ -11047,6 +11092,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 85,
         "highMinutes": 132,
@@ -11122,6 +11168,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -11162,6 +11209,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -11252,6 +11300,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 155,
@@ -11336,6 +11385,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 128,
         "highMinutes": 216,
@@ -11423,6 +11473,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 138,
         "highMinutes": 216,
@@ -11496,6 +11547,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 85,
         "highMinutes": 132,
@@ -11572,6 +11624,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -11645,6 +11698,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 158,
@@ -11686,6 +11740,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -11776,6 +11831,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 155,
@@ -11856,6 +11912,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 128,
         "highMinutes": 216,
@@ -11940,6 +11997,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 138,
         "highMinutes": 216,
@@ -12018,6 +12076,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 85,
         "highMinutes": 132,
@@ -12099,6 +12158,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -12181,6 +12241,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 158,
@@ -12222,6 +12283,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -12316,6 +12378,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 155,
@@ -12395,6 +12458,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 115,
         "highMinutes": 165,
@@ -12488,6 +12552,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 130,
         "highMinutes": 202,
@@ -12528,6 +12593,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -12614,6 +12680,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 130,
         "highMinutes": 202,
@@ -12698,6 +12765,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -12738,6 +12806,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -12856,6 +12925,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 205,
         "highMinutes": 315,
@@ -12934,6 +13004,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -13019,6 +13090,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -13108,6 +13180,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -13190,6 +13263,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 99,
         "highMinutes": 152,
@@ -13268,6 +13342,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 99,
         "highMinutes": 152,
@@ -13308,6 +13383,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -13439,6 +13515,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 205,
         "highMinutes": 315,
@@ -13527,6 +13604,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 115,
         "highMinutes": 165,
@@ -13602,6 +13680,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 115,
         "highMinutes": 165,
@@ -13706,6 +13785,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 130,
         "highMinutes": 202,
@@ -13809,6 +13889,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 126,
         "highMinutes": 195,
@@ -13903,6 +13984,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -13943,6 +14025,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -14037,6 +14120,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 155,
@@ -14124,6 +14208,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -14203,6 +14288,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -14290,6 +14376,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -14368,6 +14455,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 123,
         "highMinutes": 194,
@@ -14446,6 +14534,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 123,
         "highMinutes": 194,
@@ -14486,6 +14575,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -14597,6 +14687,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 145,
         "highMinutes": 219,
@@ -14683,6 +14774,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -14743,6 +14835,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -14802,6 +14895,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -14842,6 +14936,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -14882,6 +14977,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -14923,6 +15019,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -14964,6 +15061,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -15052,6 +15150,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 176,
         "highMinutes": 284,
@@ -15126,6 +15225,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 158,
@@ -15224,6 +15324,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 176,
         "highMinutes": 284,
@@ -15265,6 +15366,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -15362,6 +15464,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -15403,6 +15506,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -15463,6 +15567,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 158,
@@ -15563,6 +15668,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -15623,6 +15729,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -15682,6 +15789,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -15722,6 +15830,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -15762,6 +15871,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -15803,6 +15913,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -15844,6 +15955,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -15930,6 +16042,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 160,
         "highMinutes": 256,
@@ -16018,6 +16131,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 160,
         "highMinutes": 256,
@@ -16116,6 +16230,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -16199,6 +16314,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 105,
         "highMinutes": 158,
@@ -16274,6 +16390,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -16315,6 +16432,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -16389,6 +16507,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -16466,6 +16585,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -16527,6 +16647,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -16587,6 +16708,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -16628,6 +16750,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -16669,6 +16792,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -16711,6 +16835,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -16753,6 +16878,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -16840,6 +16966,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -16901,6 +17028,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -16988,6 +17116,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 65,
         "highMinutes": 94,
@@ -17049,6 +17178,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 40,
         "highMinutes": 52,
@@ -17113,6 +17243,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 65,
         "highMinutes": 94,
@@ -17155,6 +17286,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -17217,6 +17349,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 65,
         "highMinutes": 94,
@@ -17304,6 +17437,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 90,
         "highMinutes": 132,
@@ -17362,6 +17496,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 30,
         "highMinutes": 52,
@@ -17418,6 +17553,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 30,
         "highMinutes": 52,
@@ -17459,6 +17595,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -17500,6 +17637,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -17542,6 +17680,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -17584,6 +17723,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -17671,6 +17811,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -17759,6 +17900,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -17856,6 +17998,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 75,
         "highMinutes": 116,
@@ -17937,6 +18080,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 164,
@@ -17997,6 +18141,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 164,
@@ -18039,6 +18184,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -18100,6 +18246,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 60,
         "highMinutes": 94,
@@ -18194,6 +18341,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -18252,6 +18400,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 30,
         "highMinutes": 52,
@@ -18309,6 +18458,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 30,
         "highMinutes": 52,
@@ -18350,6 +18500,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -18391,6 +18542,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -18433,6 +18585,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -18475,6 +18628,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -18561,6 +18715,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -18649,6 +18804,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 116,
@@ -18746,6 +18902,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 75,
         "highMinutes": 116,
@@ -18829,6 +18986,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 164,
@@ -18888,6 +19046,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 95,
         "highMinutes": 164,
@@ -18930,6 +19089,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -18989,6 +19149,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 60,
         "highMinutes": 94,
@@ -19059,6 +19220,7 @@
       "isFullLengthReview": false,
       "isSectionBank": true,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 80,
         "highMinutes": 132,
@@ -19116,6 +19278,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 30,
         "highMinutes": 52,
@@ -19170,6 +19333,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 30,
         "highMinutes": 52,
@@ -19211,6 +19375,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -19252,6 +19417,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -19294,6 +19460,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 240,
         "highMinutes": 300,
@@ -19336,6 +19503,7 @@
       "isFullLengthReview": true,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 120,
         "highMinutes": 150,
@@ -19391,6 +19559,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 50,
         "highMinutes": 92,
@@ -19445,6 +19614,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 50,
         "highMinutes": 92,
@@ -19499,6 +19669,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 35,
         "highMinutes": 67,
@@ -19553,6 +19724,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 35,
         "highMinutes": 67,
@@ -19594,6 +19766,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 35,
         "highMinutes": 70,
@@ -19635,6 +19808,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -19676,6 +19850,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 35,
         "highMinutes": 70,
@@ -19730,6 +19905,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 35,
         "highMinutes": 67,
@@ -19784,6 +19960,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 35,
         "highMinutes": 67,
@@ -19825,6 +20002,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -19866,6 +20044,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": true,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 450,
         "highMinutes": 480,
@@ -19909,6 +20088,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -19950,6 +20130,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,
@@ -19991,6 +20172,7 @@
       "isFullLengthReview": false,
       "isSectionBank": false,
       "isTestWindow": false,
+      "isHistoricalAssignment": false,
       "estimatedWorkload": {
         "lowMinutes": 0,
         "highMinutes": 0,

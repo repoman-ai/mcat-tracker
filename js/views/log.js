@@ -1,6 +1,6 @@
 import { clearEditorDraft, clearEditorDrafts } from "../editor-drafts.js?v=20261007-2";
-import { exportJSON, exportMistakeCSV, exportWorkbook } from "../export.js?v=20261007-7";
-import { dueEntries, isMasteryEvidence } from "../data.js?v=20261007-7";
+import { exportJSON, exportMistakeCSV, exportWorkbook } from "../export.js?v=20261007-9";
+import { dueEntries, isMasteryEvidence } from "../data.js?v=20261007-9";
 import { mergeStates, validateBackup } from "../storage.js?v=20261007-7";
 import {
   debounce,
@@ -15,7 +15,7 @@ import {
   topCounts,
   uniqueId,
 } from "../utils.js?v=20261007-7";
-import { emptyState } from "./shared.js?v=20261007-7";
+import { emptyState } from "./shared.js?v=20261007-9";
 
 const logFilters = { search: "", section: "all", source: "all", result: "all", errorType: "all", retest: "all", dateFrom: "", dateTo: "", sort: "updated-desc" };
 const masteryFilters = { section: "all", confidence: "all", review: "all" };

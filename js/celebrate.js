@@ -1,4 +1,4 @@
-import { isStudyRow, weekRows } from "./data.js?v=20261007-7";
+import { isStudyRow, weekRows } from "./data.js?v=20261007-9";
 import { todayISO } from "./utils.js?v=20261007-7";
 
 export function reducedMotion(setting, systemReduced = false) {

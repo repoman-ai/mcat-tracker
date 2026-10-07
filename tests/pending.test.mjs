@@ -9,11 +9,41 @@ import { bindCompletionButtons } from "../js/views/shared.js";
 import { bindPlan, renderPlan } from "../js/views/plan.js";
 
 const raw = JSON.parse(await fs.readFile(new URL("../data/site-data.json", import.meta.url), "utf8"));
-globalThis.fetch = async () => ({ ok: true, json: async () => structuredClone(raw) });
+// Exercise the generic queue rules on an uninterrupted plan. The real restart
+// boundary has its own regression coverage below.
+globalThis.fetch = async () => ({ ok: true, json: async () => ({...structuredClone(raw),schedule:raw.schedule.map(row=>({...structuredClone(row),isHistoricalAssignment:false}))}) });
 globalThis.window = { location: { search: "?today=2026-09-25", hash: "#today" } };
 const data = await loadSiteData();
 const empty = () => normalizeState({});
 const preview = (date) => { window.location.search = `?today=${date}`; };
+
+test("October restart retires earlier assignments without clearing saved records or fabricating completion", () => {
+  const restarted = {...data, schedule:raw.schedule};
+  const state=normalizeState({daily:{
+    "2026-09-22":{status:"complete",actualQuestions:0,notes:"Preserve completion"},
+    "2026-09-24":{status:"in-progress",notes:"Preserve unfinished history"},
+    "2026-10-06":{status:"deferred"},
+  }});
+  const before=JSON.stringify(state);
+  preview("2026-10-07");
+  assert.deepEqual(pendingRows(restarted,state),[]);
+  assert.doesNotMatch(renderToday({data:restarted,state}),/class="catchup-card"/);
+  assert.deepEqual(pendingRows(restarted,state,"2026-10-08").map(row=>row.id),["2026-10-07"]);
+  assert.deepEqual(pendingRows(restarted,state,"2026-10-09").map(row=>row.id),["2026-10-07","2026-10-08"]);
+  assert.ok(completedRows(restarted,state).some(row=>row.id==="2026-09-22"));
+  assert.equal(JSON.stringify(state),before);
+});
+
+test("earlier days stay visible as history in Plan but never acquire a past-due badge",()=>{
+  const restarted={...data,schedule:raw.schedule};
+  const state=empty();
+  preview("2026-10-07");
+  const html=renderPlan({data:restarted,state},{detail:"2026-10-06"});
+  assert.match(html,/Earlier schedule history/);
+  assert.doesNotMatch(html,/class="past-due-label"/);
+  assert.ok(raw.schedule.filter(row=>row.date<raw.plan.resume.date).every(row=>row.isHistoricalAssignment));
+  assert.ok(raw.schedule.filter(row=>row.date>=raw.plan.resume.date).every(row=>!row.isHistoricalAssignment));
+});
 
 test("before/first plan day has no pending work, including superseded August history", () => {
   const state = normalizeState({ daily: { "2026-08-19": { status: "in-progress" } } });

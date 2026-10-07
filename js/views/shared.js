@@ -1,7 +1,7 @@
 import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-2";
 import { enableSwipeComplete } from "../gestures.js?v=20261007-2";
 import { captureViewState } from "../view-state.js?v=20261007-2";
-import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-7";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-9";
 import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, recordStudyActivity, parseActualCount, CURRICULUM_REVISION, needsCurriculumRecheck } from "../daily.js?v=20261007-7";
 import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-7";
 
@@ -199,6 +199,7 @@ export function assignmentDetailHTML(row, data, state) {
       <section class="detail-hero detail-hero--${escapeAttr(row.dayType)}">
         <div class="eyebrow">${escapeHTML(formatDateLong(row.date))} · ${typeof row.week === "number" ? `Week ${row.week}` : "Placeholder window"}</div>
         <h3>${escapeHTML(row.assignment)}</h3>
+        ${row.isHistoricalAssignment ? '<p class="form-hint">Earlier schedule history. This assignment is outside the restarted plan and does not count as past due. Saved progress and notes remain; completion is not assumed.</p>' : ''}
         <div class="chip-row">
           <span class="chip">${escapeHTML(row.phase)}</span>
           <span class="chip chip--soft">${escapeHTML(row.estimatedWorkload.label)}</span>

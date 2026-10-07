@@ -597,6 +597,7 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
     unknown_chapters: set[str] = set()
     assigned_chapters: list[str] = []
     start = date.fromisoformat(plan["plan_start"])
+    resume = date.fromisoformat(plan.get("resume", {}).get("date", plan["plan_start"]))
 
     for index, raw in enumerate(raw_rows, start=2):
         missing_values = [field for field in ["date", "day", "week", "phase", "weekly_focus", "assignment", "mode", "status"] if not raw[field].strip()]
@@ -666,6 +667,7 @@ def parse_schedule(chapter_index: dict[str, dict[str, Any]], plan: dict[str, Any
             "isFullLengthReview": is_review,
             "isSectionBank": is_section_bank,
             "isTestWindow": is_test_window,
+            "isHistoricalAssignment": current < resume,
         }
         if rule := stop_rule_for(raw):
             row["stopRule"] = rule
