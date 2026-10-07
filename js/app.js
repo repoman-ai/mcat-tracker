@@ -1,19 +1,19 @@
-import { createMotivationController } from "./motivation.js?v=20261007-3";
+import { createMotivationController } from "./motivation.js?v=20261007-7";
 import { bindEditorDrafts } from "./editor-drafts.js?v=20261007-2";
-import { createCelebrationController } from "./celebrate.js?v=20261007-2";
+import { createCelebrationController } from "./celebrate.js?v=20261007-7";
 import { createDialogController } from "./dialog.js?v=20261007-2";
-import { loadSiteData } from "./data.js?v=20261007-2";
-import { exportCorruptRecovery } from "./export.js?v=20261007-2";
+import { loadSiteData } from "./data.js?v=20261007-7";
+import { exportCorruptRecovery } from "./export.js?v=20261007-7";
 import { navigate, startRouter } from "./router.js?v=20261007-2";
-import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName, saveState } from "./storage.js?v=20261007-2";
-import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js?v=20261007-2";
+import { lastLoadIssue, loadState, MAX_DISPLAY_NAME_LENGTH, sanitizeDisplayName, saveState } from "./storage.js?v=20261007-7";
+import { configureLoginUsername, getLoginUsernameStatus, getSyncStatus, initializeSync, rememberedIdentifier, removeLoginUsername, renameLoginUsername, requestPinReset, scheduleCloudSync, signOutOfSync, syncNow, unlockWithPin } from "./sync.js?v=20261007-7";
 import { MAX_LOGIN_USERNAME_LENGTH, validateLoginUsername } from "./username.js?v=20261007-2";
-import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO } from "./utils.js?v=20261007-2";
-import { renderToday, bindToday, leaveToday } from "./views/today.js?v=20261007-6";
-import { renderPlan, bindPlan } from "./views/plan.js?v=20261007-2";
-import { renderExams, bindExams } from "./views/exams.js?v=20261007-2";
-import { renderLog, bindLog } from "./views/log.js?v=20261007-2";
-import { renderGuide, bindGuide } from "./views/guide.js?v=20261007-2";
+import { escapeAttr, escapeHTML, formatDateLong, setDocumentTitle, todayISO, watchLocalDay } from "./utils.js?v=20261007-7";
+import { renderToday, bindToday, leaveToday } from "./views/today.js?v=20261007-8";
+import { renderPlan, bindPlan } from "./views/plan.js?v=20261007-7";
+import { renderExams, bindExams } from "./views/exams.js?v=20261007-7";
+import { renderLog, bindLog } from "./views/log.js?v=20261007-7";
+import { renderGuide, bindGuide } from "./views/guide.js?v=20261007-7";
 import { createStateUpdater } from "./state-actions.js?v=20261007-2";
 import { createToastController } from "./toast.js?v=20261007-2";
 import { captureViewState, scrollInstantly } from "./view-state.js?v=20261007-2";
@@ -394,6 +394,7 @@ function updateNav(view) {
 
 function renderCurrent({ preserveView = true, routeChange = false, revisit = false } = {}) {
   if (!data || !state) return;
+  displayedDate = todayISO();
   const cleanups = viewCleanups;
   viewCleanups = [];
   for (const cleanup of cleanups) {
@@ -477,6 +478,10 @@ async function initialize() {
 }
 
 initialize();
+
+watchLocalDay(() => {
+  if (data && state && displayedDate !== todayISO()) renderCurrent();
+});
 
 // Document anchors must not be mistaken for application routes.
 document.querySelector(".skip-link")?.addEventListener("click", (event) => {

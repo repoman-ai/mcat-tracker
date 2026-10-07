@@ -1,8 +1,8 @@
-import { motivationContext } from "../motivation.js?v=20261007-3";
+import { motivationContext } from "../motivation.js?v=20261007-7";
 import { createFocusTimer, focusMinutes } from "../focus-timer.js?v=20261007-2";
 import { enablePullToRefresh, enableViewPager, pageSwipeTarget } from "../gestures.js?v=20261007-2";
-import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261007-2";
-import { recordedCounts, taskProgress } from "../daily.js?v=20261007-2";
+import { completedRows, dueEntries, getTodayContext, isStudyRow, pendingRows, weekRows, modeLabel } from "../data.js?v=20261007-7";
+import { recordedCounts, taskProgress } from "../daily.js?v=20261007-7";
 import {
   daysBetween,
   escapeAttr,
@@ -11,8 +11,8 @@ import {
   plural,
   todayISO,
   uniqueId,
-} from "../utils.js?v=20261007-2";
-import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js?v=20261007-2";
+} from "../utils.js?v=20261007-7";
+import { bindWorkRows, workRow, bindCompletionButtons, bindTaskChecklist, completionButton, emptyState, progressBar, taskChecklist } from "./shared.js?v=20261007-7";
 
 // Completion and sync rerender Today. Keep one timer across those renders so
 // checking off a past day doesn't reset a running block or orphan intervals.
@@ -123,7 +123,7 @@ function studyMessage(context, today, isRouteChange) {
   const message = context.motivation?.get(eligibility, today, { revisit: isRouteChange });
   if (!message) return "";
   if (message.dismissed) return `<div class="study-message-restore"><button class="button button--quiet" type="button" data-restore-study-message data-view-focus="study-message">Show study message</button></div>`;
-  const label = message.section === "motivation" ? "Credit where it's due" : "";
+  const label = formatDateLong(today);
   const countdownLabel = ([11, 12].includes(message.phraseId) || String(message.phraseId).startsWith("early-"))
     ? `<span class="study-message__countdown">${eligibility.days} days · ${eligibility.registered ? "registered exam" : "planning date"}</span>` : "";
   const heading = label || countdownLabel

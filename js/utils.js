@@ -32,6 +32,22 @@ export function todayISO() {
   return parseISODate(preview) ? preview : toISODate(new Date());
 }
 
+/** Keep a foreground page current even when it stays open through midnight. */
+export function watchLocalDay(onChange, {
+  getDay = todayISO, isVisible = () => !document.hidden,
+  schedule = setInterval, cancel = clearInterval,
+} = {}) {
+  let day = getDay();
+  const timer = schedule(() => {
+    if (!isVisible()) return;
+    const next = getDay();
+    if (next === day) return;
+    day = next;
+    onChange(next);
+  }, 60_000);
+  return () => cancel(timer);
+}
+
 export function formatDate(value, options = {}) {
   const parsed = value instanceof Date ? value : parseISODate(value);
   if (!parsed) return value || "—";

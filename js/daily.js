@@ -8,7 +8,9 @@ export function needsCurriculumRecheck(record = {}) {
 export function restoredDailyRecord(previous, current, now = Date.now()) {
   // A reversal is a NEW edit. Monotonic even when two clicks share a millisecond.
   const timestamp = Math.max(now, (Date.parse(current?.updatedAt) || 0) + 1);
-  return { ...(previous || { status: "not-started", completedTasks: {} }), updatedAt: new Date(timestamp).toISOString() };
+  return { ...(previous || { status: "not-started", completedTasks: {} }),
+    lastStudiedAt: previous?.lastStudiedAt ?? previous?.updatedAt ?? "",
+    updatedAt: new Date(timestamp).toISOString() };
 }
 
 export function parseActualCount(value) {
@@ -20,6 +22,17 @@ export function parseActualCount(value) {
 }
 
 export function dailyTimestamp(record) { return new Date(Math.max(Date.now(), (Date.parse(record?.updatedAt) || 0) + 1)).toISOString(); }
+
+/** Track new work separately from notes, deferrals, reopens and undo edits. */
+export function recordStudyActivity(previous, next) {
+  const previousStatus = previous.status === "deferred" ? resumedStatus(previous) : previous.status;
+  const newWork = (next.status === "complete" && previousStatus !== "complete")
+    || (next.status === "in-progress" && !["in-progress", "complete"].includes(previousStatus))
+    || Object.entries(next.completedTasks || {}).some(([id, done]) => done === true
+      && previousStatus !== "complete" && previous.completedTasks?.[id] !== true)
+    || ["actualQuestions", "actualCars"].some(key => Number(next[key]) > Math.max(0, Number(previous[key]) || 0));
+  return { ...next, lastStudiedAt: newWork ? next.updatedAt : previous.lastStudiedAt ?? previous.updatedAt ?? "" };
+}
 
 /** Share the same optional-count semantics between Today and exported reports. */
 export function recordedCounts(rows, state, key) {
@@ -44,7 +57,7 @@ export function withDailyStatus(state, id, status) {
     ...state,
     daily: {
       ...state.daily,
-      [id]: { ...record, status, updatedAt: dailyTimestamp(record) },
+      [id]: recordStudyActivity(state.daily[id] || {}, { ...record, status, updatedAt: dailyTimestamp(record) }),
     },
   };
 }
@@ -135,7 +148,7 @@ export function withDailyTask(state, row, taskId, complete) {
     daily: {
       ...state.daily,
       // One edited step cannot acknowledge the other steps of a revised day.
-      [row.id]: { ...existing, status, completedTasks, curriculumRevision: needsCurriculumRecheck(existing) ? existing.curriculumRevision : CURRICULUM_REVISION, updatedAt: dailyTimestamp(existing) },
+      [row.id]: recordStudyActivity(existing, { ...existing, status, completedTasks, curriculumRevision: needsCurriculumRecheck(existing) ? existing.curriculumRevision : CURRICULUM_REVISION, updatedAt: dailyTimestamp(existing) }),
     },
   };
 }
@@ -147,13 +160,13 @@ export function withDailyCompletion(state, row, complete) {
     ...state,
     daily: {
       ...state.daily,
-      [row.id]: {
+      [row.id]: recordStudyActivity(existing, {
         ...existing,
         status: complete ? "complete" : "not-started",
         curriculumRevision: CURRICULUM_REVISION,
         completedTasks,
         updatedAt: dailyTimestamp(existing),
-      },
+      }),
     },
   };
 }

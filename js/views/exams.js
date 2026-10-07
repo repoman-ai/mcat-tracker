@@ -1,6 +1,6 @@
 import { clearEditorDraft } from "../editor-drafts.js?v=20261007-2";
-import { withDailyCompletion } from "../daily.js?v=20261007-2";
-import { escapeAttr, escapeHTML, formatDateLong, parseISODate } from "../utils.js?v=20261007-2";
+import { withDailyCompletion } from "../daily.js?v=20261007-7";
+import { escapeAttr, escapeHTML, formatDateLong, parseISODate } from "../utils.js?v=20261007-7";
 
 function score(value) {
   const number = Number(value);

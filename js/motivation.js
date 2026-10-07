@@ -1,5 +1,5 @@
-import { isStudyRow } from "./data.js?v=20261007-2";
-import { daysBetween, toISODate } from "./utils.js?v=20261007-2";
+import { isStudyRow } from "./data.js?v=20261007-7";
+import { daysBetween, toISODate } from "./utils.js?v=20261007-7";
 
 // Original copy is verbatim except the approved 515 → 520 change in #39.
 // IDs retain the handoff's deliberate gaps.
@@ -92,10 +92,11 @@ export function motivationContext(data, state, today, options = MOTIVATION_OPTIO
   const row = data.index.scheduleByDate.get(today);
   if (!row || !isStudyRow(row)) return null;
   const studyDates = data.schedule.filter(isStudyRow).filter(item => item.date <= today);
-  const hasWork = (date) => recordedWork(state.daily[date]) || (state.focusSessions || []).some(session =>
+  const workDates = new Set(Object.values(state.daily).filter(recordedWork)
+    .map(record => dayOf(record.lastStudiedAt ?? record.updatedAt)));
+  const hasWork = (date) => recordedWork(state.daily[date]) || workDates.has(date) || (state.focusSessions || []).some(session =>
     savedFocus(session) && dayOf(session.endedAt || session.startedAt) === date);
-  const studied = hasWork(today) || Object.values(state.daily).some(record =>
-    recordedWork(record) && dayOf(record.updatedAt) === today);
+  const studied = hasWork(today);
   // Rest days neither create nor break a streak. Require two study dates with
   // saved work; no inference from calendar age alone.
   let streak = 0;
@@ -144,17 +145,22 @@ function pickFresh(pool, uses, recentThemes, previousId, random) {
   return choices[Math.min(choices.length - 1, Math.floor(random() * choices.length))];
 }
 
+function messageText(phrase, kicker, context) {
+  return `${phrase.text.replaceAll("{days}", String(context.days))}${kicker ? ` ${kicker.text}` : ""}`;
+}
+
 /** Pure selection with independent phrase and ending histories. */
 export function selectMessage(context, history = {}, random = Math.random) {
   const pool = eligiblePhrases(context);
   if (!pool.length) return null;
   const phraseUses = { ...history.phraseUses }, kickerUses = { ...history.kickerUses };
-  const withoutEcho = pool.filter(phrase => !history.current?.text?.includes(phrase.text));
+  const previousText = typeof history.current?.text === "string" ? history.current.text : "";
+  const withoutEcho = pool.filter(phrase => !previousText.includes(messageText(phrase, null, context)));
   const phrase = pickFresh(withoutEcho.length ? withoutEcho : pool, phraseUses, history.themes || [], history.current?.phraseId, random);
   let kicker = null;
   if (context.section === "pressure" && (!phrase.optionalKicker || random() < .5)) {
     const kickers = eligibleKickers(phrase);
-    const withoutEchoKicker = kickers.filter(item => !history.current?.text?.includes(item.text));
+    const withoutEchoKicker = kickers.filter(item => !previousText.includes(item.text));
     kicker = pickFresh(withoutEchoKicker.length ? withoutEchoKicker : kickers, kickerUses, [history.lastKickerTheme], history.lastKickerId, random);
     kickerUses[kicker.id] = (kickerUses[kicker.id] || 0) + 1;
   }
@@ -164,7 +170,7 @@ export function selectMessage(context, history = {}, random = Math.random) {
     themes: [...(history.themes || []), phrase.theme].slice(-2),
     lastKickerId: kicker?.id || history.lastKickerId,
     lastKickerTheme: kicker?.theme || history.lastKickerTheme,
-    current: { phraseId: phrase.id, kickerId: kicker?.id || "", section: context.section, text: `${phrase.text.replaceAll("{days}", String(context.days))}${kicker ? ` ${kicker.text}` : ""}` },
+    current: { phraseId: phrase.id, kickerId: kicker?.id || "", section: context.section, text: messageText(phrase, kicker, context) },
   };
 }
 
@@ -188,9 +194,15 @@ export function createMotivationController({ storage, now = () => Date.now(), ra
       const timestamp = now();
       const key = keyFor(context);
       const current = history.current;
-      const valid = typeof current?.text === "string" && eligiblePhrases(context).some(phrase => phrase.id === current?.phraseId)
-        && current?.section === context.section;
-      const rotate = !valid || history.day !== today || history.contextKey !== key
+      const phrase = eligiblePhrases(context).find(item => item.id === current?.phraseId);
+      const kicker = phrase && eligibleKickers(phrase).find(item => item.id === current?.kickerId);
+      const validKicker = context.section === "pressure"
+        ? (current?.kickerId ? Boolean(kicker) : phrase?.optionalKicker)
+        : !current?.kickerId;
+      const valid = phrase && validKicker && current?.section === context.section
+        && current?.text === messageText(phrase, kicker, context);
+      const validTimestamp = Number.isFinite(history.selectedAt) && history.selectedAt <= timestamp;
+      const rotate = !valid || !validTimestamp || history.day !== today || history.contextKey !== key
         || (revisit && timestamp - (history.selectedAt || 0) >= options.returnAfterMs);
       if (history.dismissedDay === today) return { dismissed: true };
       if (rotate) {

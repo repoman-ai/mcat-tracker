@@ -1,9 +1,9 @@
 import { focusTarget } from "../view-state.js?v=20261007-2";
 import { parseRoute } from "../router.js?v=20261007-2";
-import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js?v=20261007-2";
-import { taskProgress } from "../daily.js?v=20261007-2";
-import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20261007-2";
-import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js?v=20261007-2";
+import { isPastDue, isStudyRow, pendingRows, scheduledWeekForDate } from "../data.js?v=20261007-7";
+import { taskProgress } from "../daily.js?v=20261007-7";
+import { countPracticeQuestions, escapeAttr, escapeHTML, formatDate, todayISO } from "../utils.js?v=20261007-7";
+import { assignmentDetailHTML, bindAssignmentDetail, bindCompletionButtons, completionButton, statusLabel, workRow, bindWorkRows } from "./shared.js?v=20261007-7";
 
 const defaultFilters = {
   phase: "all",

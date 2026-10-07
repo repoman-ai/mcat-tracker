@@ -1,9 +1,9 @@
 import { bindEditorDrafts, clearEditorDraft } from "../editor-drafts.js?v=20261007-2";
 import { enableSwipeComplete } from "../gestures.js?v=20261007-2";
 import { captureViewState } from "../view-state.js?v=20261007-2";
-import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-2";
-import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, parseActualCount, CURRICULUM_REVISION, needsCurriculumRecheck } from "../daily.js?v=20261007-2";
-import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-2";
+import { getModeDetails, isStudyRow, modeLabel } from "../data.js?v=20261007-7";
+import { assignmentTasks, taskProgress, withDailyCompletion, withDailyStatus, withDailyTask, resumedStatus, restoredDailyRecord, recordStudyActivity, parseActualCount, CURRICULUM_REVISION, needsCurriculumRecheck } from "../daily.js?v=20261007-7";
+import { escapeAttr, escapeHTML, formatDate, formatDateLong, daysBetween, countPracticeQuestions } from "../utils.js?v=20261007-7";
 
 export function statusLabel(status = "not-started") {
   return {
@@ -274,12 +274,12 @@ export function bindAssignmentDetail(scope, context) {
         || status === "not-started" || (status === "complete" && existing.status !== "complete");
       const completedTasks = acknowledge && ["complete", "not-started"].includes(status)
         ? Object.fromEntries(assignmentTasks(row).map((task) => [task.id, status === "complete"])) : existing.completedTasks;
-      context.updateState({ ...context.state, daily: { ...context.state.daily, [id]: {
+      context.updateState({ ...context.state, daily: { ...context.state.daily, [id]: recordStudyActivity(existing, {
         ...withDailyStatus(context.state, id, status).daily[id],
         ...(completedTasks ? { completedTasks } : {}),
         ...(acknowledge && (["complete", "not-started"].includes(status) || form.elements.confirmRevision?.checked) ? { curriculumRevision: CURRICULUM_REVISION } : {}),
         actualQuestions, actualCars, notes: form.elements.notes.value,
-      } } }, { success: "Day saved", onSaved: () => { clearEditorDraft(`day-${id}`); if (typeof scope.close === "function") scope.close(); } });
+      }) } }, { success: "Day saved", onSaved: () => { clearEditorDraft(`day-${id}`); if (typeof scope.close === "function") scope.close(); } });
     });
   });
 }

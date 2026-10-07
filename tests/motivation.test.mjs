@@ -5,6 +5,9 @@ import { createMotivationController, EARLY_COUNTDOWN_PHRASES, eligibleKickers, e
 import { normalizeState } from "../js/storage.js";
 import { loadSiteData } from "../js/data.js";
 import { renderToday } from "../js/views/today.js";
+import { bindAssignmentDetail } from "../js/views/shared.js";
+import { recordStudyActivity, restoredDailyRecord, withDailyCompletion, withDailyStatus, withDailyTask } from "../js/daily.js";
+import { watchLocalDay } from "../js/utils.js";
 
 const raw = JSON.parse(await fs.readFile(new URL("../data/site-data.json", import.meta.url), "utf8"));
 globalThis.fetch = async () => ({ ok: true, json: async () => structuredClone(raw) });
@@ -200,4 +203,132 @@ test("Today leads with the prominent message before its header and backlog, and 
   storage.setItem(MOTIVATION_STORAGE_KEY, JSON.stringify({ ...picked, day: "2026-10-07" }));
   context.motivation = { get: () => picked.current };
   assert.match(renderToday(context), /163 days · planning date/);
+});
+
+test("foreground day rollover rotates an idle Today page and clears yesterday's dismissal", () => {
+  const controller = createMotivationController({ storage: memoryStorage(), random: seeded() });
+  let day = "2026-10-07", tick, visible = true, renders = 0;
+  const first = controller.get(pressure, day);
+  controller.dismiss(day);
+  const stop = watchLocalDay(() => {
+    renders++;
+    const next = controller.get(pressure, day);
+    assert.notEqual(next.phraseId, first.phraseId);
+    assert.ok(!next.dismissed);
+  }, {
+    getDay: () => day, isVisible: () => visible,
+    schedule(callback, delay) { assert.equal(delay, 60_000); tick = callback; return 42; },
+    cancel: timer => assert.equal(timer, 42),
+  });
+  tick();
+  assert.equal(renders, 0);
+  day = "2026-10-08";
+  visible = false;
+  tick();
+  assert.equal(renders, 0);
+  visible = true;
+  tick();
+  tick();
+  assert.equal(renders, 1);
+  stop();
+});
+
+test("Today forwards long foreground returns for four-hour rotation without shuffling on saves", () => {
+  let now = 100;
+  const context = { data, state: normalizeState({}), motivation: createMotivationController({
+    storage: memoryStorage(), now: () => now, random: seeded(),
+  }) };
+  const first = renderToday(context, {}, { isRouteChange: false });
+  now += 4 * 60 * 60 * 1000;
+  assert.equal(renderToday(context, {}, { isRouteChange: false }), first);
+  assert.notEqual(renderToday(context, {}, { isRouteChange: false, revisit: true }), first);
+});
+
+test("invalid saved text, endings and selection timestamps recover without breaking Today", () => {
+  for (const corrupt of [
+    history => { history.current.text = 123; },
+    history => { history.current.text = { includes: "broken" }; },
+    history => { history.current.text = "stale or unapproved cached text"; },
+    history => { history.current.kickerId = "nonexistent"; },
+    history => { history.selectedAt = "invalid"; },
+    history => { history.selectedAt = 999_999; },
+  ]) {
+    const storage = memoryStorage();
+    createMotivationController({ storage, now: () => 100, random: seeded() }).get(pressure, "2026-10-07");
+    const history = JSON.parse(storage.getItem(MOTIVATION_STORAGE_KEY));
+    const oldId = history.current.phraseId;
+    corrupt(history);
+    storage.setItem(MOTIVATION_STORAGE_KEY, JSON.stringify(history));
+    const recovered = createMotivationController({ storage, now: () => 200, random: seeded() }).get(pressure, "2026-10-07");
+    assert.notEqual(recovered.phraseId, oldId);
+    assert.equal(typeof recovered.text, "string");
+    assert.ok(!recovered.text.includes("unapproved"));
+  }
+});
+
+test("notes, reopens, undo and deferral/resume do not manufacture catch-up study today", () => {
+  const today = "2026-10-07", id = "2026-09-22";
+  const original = { status: "complete", updatedAt: "2026-10-06T15:00:00Z", actualQuestions: 7 };
+  const state = normalizeState({ daily: { [id]: original } });
+  const notes = withDailyStatus(state, id, "complete");
+  assert.equal(motivationContext(data, notes, today).section, "pressure");
+  assert.equal(notes.daily[id].lastStudiedAt, original.updatedAt);
+  const reopened = withDailyTask(state, data.index.scheduleByDate.get(id), "chapter:GC04", false);
+  assert.equal(motivationContext(data, reopened, today).section, "pressure");
+  const deferred = withDailyStatus(state, id, "deferred");
+  const resumed = withDailyStatus(deferred, id, "complete");
+  assert.equal(motivationContext(data, resumed, today).section, "pressure");
+  const undone = { ...state, daily: { [id]: restoredDailyRecord(original, notes.daily[id]) } };
+  assert.equal(motivationContext(data, undone, today).section, "pressure");
+  const neverStudied = restoredDailyRecord(undefined, notes.daily[id]);
+  assert.equal(neverStudied.lastStudiedAt, "");
+});
+
+test("new checklist work and increased counts record catch-up activity; notes preserve its time", () => {
+  const id = "2026-09-22", timestamp = "2026-10-07T15:00:00Z";
+  const state = normalizeState({ daily: { [id]: { actualQuestions: 7, updatedAt: "2026-10-06T15:00:00Z" } } });
+  const row = data.index.scheduleByDate.get(id);
+  for (const next of [withDailyTask(state, row, "chapter:GC04", true), withDailyCompletion(state, row, true), withDailyStatus(state, id, "in-progress")]) {
+    const record = next.daily[id];
+    assert.equal(record.lastStudiedAt, record.updatedAt);
+  }
+  for (const key of ["actualQuestions", "actualCars"]) {
+    const record = recordStudyActivity(state.daily[id], { ...state.daily[id], [key]: 8, updatedAt: timestamp });
+    assert.equal(record.lastStudiedAt, timestamp);
+    assert.equal(motivationContext(data, { ...state, daily: { [id]: record } }, "2026-10-07").section, "motivation");
+    const notes = recordStudyActivity(record, { ...record, notes: "Edited", updatedAt: "2026-10-08T15:00:00Z" });
+    assert.equal(notes.lastStudiedAt, timestamp);
+    assert.equal(motivationContext(data, { ...state, daily: { [id]: notes } }, "2026-10-08").section, "pressure");
+  }
+});
+
+test("the day-detail form records increased counts but does not count notes-only saves", () => {
+  const id = "2026-09-22";
+  for (const status of ["complete", "deferred"]) {
+    const state = normalizeState({ daily: { [id]: { status, statusBeforeDeferred: "complete", actualQuestions: 7, updatedAt: "2026-10-06T15:00:00Z" } } });
+    for (const count of ["7", "8"]) {
+      let submit, saved;
+      const form = {
+        dataset: { dayForm: id },
+        elements: { status: { value: "complete" }, actualQuestions: { value: count }, actualCars: { value: "" }, notes: { value: "Edited note" } },
+        querySelector: selector => selector === "[data-day-error]" ? { textContent: "" } : null,
+        reportValidity: () => true,
+        addEventListener(name, callback) { if (name === "submit") submit = callback; },
+      };
+      const scope = { querySelectorAll: selector => selector === "[data-day-form]" ? [form] : [] };
+      bindAssignmentDetail(scope, { data, state, updateState(next) { saved = next; } });
+      submit({ preventDefault() {} });
+      const record = saved.daily[id];
+      assert.equal(record.notes, "Edited note");
+      assert.equal(record.lastStudiedAt, count === "8" ? record.updatedAt : state.daily[id].updatedAt);
+    }
+  }
+});
+
+test("catch-up work can sustain a streak across consecutive study dates", () => {
+  const state = normalizeState({ daily: {
+    "2026-09-22": { status: "complete", lastStudiedAt: "2026-10-06T15:00:00Z" },
+    "2026-09-23": { status: "complete", lastStudiedAt: "2026-10-07T15:00:00Z" },
+  } });
+  assert.equal(motivationContext(data, state, "2026-10-07").streak, true);
 });
